@@ -8,5 +8,5 @@ public class JournalEntry
 {
     /*Heya friends please let me know if this works*/
 
-    //Yo alex testing stuff here
+    //Testing again
 }
