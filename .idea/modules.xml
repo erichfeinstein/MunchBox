@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/MunchBox.iml" filepath="$PROJECT_DIR$/.idea/MunchBox.iml" />
       <module fileurl="file://$PROJECT_DIR$/MunchBox.iml" filepath="$PROJECT_DIR$/MunchBox.iml" />
+      <module fileurl="file://C:\Users\Paul\StudioProjects\MunchBox\.idea\MunchBox.iml" filepath="C:\Users\Paul\StudioProjects\MunchBox\.idea\MunchBox.iml" />
+      <module fileurl="file://C:\Users\Paul\StudioProjects\MunchBox\MunchBox.iml" filepath="C:\Users\Paul\StudioProjects\MunchBox\MunchBox.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\Paul\StudioProjects\MunchBox\app\app.iml" filepath="C:\Users\Paul\StudioProjects\MunchBox\app\app.iml" />
     </modules>
   </component>
 </project>
