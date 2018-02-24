@@ -8,106 +8,6 @@
     android:layout_gravity="center"
     tools:context="seniorproj.munchbox.MainActivity">
 
-
-    <ScrollView
-        android:layout_width="380dp"
-        android:layout_height="514dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/textView60"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Entry"
-                android:textSize="36sp" />
-
-            <TextView
-                android:id="@+id/textView59"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Entry"
-                android:textSize="36sp" />
-
-            <TextView
-                android:id="@+id/textView58"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Entry"
-                android:textSize="36sp" />
-
-            <TextView
-                android:id="@+id/textView57"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Entry"
-                android:textSize="36sp" />
-
-            <TextView
-                android:id="@+id/textView56"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Entry"
-                android:textSize="36sp" />
-
-            <TextView
-                android:id="@+id/textView55"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Entry"
-                android:textSize="36sp" />
-
-            <TextView
-                android:id="@+id/textView54"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Entry"
-                android:textSize="36sp" />
-
-            <TextView
-                android:id="@+id/textView53"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Entry"
-                android:textSize="36sp" />
-
-            <TextView
-                android:id="@+id/textView52"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Entry"
-                android:textSize="36sp" />
-
-            <TextView
-                android:id="@+id/textView51"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Entry"
-                android:textSize="36sp" />
-
-            <TextView
-                android:id="@+id/textView50"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Entry"
-                android:textSize="36sp" />
-
-            <TextView
-                android:id="@+id/textView49"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Entry"
-                android:textSize="36sp" />
-        </LinearLayout>
-
-    </ScrollView>
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -118,5 +18,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:layout_width="380dp"
+        android:layout_height="514dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <android.support.v7.widget.RecyclerView
+        android:id="@+id/entriesView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
+
+
+
+
 
 </android.support.constraint.ConstraintLayout>
