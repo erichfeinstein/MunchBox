@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Fill up list w/ dummy entries
         for (int i = 0; i <= 100; i++) {
-            ListItem listItem = new ListItem("Burger" + i+1, "Jolly");
+            ListItem listItem = new ListItem("Burger " + (i+1), "Jolly");
             listItems.add(listItem);
         }
 
