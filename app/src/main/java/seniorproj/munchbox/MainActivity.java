@@ -16,9 +16,9 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
 
-    private List<ListItem> listItems;
+    private List<JournalEntry> journal;
 
-    LinkedList<JournalEntry> Journal = new LinkedList<JournalEntry>();
+    //LinkedList<JournalEntry> Journal = new LinkedList<JournalEntry>();
     public Image newEntryPhoto = null;
 
     @Override
@@ -31,22 +31,26 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        listItems = new ArrayList<>();
+        journal = new ArrayList<>();
 
         //Fill up list w/ dummy entries
-        for (int i = 0; i <= 100; i++) {
-            ListItem listItem = new ListItem("Burger " + (i+1), "Jolly");
-            listItems.add(listItem);
+        for (int i = 0; i <= 100; i++)
+        {
+
+            JournalEntry listItem = new JournalEntry();
+            listItem.changeRestaurantName("Jolly Scholar");
+            listItem.setIdentifier(i);
+            journal.add(listItem);
         }
 
-        adapter = new MyAdapter(listItems, this);
+        adapter = new MyAdapter(journal, this);
         recyclerView.setAdapter(adapter);
     }
 
-    public void createEntry(Image newEntryPhoto)
+    /*public void createEntry(Image newEntryPhoto)
     {
-        Journal.add(new JournalEntry(newEntryPhoto));
-    }
+        Journal.add(new JournalEntry());
+    }*/
 
 
 }

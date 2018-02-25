@@ -48,6 +48,19 @@ public class JournalEntry
         entryDate = Calendar.getInstance().getTime();  //generate date on entry creation
     }
 
+    public JournalEntry()
+    {
+        rating = 0;
+        nameOfDish = "";
+        restaurantName = "";
+        //restaurantName = GoogleFindRestaurantName();
+        //tags.add(GoogleFindTags);
+        description = "";
+        this.photo = null;
+        frequency = 1;
+        entryDate = Calendar.getInstance().getTime();  //generate date on entry creation
+    }
+
     //These methods will used to change the information in each datapoint.
     //They will be used both for the first time entering and for editting existing datapoints.
     public void incrementFrequency()
@@ -136,5 +149,15 @@ public class JournalEntry
     {
         //Whatever API magic needs to happen in here
         return null;
+    }
+
+    public int getIdentifier()
+    {
+        return identifier;
+    }
+
+    public void setIdentifier(int identify)
+    {
+        identifier = identify;
     }
 }

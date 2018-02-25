@@ -9,7 +9,8 @@ public class ListItem {
     private String nameOfDish;
     private String restaurantName;
 
-    public ListItem(String nameOfDish, String restaurantName) {
+    public ListItem(String nameOfDish, String restaurantName)
+    {
         this.nameOfDish = restaurantName;
         this.restaurantName = nameOfDish;
     }
