@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i <= 100; i++)
         {
             JournalEntry listItem = new JournalEntry();
+            listItem.renameDish("Burger " + i);
             listItem.changeRestaurantName("Jolly Scholar");
             listItem.setIdentifier(i);
             listItem.setPhotoID(R.drawable.sample_image);
