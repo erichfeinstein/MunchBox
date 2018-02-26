@@ -4,9 +4,11 @@
     <modules>
       <module fileurl="file://C:\Users\Paul\StudioProjects\MunchBox\.idea\2018_spring_395_munchbox.iml" filepath="C:\Users\Paul\StudioProjects\MunchBox\.idea\2018_spring_395_munchbox.iml" />
       <module fileurl="file://$PROJECT_DIR$/MunchBox.iml" filepath="$PROJECT_DIR$/MunchBox.iml" />
+      <module fileurl="file://C:\Users\Paul\StudioProjects\MunchBox\MunchBox.iml" filepath="C:\Users\Paul\StudioProjects\MunchBox\MunchBox.iml" />
       <module fileurl="file://C:\Users\Eric.DESKTOP-783BPSR\Desktop\MunchGit\2018_spring_395_munchbox\MunchBox.iml" filepath="C:\Users\Eric.DESKTOP-783BPSR\Desktop\MunchGit\2018_spring_395_munchbox\MunchBox.iml" />
       <module fileurl="file://C:\Users\Paul\StudioProjects\MunchBox\.idea\MunchBox.iml" filepath="C:\Users\Paul\StudioProjects\MunchBox\.idea\MunchBox.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\Paul\StudioProjects\MunchBox\app\app.iml" filepath="C:\Users\Paul\StudioProjects\MunchBox\app\app.iml" />
     </modules>
   </component>
 </project>

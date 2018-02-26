@@ -17,6 +17,7 @@ public class JournalEntry
     private String restaurantName;
     private int rating;
     public Image photo = null;
+    public int photoID;
     private int frequency;
     private String description;
     private ArrayList<String> tags;
@@ -43,7 +44,7 @@ public class JournalEntry
         //restaurantName = GoogleFindRestaurantName();
         //tags.add(GoogleFindTags);
         description = "";
-        this.photo = photo;
+        //this.photoID = R.drawable.sample_image;
         frequency = 1;
         entryDate = Calendar.getInstance().getTime();  //generate date on entry creation
     }
@@ -56,9 +57,13 @@ public class JournalEntry
         //restaurantName = GoogleFindRestaurantName();
         //tags.add(GoogleFindTags);
         description = "";
-        this.photo = null;
+        this.photoID = R.drawable.sample_image;
         frequency = 1;
         entryDate = Calendar.getInstance().getTime();  //generate date on entry creation
+        if(tags != null && tags.size() > 0)
+        {
+            nameOfDish = tags.get(0);
+        }
     }
 
     //These methods will used to change the information in each datapoint.
@@ -159,5 +164,15 @@ public class JournalEntry
     public void setIdentifier(int identify)
     {
         identifier = identify;
+    }
+
+    public void setPhotoID(int ID)
+    {
+        photoID = ID;
+    }
+
+    public int getPhotoID()
+    {
+        return photoID;
     }
 }

@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
             JournalEntry listItem = new JournalEntry();
             listItem.changeRestaurantName("Jolly Scholar");
             listItem.setIdentifier(i);
+            listItem.setPhotoID(R.drawable.sample_image);
             journal.add(listItem);
         }
 
