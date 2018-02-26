@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MunchBox</string>
+    <string name="title_activity_view_entry">view_entry</string>
 </resources>
