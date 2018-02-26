@@ -12,5 +12,4 @@ public class view_entry extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_entry);
     }
-
 }
