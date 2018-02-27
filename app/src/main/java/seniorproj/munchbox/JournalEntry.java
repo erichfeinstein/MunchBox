@@ -67,7 +67,7 @@ public class JournalEntry
     }
 
     //These methods will used to change the information in each datapoint.
-    //They will be used both for the first time entering and for editting existing datapoints.
+    //They will be used both for the first time entering and for editing existing datapoints.
     public void incrementFrequency()
     {
         frequency += 1;
