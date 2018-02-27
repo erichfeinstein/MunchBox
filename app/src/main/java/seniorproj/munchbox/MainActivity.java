@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.WindowManager;
 import android.content.Intent;
 import android.view.View;
+import android.widget.EditText;
 
 
 import java.util.ArrayList;
@@ -54,10 +55,14 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    public void sendMessage(View view)
+    public void createEntryButton(View view)
     {
-        System.out.println("here");
-        Intent intent = new Intent(MainActivity.this, view_entry.class);
+        Intent intent = new Intent(MainActivity.this, EditEntry.class);
+        startActivity(intent);
+    }
+    public void viewEntryButton(View view)
+    {
+        Intent intent = new Intent(MainActivity.this, ViewEntry.class);
         startActivity(intent);
     }
 

@@ -7,7 +7,7 @@
     android:layout_gravity="center_horizontal"
     android:background="@android:color/background_light"
     android:orientation="vertical"
-    tools:context="seniorproj.munchbox.view_entry">
+    tools:context="seniorproj.munchbox.ViewEntry">
 
     <seniorproj.munchbox.SquareImageView
         android:id="@+id/imageView"
@@ -84,13 +84,34 @@
             android:id="@+id/tags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lines="2"
+            android:singleLine="true"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:text="List of tags"
-            android:textColor="@android:color/black"
+            android:textColor="#cecece"
             android:textSize="18dp" />
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <Button
+            android:id="@+id/editSaveButton"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:onClick="toggleEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/button"
+            android:elevation="8dp"
+            android:text="Edit"
+            android:textSize="15dp"
+            android:padding="5dp"
+            android:textColor="@android:color/white"
+            android:visibility="visible" />
+        </RelativeLayout>
 </LinearLayout>

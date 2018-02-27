@@ -98,7 +98,7 @@
         <Button
             android:id="@+id/createNewEntry"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:onClick="sendMessage"
+            android:onClick="createEntryButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

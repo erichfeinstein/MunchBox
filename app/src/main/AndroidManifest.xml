@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.MunchBoxNoBar.Light.NoActionBar">
@@ -18,9 +19,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".view_entry"
-            android:label="@string/title_activity_view_entry"></activity>
+            android:name=".ViewEntry"
+            android:label="@string/title_activity_view_entry">
+        </activity>
+
+        <activity
+            android:name=".EditEntry"
+            android:label="@string/app_name" >
+        </activity>
+
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 
