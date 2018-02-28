@@ -67,8 +67,6 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
         /* The camera only comes up now after I press the back button. Need to test on phone to see if this always the case. */
-        Intent intent = new Intent(MainActivity.this, EditEntry.class);
-        startActivity(intent);
     }
     public void viewEntryButton(View view)
     {
@@ -86,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             createEntry(imageBitmap);
+            Intent intent = new Intent(MainActivity.this, EditEntry.class);
+            startActivity(intent);
         }
     }
 
