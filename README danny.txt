@@ -1,4 +1,13 @@
 Danny Miles
+
+Week of 2/25
+
+2/27: Set up image framework and thumbnail generation using Android's camera. Updated manifest with various permissions.
+
+2/25: Generated API key for team use in utilizing relevant Google APIs. Read about implementation of Google Vision, and updated the manifeset.
+
+
+
 Week of 2/18
 
 2/22: JournalEntry.java:
