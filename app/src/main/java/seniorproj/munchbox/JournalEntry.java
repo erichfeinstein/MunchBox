@@ -1,6 +1,9 @@
 package seniorproj.munchbox;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.media.ThumbnailUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,12 +19,15 @@ public class JournalEntry
     private String nameOfDish;
     private String restaurantName;
     private int rating;
-    public Image photo = null;
+    public Bitmap photo = null;
     public int photoID;
     private int frequency;
     private String description;
     private ArrayList<String> tags;
     public Date entryDate = null;
+    public Bitmap thumbnail = null;
+
+    final int THUMBSIZE = 64;
 
     /*Returns all information in the order of: name, restaurant, tags */
     public ArrayList<String> getKeywords()
@@ -36,7 +42,7 @@ public class JournalEntry
         return returnList;
     }
 
-    public JournalEntry(Image photo)
+    public JournalEntry(Bitmap thumb)
     {
         rating = 0;
         nameOfDish = "";
@@ -44,6 +50,7 @@ public class JournalEntry
         //restaurantName = GoogleFindRestaurantName();
         //tags.add(GoogleFindTags);
         description = "";
+        thumbnail = thumb;
         //this.photoID = R.drawable.sample_image;
         frequency = 1;
         entryDate = Calendar.getInstance().getTime();  //generate date on entry creation

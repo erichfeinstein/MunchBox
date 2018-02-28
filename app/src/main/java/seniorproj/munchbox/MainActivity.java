@@ -1,6 +1,8 @@
 package seniorproj.munchbox;
 
+import android.graphics.Bitmap;
 import android.media.Image;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
     //LinkedList<JournalEntry> Journal = new LinkedList<JournalEntry>();
     public Image newEntryPhoto = null;
+    private String recentImagePath;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -57,6 +61,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void createEntryButton(View view)
     {
+        /* Prompt the user for a picture */
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+        /* The camera only comes up now after I press the back button. Need to test on phone to see if this always the case. */
         Intent intent = new Intent(MainActivity.this, EditEntry.class);
         startActivity(intent);
     }
@@ -66,10 +76,17 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /*public void createEntry(Image newEntryPhoto)
+    public void createEntry(Bitmap newEntryPhoto)
     {
-        Journal.add(new JournalEntry());
-    }*/
+        journal.add(new JournalEntry());
+    }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            createEntry(imageBitmap);
+        }
+    }
 
 }
