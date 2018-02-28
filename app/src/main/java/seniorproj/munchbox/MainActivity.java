@@ -68,11 +68,6 @@ public class MainActivity extends AppCompatActivity {
         }
         /* The camera only comes up now after I press the back button. Need to test on phone to see if this always the case. */
     }
-    public void viewEntryButton(View view)
-    {
-        Intent intent = new Intent(MainActivity.this, ViewEntry.class);
-        startActivity(intent);
-    }
 
     public void createEntry(Bitmap newEntryPhoto)
     {
