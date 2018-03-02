@@ -54,7 +54,7 @@ public class ViewEntry extends Activity {
             }
             return stars.toString();
         } else {
-            for (int i = 0; i < ratingAsInt; i+=2) {
+            for (int i = 0; i < ratingAsInt-1; i+=2) {
                 stars.append("★");
             }
             stars.append("½");
