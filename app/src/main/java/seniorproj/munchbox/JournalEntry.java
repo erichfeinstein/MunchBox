@@ -142,6 +142,8 @@ public class JournalEntry
         return restaurantName;
     }
 
+    public ArrayList<String> getTags() { return tags; }
+
     public void newTag(String newTag)
     {
         tags.add(newTag);

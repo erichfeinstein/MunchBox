@@ -137,5 +137,7 @@ public class MainActivity extends AppCompatActivity {
         return photo;
     }
 
-
+    public List<JournalEntry> getJournal() {
+        return journal;
+    }
 }
