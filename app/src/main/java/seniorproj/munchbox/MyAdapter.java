@@ -63,9 +63,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public void onClick(View view) {
             int position = getAdapterPosition(); // gets item position
             if (position != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
-                Toast.makeText(context, "" + id, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Opening journal with ID " + id, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, ViewEntry.class);
-                context.startActivity(intent);
+                MainActivity activity = (MainActivity) context;
+                if (activity != null) {
+                    JournalEntry selectedEntry = activity.getJournal().get(id);
+                    intent.putExtra("id", id);
+                    intent.putExtra("dishName", selectedEntry.getNameOfDish());
+                    intent.putExtra("restaurantName", selectedEntry.getRestaurantName());
+                    intent.putExtra("description", selectedEntry.getDescription());
+                    intent.putExtra("tags", selectedEntry.getTags());
+                    intent.putExtra("rating", selectedEntry.getRating());
+                    context.startActivity(intent);
+                }
             }
         }
     }
