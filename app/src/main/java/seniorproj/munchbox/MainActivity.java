@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
             listItem.rateDish((i % 10) + 1);
             listItem.setIdentifier(i);
             listItem.setPhotoID(R.drawable.sample_image);
-            System.out.println("---------- Name: " + listItem.getNameOfDish() + " --- Location: " + listItem.getRestaurantName() + " --- Description: " + listItem.getDescription() + " ---  Keywords: " + listItem.getKeywords() + " --- Rating: " + (float)((float)listItem.getRating()/2) + " --- Identifier: " + listItem.getIdentifier() + " --- PhotoID: " + listItem.getPhotoID());
             journal.add(listItem);
         }
 
@@ -116,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
     private void createEntry(Bitmap newEntryPhoto, String imagePath)
     {
         journal.add(new JournalEntry(newEntryPhoto, recentImagePath));
-        recentImagePath = "";
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -124,7 +122,9 @@ public class MainActivity extends AppCompatActivity {
             Bitmap thumb = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(recentImagePath), THUMBSIZE, THUMBSIZE);
             createEntry(thumb, recentImagePath);
             Intent intent = new Intent(MainActivity.this, EditEntry.class);
+            intent.putExtra("foodImagePath", recentImagePath);
             startActivity(intent);
+            recentImagePath = "";
         }
     }
 

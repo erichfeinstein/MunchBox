@@ -112,7 +112,7 @@ public class JournalEntry
 
     public void renameDish(String newName)
     {
-        nameOfDish = newName;
+         nameOfDish = newName;
     }
 
     public String getNameOfDish()
