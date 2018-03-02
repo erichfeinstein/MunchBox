@@ -1,10 +1,14 @@
 package seniorproj.munchbox;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.media.ThumbnailUtils;
+import android.os.Environment;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,15 +23,16 @@ public class JournalEntry
     private String nameOfDish;
     private String restaurantName;
     private int rating;
-    public Bitmap photo = null;
+    public File photo = null;
     public int photoID;
     private int frequency;
     private String description;
     private ArrayList<String> tags = new ArrayList<String>();
-    public Date entryDate = null;
-    public Bitmap thumbnail = null;
+    private Date entryDate = null;
+    private Bitmap thumbnail = null;
+    private String photoPath;
 
-    final int THUMBSIZE = 64;
+
 
     /*Returns all information in the order of: name, restaurant, tags */
     public ArrayList<String> getKeywords()
@@ -42,7 +47,7 @@ public class JournalEntry
         return returnList;
     }
 
-    public JournalEntry(Bitmap thumb)
+    public JournalEntry(Bitmap thumb, String path)
     {
         rating = 0;
         nameOfDish = "";
@@ -51,13 +56,13 @@ public class JournalEntry
         //tags.add(GoogleFindTags);
         description = "";
         thumbnail = thumb;
+        photoPath = path;
         //this.photoID = R.drawable.sample_image;
         frequency = 1;
         entryDate = Calendar.getInstance().getTime();  //generate date on entry creation
     }
 
-    public JournalEntry()
-    {
+    public JournalEntry() {
         rating = 0;
         nameOfDish = "";
         restaurantName = "";
@@ -67,8 +72,7 @@ public class JournalEntry
         this.photoID = R.drawable.sample_image;
         frequency = 1;
         entryDate = Calendar.getInstance().getTime();  //generate date on entry creation
-        if(tags != null && tags.size() > 0)
-        {
+        if (tags != null && tags.size() > 0) {
             nameOfDish = tags.get(0);
         }
     }
@@ -182,4 +186,6 @@ public class JournalEntry
     {
         return photoID;
     }
+
+
 }
