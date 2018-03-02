@@ -16,6 +16,7 @@ import android.widget.EditText;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,8 +51,32 @@ public class MainActivity extends AppCompatActivity {
             JournalEntry listItem = new JournalEntry();
             listItem.renameDish("Burger " + i);
             listItem.changeRestaurantName("Jolly Scholar");
+            if(i % 5 == 0)
+            {
+                listItem.changeRestaurantName("Otani Noodle");
+            }
+            if(i % 5 == 0)
+            {
+                listItem.newTag("Noodle");
+            }
+            else
+            {
+                listItem.newTag("Burger");
+            }
+            listItem.newTag("Food");
+            if(i % 4 == 0)
+            {
+                listItem.newDescription("I don't like this very much.");
+            }
+            else
+            {
+                listItem.newDescription("This is great!");
+            }
+
+            listItem.rateDish((i % 10) + 1);
             listItem.setIdentifier(i);
             listItem.setPhotoID(R.drawable.sample_image);
+            System.out.println("---------- Name: " + listItem.getNameOfDish() + " --- Location: " + listItem.getRestaurantName() + " --- Description: " + listItem.getDescription() + " ---  Keywords: " + listItem.getKeywords() + " --- Rating: " + (float)((float)listItem.getRating()/2) + " --- Identifier: " + listItem.getIdentifier() + " --- PhotoID: " + listItem.getPhotoID());
             journal.add(listItem);
         }
 

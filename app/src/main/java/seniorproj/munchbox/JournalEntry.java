@@ -23,7 +23,7 @@ public class JournalEntry
     public int photoID;
     private int frequency;
     private String description;
-    private ArrayList<String> tags;
+    private ArrayList<String> tags = new ArrayList<String>();
     public Date entryDate = null;
     public Bitmap thumbnail = null;
 
