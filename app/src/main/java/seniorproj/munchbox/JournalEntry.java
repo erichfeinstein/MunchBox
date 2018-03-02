@@ -105,6 +105,8 @@ public class JournalEntry
         }
     }
 
+    public Bitmap getThumbnail() { return thumbnail; };
+
     public int getRating()
     {
         return rating;

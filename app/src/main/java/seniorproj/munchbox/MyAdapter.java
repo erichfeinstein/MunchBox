@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
+import android.widget.ImageView;
 
 import java.util.List;
 
@@ -37,6 +38,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.textViewDish.setText(entry.getNameOfDish());
         holder.textViewRestaurant.setText(entry.getRestaurantName());
         holder.id = entry.getIdentifier();
+        ImageView img = holder.getThumb();
+        img.setImageBitmap(entry.getThumbnail());
+        holder.thumb = img;
     }
 
     @Override
@@ -50,11 +54,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public TextView textViewRestaurant;
         //For opening the entry
         private int id;
+        public ImageView thumb;
 
         public ViewHolder(View itemView) {
             super(itemView);
             textViewDish = (TextView)itemView.findViewById(R.id.dish);
             textViewRestaurant = (TextView)itemView.findViewById(R.id.restaurant);
+            thumb = (ImageView) itemView.findViewById(R.id.foodThumbnail);
             id = itemView.getId();
             itemView.setOnClickListener(this);
         }
@@ -78,6 +84,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 }
             }
         }
+
+        public ImageView getThumb() { return thumb; }
     }
 
 }

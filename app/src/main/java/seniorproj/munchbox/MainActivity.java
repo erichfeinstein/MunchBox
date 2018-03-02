@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private String recentImagePath;
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    static final int THUMBSIZE = 64;
+    static final int THUMBSIZE = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
