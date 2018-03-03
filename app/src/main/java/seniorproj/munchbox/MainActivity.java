@@ -1,12 +1,16 @@
 package seniorproj.munchbox;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.LocationManager;
 import android.media.Image;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,6 +42,12 @@ public class MainActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     static final int THUMBSIZE = 200;
+
+    //Distance Matrix
+    static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 0; //For request permissions
+    private Context context;
+    private LocationGetter locationGetter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -139,5 +149,31 @@ public class MainActivity extends AppCompatActivity {
 
     public List<JournalEntry> getJournal() {
         return journal;
+    }
+
+    public void startLocationGetter(){
+        locationGetter = new LocationGetter(this.getApplicationContext());
+        locationGetter.startListening();
+    }
+
+    //For permission requests
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case MY_PERMISSIONS_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    locationGetter.startListening();
+                }
+
+                else {
+                    System.out.println("rip");
+                }
+            }
+
+            // other 'case' lines to check for other permissions.
+        }
     }
 }

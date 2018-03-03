@@ -36,9 +36,12 @@ public class LocationGetter {
 
         };
 
+    }
+
+    public void startListening(){
         // Register the listener with the Location Manager to receive location updates
         if(context.checkPermission(Context.LOCATION_SERVICE, android.os.Process.myPid(), android.os.Process.myUid())
-            != PackageManager.PERMISSION_GRANTED) {
+                != PackageManager.PERMISSION_GRANTED) {
 
         }
         else{
@@ -60,5 +63,6 @@ public class LocationGetter {
         }
 
     }
+
 
 }
