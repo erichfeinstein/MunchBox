@@ -20,6 +20,9 @@ import android.view.WindowManager;
 import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
+import android.view.View;
+import android.widget.TextView;
+import android.graphics.Typeface;
 
 
 import java.io.File;
@@ -42,6 +45,21 @@ public class MainActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     static final int THUMBSIZE = 200;
+
+    /*Preliminary font code. Do NOT remove or modify*/
+
+//    TextView tx = (TextView)findViewById(R.id.textview1);
+//
+//    Typeface sugar = Typeface.createFromAsset(getAssets(),  "../assets/SUGAR.ttf");
+//
+//    tx.setTypeface(sugar);
+
+//    AssetManager am = context.getApplicationContext().getAssets();
+//
+//    typeface = Typeface.createFromAsset(am,
+//            String.format(Locale.US, "fonts/%s", "sugar.ttf"));
+//
+//    setTypeface(typeface);
 
     //Distance Matrix
     static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 0; //For request permissions
