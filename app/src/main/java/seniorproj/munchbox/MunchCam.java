@@ -1,15 +1,10 @@
 package seniorproj.munchbox;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -45,7 +40,14 @@ public class MunchCam extends Activity {
         FrameLayout prev = (FrameLayout) findViewById(R.id.camera_preview);
         prev.addView(munchCamPreview);
 
-        Button captureButton = (Button) findViewById(R.id.button_capture);
+        final Button captureButton = (Button) findViewById(R.id.button_capture);
+        final Button confirmButton = (Button) findViewById(R.id.button_confirm);
+        final Button cancelButton = (Button) findViewById(R.id.button_cancel);
+        confirmButton.setVisibility(View.INVISIBLE);
+        confirmButton.setEnabled(false);
+        cancelButton.setVisibility(View.INVISIBLE);
+        cancelButton.setEnabled(false);
+        //Cancel button
 
         captureButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -53,6 +55,12 @@ public class MunchCam extends Activity {
                     public void onClick(View v) {
                         // get an image from the camera
                         cam.takePicture(null, null, mPicture);
+                        captureButton.setEnabled(false);
+                        captureButton.setVisibility(View.INVISIBLE);
+                        confirmButton.setEnabled(true);
+                        confirmButton.setVisibility(View.VISIBLE);
+                        cancelButton.setEnabled(true);
+                        cancelButton.setVisibility(View.VISIBLE);
                     }
                 }
         );
