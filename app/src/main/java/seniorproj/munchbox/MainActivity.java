@@ -1,31 +1,23 @@
 package seniorproj.munchbox;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.media.ThumbnailUtils;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.WindowManager;
-import android.content.Intent;
 import android.view.View;
-import android.widget.EditText;
-
+import android.view.WindowManager;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -94,7 +86,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void createEntryButton(View view) {
         /* Prompt the user for a picture */
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent takePictureIntent = new Intent(MainActivity.this, MunchCam.class);
+        startActivity(takePictureIntent);
+        /*
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             File photoFile = null;
             String photoPath = "";
@@ -109,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
         /* The camera only comes up now after I press the back button. Need to test on phone to see if this always the case. */
-        }
+
     }
 
     private void createEntry(Bitmap newEntryPhoto, String imagePath)
