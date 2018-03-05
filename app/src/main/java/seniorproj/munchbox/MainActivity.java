@@ -1,6 +1,7 @@
 package seniorproj.munchbox;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -41,12 +42,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Ask any permissions here
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.CAMERA}, 100);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+        int PERMISSION_ALL = 1;
+        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+        if(!hasPermissions(this, permissions)){
+            ActivityCompat.requestPermissions(this, permissions, PERMISSION_ALL);
         }
 
         recyclerView = (RecyclerView) findViewById(R.id.entriesView);
@@ -145,5 +144,19 @@ public class MainActivity extends AppCompatActivity {
 
     public List<JournalEntry> getJournal() {
         return journal;
+    }
+
+    //TODO: If camera or read/write permissions are not given, app will not work and must close
+
+    //For checking permissions
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
