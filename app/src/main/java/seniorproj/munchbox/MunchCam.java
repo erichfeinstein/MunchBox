@@ -1,6 +1,9 @@
 package seniorproj.munchbox;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +26,7 @@ import java.util.Date;
 public class MunchCam extends Activity {
     private Camera cam;
     private MunchCamPreview munchCamPreview;
+    private byte[] tempImage;
 
     public static final int MEDIA_TYPE_IMAGE = 1;
 
@@ -64,6 +68,19 @@ public class MunchCam extends Activity {
                     }
                 }
         );
+        confirmButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // save image and send to new activity
+                        Intent intent = new Intent(MunchCam.this, EditEntry.class);
+                        intent.putExtra("image", tempImage);
+                        startActivity(intent);
+                    }
+                }
+        );
+
+        //TODO: Cancel button behavior
     }
 
     protected Camera getCameraInstance(){
@@ -90,7 +107,15 @@ public class MunchCam extends Activity {
             try {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 System.out.println("Picture taken, now confirm it and start the EditEntry intent with image");
+
+
                 fos.write(data);
+
+                //I think this should happen here:
+                //TODO: Rotate the image based on EXIF data
+
+                tempImage = data;
+
                 fos.close();
             } catch (FileNotFoundException e) {
                 System.out.println("File not found: " + e.getMessage());
@@ -104,7 +129,6 @@ public class MunchCam extends Activity {
     private static Uri getOutputMediaFileUri(int type){
         return Uri.fromFile(getOutputMediaFile(type));
     }
-
 
     private static File getOutputMediaFile(int type){
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(

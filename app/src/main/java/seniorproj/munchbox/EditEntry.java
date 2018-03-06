@@ -20,20 +20,12 @@ public class EditEntry extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_entry);
 
-        String picPath = getIntent().getStringExtra("foodImagePath");
-        File picFile = new File(picPath);
-        System.out.println("test" + picPath);
-
-        if (picFile.exists()) {
-//            ImageView foodPic = (ImageView) findViewById(R.id.imageView);
-//            ImageView img = new ImageView(this);
-//            img.setImageResource(foodPic);
-
-            Bitmap myBitmap = BitmapFactory.decodeFile(picPath);
-
-            ImageView myImage = (ImageView) findViewById(R.id.imageView);
-
-            myImage.setImageBitmap(myBitmap);
-        }
+        //Get image and display it
+        byte[] picBytes = getIntent().getByteArrayExtra("image");
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap image = BitmapFactory.decodeByteArray(picBytes, 0, picBytes.length, opts);
+        ImageView myImage = (ImageView) findViewById(R.id.imageView);
+        myImage.setImageBitmap(image);
     }
 }
