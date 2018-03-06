@@ -1,16 +1,11 @@
 package seniorproj.munchbox;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.media.Image;
-import android.os.Bundle;
 import android.app.Activity;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.view.View;
-import java.io.File;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.widget.ImageView;
 
 public class EditEntry extends Activity {
 
@@ -27,5 +22,12 @@ public class EditEntry extends Activity {
         Bitmap image = BitmapFactory.decodeByteArray(picBytes, 0, picBytes.length, opts);
         ImageView myImage = (ImageView) findViewById(R.id.imageView);
         myImage.setImageBitmap(image);
+    }
+
+    @Override
+    public void onBackPressed(){
+        finish();
+        Intent backToList = new Intent(EditEntry.this, MainActivity.class);
+        startActivity(backToList);
     }
 }

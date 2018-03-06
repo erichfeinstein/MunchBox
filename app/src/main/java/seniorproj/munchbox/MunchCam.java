@@ -42,7 +42,6 @@ public class MunchCam extends Activity {
         Camera.Parameters params = cam.getParameters();
         params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
         cam.setParameters(params);
-
         munchCamPreview = new MunchCamPreview(this, cam);
         FrameLayout prev = (FrameLayout) findViewById(R.id.camera_preview);
         prev.addView(munchCamPreview);
@@ -54,7 +53,6 @@ public class MunchCam extends Activity {
         confirmButton.setEnabled(false);
         cancelButton.setVisibility(View.INVISIBLE);
         cancelButton.setEnabled(false);
-        //Cancel button
 
         captureButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -82,8 +80,20 @@ public class MunchCam extends Activity {
                     }
                 }
         );
+        cancelButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        recreate();
+                    }
+                }
+        );
+    }
 
-        //TODO: Cancel button behavior
+    @Override
+    public void onPause(){
+        super.onPause();
+        finish();
     }
 
     protected Camera getCameraInstance(){

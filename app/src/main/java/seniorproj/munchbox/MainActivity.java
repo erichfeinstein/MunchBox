@@ -10,7 +10,6 @@ import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
     private String recentImagePath;
     static final int REQUEST_IMAGE_CAPTURE = 1;
-
     static final int THUMBSIZE = 200;
 
     @Override
