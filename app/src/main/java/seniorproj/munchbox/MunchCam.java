@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -27,6 +29,7 @@ public class MunchCam extends Activity {
     private Camera cam;
     private MunchCamPreview munchCamPreview;
     private byte[] tempImage;
+    private String recentImagePath;
 
     public static final int MEDIA_TYPE_IMAGE = 1;
 
@@ -105,17 +108,25 @@ public class MunchCam extends Activity {
             }
 
             try {
+                recentImagePath = pictureFile.getPath().toString();
+                System.out.println(recentImagePath);
+                Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+                //Ignore EXIF info and just rotate
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
+                bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
+
+                //Crop
+                bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getWidth());
+
+                //Convert rotated image to byte array then save
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] newData = stream.toByteArray();
                 FileOutputStream fos = new FileOutputStream(pictureFile);
-                System.out.println("Picture taken, now confirm it and start the EditEntry intent with image");
-
-
-                fos.write(data);
-
-                //I think this should happen here:
-                //TODO: Rotate the image based on EXIF data
-
-                tempImage = data;
-
+                fos.write(newData);
+                tempImage = newData; //?
                 fos.close();
             } catch (FileNotFoundException e) {
                 System.out.println("File not found: " + e.getMessage());

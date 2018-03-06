@@ -13,11 +13,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-                <seniorproj.munchbox.SquareImageView
-                    android:id="@+id/imageView"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@android:drawable/btn_star_big_on" />
+                    android:layout_height="match_parent">
+
+                        <seniorproj.munchbox.SquareImageView
+                            android:id="@+id/imageView"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginLeft="90dp"
+                            android:layout_marginRight="90dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@android:drawable/btn_star_big_on" />
+
+                </RelativeLayout>
 
                 <TextView
                     android:layout_width="match_parent"
