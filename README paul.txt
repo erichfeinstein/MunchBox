@@ -7,3 +7,10 @@ Week 2:
 Tried to get pictures to work and be attached to specific entries. Changed "photo" to "photoID" with the idea that imageView can all these photos when necessary instead of storing them in the entry.
 Also made it so the default title for an entry is the first tag, if one exists.
 All datapoints in an entry now work. The dummy list has tags, rating, description, etc. The log shows all this data, UI is not connected yet.
+
+Week 3:
+Created a basic search method. Now we can search through the list of journal entries to find entries whose keywords match the searched word.
+The search is not case-sensitive and works even when the keyword is comprised of multiple words (Will find "Otani Noodle" from searching "otani")
+Search method returns all entries with matching keywords in a new list. Also added a method that sorts this search to display entries from descending rating order
+I also made it so the dummyList has random ratings to help ensure sorting by rating is successful
+Not optimized and not all sorting returns are in place, but with a basic search method we can integrate this feature with the others, specifically UI

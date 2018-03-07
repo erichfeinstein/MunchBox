@@ -25,6 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -78,7 +80,10 @@ public class MainActivity extends AppCompatActivity {
                 listItem.newDescription("This is great!");
             }
 
-            listItem.rateDish((i % 10) + 1);
+            Random r = new Random();
+            int newRando = r.nextInt((10 - 0) + 1) + 0;
+
+            listItem.rateDish(newRando);
             listItem.setIdentifier(i);
             listItem.setPhotoID(R.drawable.sample_image);
             journal.add(listItem);
@@ -86,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new MyAdapter(journal, this);
         recyclerView.setAdapter(adapter);
+
+        searchByReview("otani");
     }
 
     public void createEntryButton(View view) {
@@ -108,6 +115,65 @@ public class MainActivity extends AppCompatActivity {
             }
         /* The camera only comes up now after I press the back button. Need to test on phone to see if this always the case. */
 
+    }
+
+    //Basic Search Function will be improved later
+    public List<JournalEntry> searchTerm(String search)
+    {
+        List<JournalEntry> tempList = new ArrayList<JournalEntry>();
+        for(JournalEntry i: journal)
+        {
+            ArrayList<String> words = i.getKeywords();
+            for(String x: words)
+            {
+                x = x.toLowerCase(Locale.US);
+                search = search.toLowerCase(Locale.US);
+                if(x.indexOf(search) != -1)
+                {
+                    tempList.add(i);
+                }
+            }
+        }
+        return tempList;
+    }
+
+    //Sort By Specific Things
+    public List<JournalEntry> searchByDate(String search)
+    {
+        List<JournalEntry> tempList = searchTerm(search);
+        for(JournalEntry found: tempList)
+        {
+            System.out.println(found.getIdentifier());
+        }
+        return tempList;
+    }
+
+    public List<JournalEntry> searchByReview(String search)
+    {
+        System.out.println("--------------------------------Starting Sort: " + search);
+        List<JournalEntry> tempList = searchTerm(search);
+        for(JournalEntry found: tempList)
+        {
+            System.out.println(found.getIdentifier() + ": " + found.getRating());
+        }
+        List<JournalEntry> sortedList = new ArrayList<JournalEntry>();
+        for(int i = 10; i >= 0; i--)
+        {
+            for(JournalEntry found : tempList)
+            {
+                if (found.getRating() == i)
+                {
+                    sortedList.add(found);
+                    //tempList.remove(found);
+                }
+            }
+        }
+        System.out.println("--------------------------------Sorting Complete---------------------------");
+        for(JournalEntry found: sortedList)
+        {
+            System.out.println(found.getIdentifier() + ": " + found.getRating());
+        }
+        return  sortedList;
     }
 
     private void createEntry(Bitmap newEntryPhoto, String imagePath) {
