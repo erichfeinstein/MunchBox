@@ -1,5 +1,12 @@
 Danny Miles
 
+Week of 3/4
+
+3/6: Worked on permissions implementation. Application will no longer run if user refuses permissions. Not functioning quite as intended, but the
+framework is in place.
+
+3/4: Met with Eric and designed custom camera funcationality upon realization that Android default camera would not satisfy needs.
+
 Week of 2/25
 
 3/1: Implemented camera functionality. User can now take picture and the picture and its thumbnail will be associated with the journal entry.
