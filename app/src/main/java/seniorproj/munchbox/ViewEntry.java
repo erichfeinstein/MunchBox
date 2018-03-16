@@ -1,12 +1,9 @@
 package seniorproj.munchbox;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.app.Activity;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.view.View;
+import android.os.Bundle;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 
 public class ViewEntry extends Activity {
@@ -23,7 +20,7 @@ public class ViewEntry extends Activity {
         ArrayList<String> tagsList = getIntent().getStringArrayListExtra("tags");
         String ratingText = convertRatingToStars(getIntent().getIntExtra("rating", 0));
 
-        TextView dishName = (TextView)findViewById(R.id.dishName);
+        TextView dishName = (TextView)findViewById(R.id.name);
         dishName.setText(dish);
         TextView restaurantName = (TextView)findViewById(R.id.restaurant);
         restaurantName.setText(restaurant);

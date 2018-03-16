@@ -31,6 +31,8 @@ public class MunchCam extends Activity {
     private byte[] tempImage;
     private String recentImagePath;
 
+    private Button confirmButton;
+
     public static final int MEDIA_TYPE_IMAGE = 1;
 
     @Override
@@ -47,7 +49,7 @@ public class MunchCam extends Activity {
         prev.addView(munchCamPreview);
 
         final Button captureButton = (Button) findViewById(R.id.button_capture);
-        final Button confirmButton = (Button) findViewById(R.id.button_confirm);
+        confirmButton = (Button) findViewById(R.id.button_confirm);
         final Button cancelButton = (Button) findViewById(R.id.button_cancel);
         confirmButton.setVisibility(View.INVISIBLE);
         confirmButton.setEnabled(false);
@@ -62,7 +64,7 @@ public class MunchCam extends Activity {
                         cam.takePicture(null, null, mPicture);
                         captureButton.setEnabled(false);
                         captureButton.setVisibility(View.INVISIBLE);
-                        confirmButton.setEnabled(true);
+                        //wait on enable confirm
                         confirmButton.setVisibility(View.VISIBLE);
                         cancelButton.setEnabled(true);
                         cancelButton.setVisibility(View.VISIBLE);
@@ -75,7 +77,7 @@ public class MunchCam extends Activity {
                     public void onClick(View v) {
                         // save image and send to new activity
                         Intent intent = new Intent(MunchCam.this, EditEntry.class);
-                        intent.putExtra("image", tempImage);
+                        intent.putExtra("imageAddr", recentImagePath);
                         startActivity(intent);
                     }
                 }
@@ -119,7 +121,6 @@ public class MunchCam extends Activity {
 
             try {
                 recentImagePath = pictureFile.getPath().toString();
-                System.out.println(recentImagePath);
                 Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
 
                 //Ignore EXIF info and just rotate
@@ -136,8 +137,8 @@ public class MunchCam extends Activity {
                 byte[] newData = stream.toByteArray();
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(newData);
-                tempImage = newData; //?
                 fos.close();
+                confirmButton.setEnabled(true);
             } catch (FileNotFoundException e) {
                 System.out.println("File not found: " + e.getMessage());
             } catch (IOException e) {

@@ -16,10 +16,10 @@ public class EditEntry extends Activity {
         setContentView(R.layout.activity_edit_entry);
 
         //Get image and display it
-        byte[] picBytes = getIntent().getByteArrayExtra("image");
+        String imgPath = getIntent().getStringExtra("imageAddr");
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        Bitmap image = BitmapFactory.decodeByteArray(picBytes, 0, picBytes.length, opts);
+        Bitmap image = BitmapFactory.decodeFile(imgPath);
         ImageView myImage = (ImageView) findViewById(R.id.imageView);
         myImage.setImageBitmap(image);
     }
@@ -28,6 +28,7 @@ public class EditEntry extends Activity {
     public void onBackPressed(){
         finish();
         Intent backToList = new Intent(EditEntry.this, MainActivity.class);
+        //If StringExtra imageAddr is not null, delete image from directory (entry was in process of being created, but we don't want to save the image)
         startActivity(backToList);
     }
 }

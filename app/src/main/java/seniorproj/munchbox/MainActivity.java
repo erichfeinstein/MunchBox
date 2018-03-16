@@ -12,7 +12,6 @@ import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -93,6 +92,17 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         searchByReview("otani");
+
+        //Create a .nomedia file so images captured by MunchBox don't get scanned by MediaScanner
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "MunchCam");
+        File nomedia = new File(mediaStorageDir.getPath() + File.separator + ".nomedia");
+        try {
+            nomedia.createNewFile();
+        } catch (IOException e) {
+            e.getMessage();
+        }
+
     }
 
     public void createEntryButton(View view) {
@@ -205,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //TODO: If camera or read/write permissions are not given, app will not work and must close
+    //This is still bugged. If you give it permissions, the user is still alerted that the app requires permissions
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
