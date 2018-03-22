@@ -19,7 +19,11 @@ import android.view.View;
 import android.view.WindowManager;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     static final int READ_STORAGE = 1;
     static final int CAMERA = 2;
     String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+    //File internalStorageDir = getFilesDir();
+    //File savedJournal = new File(internalStorageDir, "savejournal.csv");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +63,30 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        journal = new ArrayList<>();
+
+
+        if(loadData() != null)
+        {
+            journal = loadData();
+        }
+        else
+        {
+            journal = new ArrayList<>();
+        }
+
+
 
         //Fill up list w/ dummy entries
-        for (int i = 0; i <= 100; i++) {
+        int i;
+        if(journal.isEmpty())
+        {
+            i = 0;
+        }
+        else
+        {
+            i = journal.size();
+        }
+        for (i = 0; i <= 100; i++) {
             JournalEntry listItem = new JournalEntry();
             listItem.renameDish("Burger " + i);
             listItem.changeRestaurantName("Jolly Scholar");
@@ -102,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.getMessage();
         }
+
+        saveData();
 
     }
 
@@ -184,6 +212,46 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(found.getIdentifier() + ": " + found.getRating());
         }
         return  sortedList;
+    }
+
+    //Saves the list of journal entries
+    public void saveData()
+    {
+        String FILENAME = "SavedJournal";
+        FileOutputStream outputStream = null;
+        try
+        {
+            outputStream = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            ObjectOutputStream objectStream = new ObjectOutputStream(outputStream);
+            for(JournalEntry i: journal)
+            {
+                objectStream.writeObject(i);
+            }
+            objectStream.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<JournalEntry> loadData()
+    {
+        String FILENAME = "SavedJournal";
+        FileInputStream inputStream = null;
+        ArrayList<JournalEntry> returnList = new ArrayList<JournalEntry>();
+        try
+        {
+            inputStream = openFileInput(FILENAME);
+            ObjectInputStream objectStream = new ObjectInputStream(inputStream);
+            returnList = (ArrayList<JournalEntry>) objectStream.readObject();
+            objectStream.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return returnList;
     }
 
     private void createEntry(Bitmap newEntryPhoto, String imagePath) {

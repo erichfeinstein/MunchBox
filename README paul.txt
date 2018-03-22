@@ -14,3 +14,6 @@ The search is not case-sensitive and works even when the keyword is comprised of
 Search method returns all entries with matching keywords in a new list. Also added a method that sorts this search to display entries from descending rating order
 I also made it so the dummyList has random ratings to help ensure sorting by rating is successful
 Not optimized and not all sorting returns are in place, but with a basic search method we can integrate this feature with the others, specifically UI
+
+Week 4:
+Started work on saving journal data between sessions. Methods in place, do not work but also don't crash.
