@@ -193,5 +193,15 @@ public class JournalEntry
         return photoID;
     }
 
+    public Date getEntryDate()
+    {
+        return entryDate;
+    }
+
+    public void setEntryDate(Date datedatedate)
+    {
+        entryDate = datedatedate;
+    }
+
 
 }
