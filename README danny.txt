@@ -1,5 +1,10 @@
 Danny Miles
 
+Week of 3/18
+
+3/22: Rehauled + simplified permissions system. Fixed bug where dialog window would pop up regardless of whether user agreed to permissions. App no longer
+allows users to proceed without accepting all permissions.
+
 Week of 3/4
 
 3/6: Worked on permissions implementation. Application will no longer run if user refuses permissions. Not functioning quite as intended, but the

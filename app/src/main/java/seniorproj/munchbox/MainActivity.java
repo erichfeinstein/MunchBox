@@ -41,9 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private String recentImagePath;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int THUMBSIZE = 200;
-    static final int WRITE_STORAGE = 0;
-    static final int READ_STORAGE = 1;
-    static final int CAMERA = 2;
+    static final int PERMISSION_ALL = 1;
     String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
     //File internalStorageDir = getFilesDir();
     //File savedJournal = new File(internalStorageDir, "savejournal.csv");
@@ -54,7 +52,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        checkPermissions(permissions);
+        if (!hasPermissions(this, permissions)) {
+            ActivityCompat.requestPermissions(this, permissions, PERMISSION_ALL);
+        }
 
         recyclerView = (RecyclerView) findViewById(R.id.entriesView);
         recyclerView.setHasFixedSize(true);
@@ -282,39 +282,24 @@ public class MainActivity extends AppCompatActivity {
         return journal;
     }
 
-    //TODO: If camera or read/write permissions are not given, app will not work and must close
-    //This is still bugged. If you give it permissions, the user is still alerted that the app requires permissions
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-       switch (requestCode) {
-           case WRITE_STORAGE: {
-               if (!(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                   alertUser(WRITE_STORAGE);
-               }
-           }
-           case READ_STORAGE: {
-               if (!(grantResults.length > 1 && grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
-                   alertUser(READ_STORAGE);
-               }
-           }
-           case CAMERA: {
-               if (!(grantResults.length > 2 && grantResults[2] == PackageManager.PERMISSION_GRANTED)) {
-                   alertUser(CAMERA);
-               }
-           }
-           return;
-       }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        for (int i = 0; i < grantResults.length; i++) {
+            if (!(grantResults.length > 0 && grantResults[i] == PackageManager.PERMISSION_GRANTED)) {
+                alertUser();
+            }
+        }
     }
 
-    public void alertUser(int id) {
-        final int tag = id;
+    public void alertUser() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                ActivityCompat.requestPermissions(MainActivity.this, permissions, tag);
                 dialogInterface.dismiss();
+                ActivityCompat.requestPermissions(MainActivity.this, permissions, PERMISSION_ALL);
+
             }
         });
         builder.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
@@ -337,17 +322,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return true;
-    }
-
-    private void checkPermissions(String... permissions) {
-        if (permissions != null) {
-            for (int i = 0; i < permissions.length; i++) {
-                String permission = permissions[i];
-                int debug = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this, permissions, i);
-                }
-            }
-        }
     }
 }
