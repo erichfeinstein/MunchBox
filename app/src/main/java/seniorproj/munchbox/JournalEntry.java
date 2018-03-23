@@ -53,7 +53,9 @@ public class JournalEntry
         nameOfDish = "";
         restaurantName = "";
         //restaurantName = GoogleFindRestaurantName();
-        //tags.add(GoogleFindTags);
+        //Generate tags
+        PhotoAnalyzer labelGen = new PhotoAnalyzer(path);
+        labelGen.generateLabels();
         description = "";
         thumbnail = thumb;
         photoPath = path;

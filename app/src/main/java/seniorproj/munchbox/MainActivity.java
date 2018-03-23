@@ -282,6 +282,7 @@ public class MainActivity extends AppCompatActivity {
         return journal;
     }
 
+    //For permissions checking
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -292,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Generates a dialog popup if user has not accepted permissions
     public void alertUser() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener() {
