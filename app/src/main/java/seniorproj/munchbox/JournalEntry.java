@@ -7,11 +7,14 @@ import android.media.Image;
 import android.media.ThumbnailUtils;
 import android.os.Environment;
 
+import com.google.api.services.vision.v1.model.EntityAnnotation;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Paul and Danny on 2/22/2018.
@@ -53,7 +56,17 @@ public class JournalEntry
         nameOfDish = "";
         restaurantName = "";
         //restaurantName = GoogleFindRestaurantName();
-        //tags.add(GoogleFindTags);
+        //Generate tags
+        PhotoAnalyzer labelGen = new PhotoAnalyzer(path);
+        try {
+            List<EntityAnnotation> labels = labelGen.generateLabels(4);
+            for (int i = 0; i < labels.size(); i++){
+                tags.add(labels.get(i).getDescription());
+            }
+        }
+        catch (IOException e) {
+            System.out.print(e.toString());
+        }
         description = "";
         thumbnail = thumb;
         photoPath = path;
@@ -189,6 +202,16 @@ public class JournalEntry
     public int getPhotoID()
     {
         return photoID;
+    }
+
+    public Date getEntryDate()
+    {
+        return entryDate;
+    }
+
+    public void setEntryDate(Date datedatedate)
+    {
+        entryDate = datedatedate;
     }
 
 

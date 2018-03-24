@@ -17,3 +17,7 @@ Not optimized and not all sorting returns are in place, but with a basic search 
 
 Week 4:
 Started work on saving journal data between sessions. Methods in place, do not work but also don't crash.
+Reloading ListUI is now a separate method. Can be called at any time to reload the ListUI with new parameters.
+Results of searches now appear in the List UI. Giving the ListUI a new list of entries(the return value of a search) when it reloads will cause only those entries to be shown
+Can now search a specific date to find an entry made on that day. Will add further options and settings to this search later. Getters and setters for dates for each entry.
+Reformatted the generated list of entries we use for testing. Now more variety in terms on entries, more organized in case we want to add more. Each entry now has a date.

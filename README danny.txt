@@ -2,6 +2,9 @@ Danny Miles
 
 Week of 3/18
 
+3/23: Began implementation of Google Vision functionality. Code is in place and theoretically functional, but will require significant testing and tweaks
+for production quality.
+
 3/22: Rehauled + simplified permissions system. Fixed bug where dialog window would pop up regardless of whether user agreed to permissions. App no longer
 allows users to proceed without accepting all permissions.
 

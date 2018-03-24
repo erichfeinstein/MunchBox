@@ -26,7 +26,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
 
-    private List<JournalEntry> journal;
+    private ArrayList<JournalEntry> journal;
 
     private String recentImagePath;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -77,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Fill up list w/ dummy entries
+        int year = 2015;
+        int month = 1;
+        int day = 14;
+
         int i;
         if(journal.isEmpty())
         {
@@ -88,36 +94,91 @@ public class MainActivity extends AppCompatActivity {
         }
         for (i = 0; i <= 100; i++) {
             JournalEntry listItem = new JournalEntry();
-            listItem.renameDish("Burger " + i);
-            listItem.changeRestaurantName("Jolly Scholar");
-            if (i % 5 == 0) {
-                listItem.changeRestaurantName("Otani Noodle");
+
+            if (i % 3 == 0) {
+                listItem.renameDish("Ramen Noodles: " + i);
+            } else if (i % 5 == 0) {
+                listItem.renameDish("Meatball Sub: " + i);
+            } else if (i % 7 == 0) {
+                listItem.renameDish("Delicious Pancakes: " + i);
+            } else {
+                listItem.renameDish("Bacon Cheeseburger: " + i);
             }
-            if (i % 5 == 0) {
+
+
+            if (i % 3 == 0) {
+                listItem.changeRestaurantName("Otani Noodle");
+            } else if (i % 5 == 0) {
+                listItem.changeRestaurantName("Subway");
+            } else if (i % 7 == 0) {
+                listItem.changeRestaurantName("IHOP");
+            } else {
+                listItem.changeRestaurantName("Jolly Scholar");
+            }
+
+
+            if (i % 3 == 0) {
+                listItem.newTag("Ramen");
                 listItem.newTag("Noodle");
+            } else if (i % 5 == 0) {
+                listItem.newTag("Meatball");
+                listItem.newTag("Sandwich");
+            } else if (i % 7 == 0) {
+                listItem.newTag("Fluffy");
+                listItem.newTag("Pancake");
             } else {
                 listItem.newTag("Burger");
+                listItem.newTag("Bacon");
             }
             listItem.newTag("Food");
-            if (i % 4 == 0) {
+
+
+            Random r = new Random();
+            int randomDescription = r.nextInt((6 - 0) + 1) + 0;
+
+            if (randomDescription == 1) {
                 listItem.newDescription("I don't like this very much.");
+            } else if (randomDescription == 2) {
+                listItem.newDescription("This is just ok");
+            } else if (randomDescription == 3) {
+                listItem.newDescription("Better than I was expecting");
+            } else if (randomDescription == 4) {
+                listItem.newDescription("Worse than I had hoped for");
+            } else if (randomDescription == 5) {
+                listItem.newDescription("I wish this was better");
             } else {
                 listItem.newDescription("This is great!");
             }
 
-            Random r = new Random();
-            int newRando = r.nextInt((10 - 0) + 1) + 0;
+            int randomRating = r.nextInt((10 - 0) + 1) + 0;
+            listItem.rateDish(randomRating);
 
-            listItem.rateDish(newRando);
+            Date dayOfVisit = new GregorianCalendar(year, month, day).getTime();
+            listItem.setEntryDate(dayOfVisit);
+
             listItem.setIdentifier(i);
             listItem.setPhotoID(R.drawable.sample_image);
             journal.add(listItem);
+
+            day++;
+            if(day >= 30)
+            {
+                day = 1;
+                month++;
+                if(month >= 12)
+                {
+                    month = 0;
+                    year++;
+                }
+            }
         }
 
-        adapter = new MyAdapter(journal, this);
-        recyclerView.setAdapter(adapter);
+        reloadList(journal);
 
-        searchByReview("otani");
+        Date searchForDay = new GregorianCalendar(2015, 2, 14).getTime();
+        ArrayList<JournalEntry> searchedList = searchTerm("otani");// = searchByDate(searchForDay);
+        reloadList(searchedList);
+
 
         //Create a .nomedia file so images captured by MunchBox don't get scanned by MediaScanner
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
@@ -155,10 +216,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //Basic Search Function will be improved later
-    public List<JournalEntry> searchTerm(String search)
+    //Changes what the list UI displays
+    public void reloadList(ArrayList<JournalEntry> newList)
     {
-        List<JournalEntry> tempList = new ArrayList<JournalEntry>();
+        adapter = new MyAdapter(newList, this);
+        recyclerView.setAdapter(adapter);
+    }
+
+    //Basic Search Function will be improved later
+    public ArrayList<JournalEntry> searchTerm(String search)
+    {
+        ArrayList<JournalEntry> tempList = new ArrayList<JournalEntry>();
         for(JournalEntry i: journal)
         {
             ArrayList<String> words = i.getKeywords();
@@ -175,26 +243,45 @@ public class MainActivity extends AppCompatActivity {
         return tempList;
     }
 
-    //Sort By Specific Things
-    public List<JournalEntry> searchByDate(String search)
+    //Only returns restaurants with the search term
+    public ArrayList<JournalEntry> searchTermRestaurantsOnly(String search)
     {
-        List<JournalEntry> tempList = searchTerm(search);
-        for(JournalEntry found: tempList)
+        ArrayList<JournalEntry> tempList = new ArrayList<JournalEntry>();
+        for(JournalEntry i: journal)
         {
-            System.out.println(found.getIdentifier());
+            String restName = i.getRestaurantName();
+            restName = restName.toLowerCase(Locale.US);
+            search = search.toLowerCase(Locale.US);
+            if(restName.indexOf(search) != -1)
+            {
+                tempList.add(i);
+            }
         }
         return tempList;
     }
 
-    public List<JournalEntry> searchByReview(String search)
+    //Sort By Specific Things
+    public ArrayList<JournalEntry> searchByDate(Date searchDay)
     {
-        System.out.println("--------------------------------Starting Sort: " + search);
-        List<JournalEntry> tempList = searchTerm(search);
+        ArrayList<JournalEntry> tempList = new ArrayList<>();
+        for(JournalEntry search: journal)
+        {
+            if(search.getEntryDate().compareTo(searchDay) == 0)
+            {
+                tempList.add(search);
+            }
+        }
+        return tempList;
+    }
+
+    public ArrayList<JournalEntry> sortByReview(String search)
+    {
+        ArrayList<JournalEntry> tempList = searchTerm(search);
         for(JournalEntry found: tempList)
         {
             System.out.println(found.getIdentifier() + ": " + found.getRating());
         }
-        List<JournalEntry> sortedList = new ArrayList<JournalEntry>();
+        ArrayList<JournalEntry> sortedList = new ArrayList<JournalEntry>();
         for(int i = 10; i >= 0; i--)
         {
             for(JournalEntry found : tempList)
@@ -202,16 +289,10 @@ public class MainActivity extends AppCompatActivity {
                 if (found.getRating() == i)
                 {
                     sortedList.add(found);
-                    //tempList.remove(found);
                 }
             }
         }
-        System.out.println("--------------------------------Sorting Complete---------------------------");
-        for(JournalEntry found: sortedList)
-        {
-            System.out.println(found.getIdentifier() + ": " + found.getRating());
-        }
-        return  sortedList;
+        return sortedList;
     }
 
     //Saves the list of journal entries
@@ -282,6 +363,7 @@ public class MainActivity extends AppCompatActivity {
         return journal;
     }
 
+    //For permissions checking
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -292,6 +374,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Generates a dialog popup if user has not accepted permissions
     public void alertUser() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener() {
