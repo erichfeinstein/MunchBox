@@ -27,15 +27,12 @@ public class JournalEntry
     private String restaurantName;
     private int rating;
     public File photo = null;
-    public int photoID;
     private int frequency;
     private String description;
     private ArrayList<String> tags = new ArrayList<String>();
     private Date entryDate = null;
     private Bitmap thumbnail = null;
     private String photoPath;
-
-
 
     /*Returns all information in the order of: name, restaurant, tags */
     public ArrayList<String> getKeywords()
@@ -82,7 +79,6 @@ public class JournalEntry
         //restaurantName = GoogleFindRestaurantName();
         //tags.add(GoogleFindTags);
         description = "";
-        this.photoID = R.drawable.sample_image;
         frequency = 1;
         entryDate = Calendar.getInstance().getTime();  //generate date on entry creation
         if (tags != null && tags.size() > 0) {
@@ -194,16 +190,6 @@ public class JournalEntry
         identifier = identify;
     }
 
-    public void setPhotoID(int ID)
-    {
-        photoID = ID;
-    }
-
-    public int getPhotoID()
-    {
-        return photoID;
-    }
-
     public Date getEntryDate()
     {
         return entryDate;
@@ -214,5 +200,7 @@ public class JournalEntry
         entryDate = datedatedate;
     }
 
+    public String getPhotoPath() { return photoPath; }
 
+    public void setPhotoPath(String photoPath) { this.photoPath = photoPath; }
 }

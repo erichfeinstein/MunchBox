@@ -61,14 +61,15 @@ public class MainActivity extends AppCompatActivity {
         String name = getIntent().getStringExtra("name");
         String restaurant = getIntent().getStringExtra("restaurant");
         String description = getIntent().getStringExtra("description");
+        String imgPath = getIntent().getStringExtra("imgPath");
         if (name != null && restaurant != null && description != null) {
             JournalEntry newEntry = new JournalEntry();
             newEntry.setNameOfDish(name);
             newEntry.setRestaurantName(restaurant);
             newEntry.setDescription(description);
             newEntry.setIdentifier(journal.size());
+            newEntry.setPhotoPath(imgPath);
             journal.add(newEntry);
-            System.out.println("added new entry yay");
         }
 
         if (!hasPermissions(this, permissions)) {
@@ -184,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
         journal.add(new JournalEntry(newEntryPhoto, recentImagePath));
     }
 
+    //TODO does this ever get called? I don't think so -Eric
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bitmap thumb = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(recentImagePath), THUMBSIZE, THUMBSIZE);

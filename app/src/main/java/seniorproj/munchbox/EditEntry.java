@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 public class EditEntry extends Activity {
 
+    private String imgPath;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -19,7 +21,7 @@ public class EditEntry extends Activity {
         setContentView(R.layout.activity_edit_entry);
 
         //Get image and display it
-        String imgPath = getIntent().getStringExtra("imageAddr");
+        imgPath = getIntent().getStringExtra("imageAddr");
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inPreferredConfig = Bitmap.Config.ARGB_8888;
         Bitmap image = BitmapFactory.decodeFile(imgPath);
@@ -36,6 +38,7 @@ public class EditEntry extends Activity {
         intent.putExtra("name", name.getText().toString());
         intent.putExtra("restaurant", restaurant.getText().toString());
         intent.putExtra("description", description.getText().toString());
+        intent.putExtra("imgPath", imgPath);
         startActivity(intent);
         //missing rating
     }

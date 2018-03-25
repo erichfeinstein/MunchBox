@@ -1,7 +1,11 @@
 package seniorproj.munchbox;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,6 +23,7 @@ public class ViewEntry extends Activity {
         String descriptionText = getIntent().getStringExtra("description");
         ArrayList<String> tagsList = getIntent().getStringArrayListExtra("tags");
         String ratingText = convertRatingToStars(getIntent().getIntExtra("rating", 0));
+        String imgPath = getIntent().getStringExtra("imgPath");
 
         TextView dishName = (TextView)findViewById(R.id.name);
         dishName.setText(dish);
@@ -26,6 +31,9 @@ public class ViewEntry extends Activity {
         restaurantName.setText(restaurant);
         TextView description = (TextView)findViewById(R.id.description);
         description.setText(descriptionText);
+        Bitmap image = BitmapFactory.decodeFile(imgPath);
+        ImageView myImage = (ImageView) findViewById(R.id.imageView);
+        myImage.setImageBitmap(image);
 
         StringBuilder tagsText = new StringBuilder();
         for (int i = 0; i < tagsList.size(); i++) {

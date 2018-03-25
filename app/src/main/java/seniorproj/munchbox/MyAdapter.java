@@ -1,6 +1,9 @@
 package seniorproj.munchbox;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,8 @@ import java.util.List;
  */
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+
+    static final int THUMBSIZE = 200;
 
     private List<JournalEntry> entriesList;
     private Context context;
@@ -38,9 +43,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.textViewDish.setText(entry.getNameOfDish());
         holder.textViewRestaurant.setText(entry.getRestaurantName());
         holder.id = entry.getIdentifier();
-        ImageView img = holder.getThumb();
-        img.setImageBitmap(entry.getThumbnail());
-        holder.thumb = img;
+        Bitmap img = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(entry.getPhotoPath()), THUMBSIZE, THUMBSIZE);
+        holder.thumb.setImageBitmap(img);
+
+
+        //ImageView img = holder.getThumb();
+        //img.setImageBitmap(entry.getThumbnail());
+        //holder.thumb = img;
     }
 
     @Override
@@ -52,9 +61,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         public TextView textViewDish;
         public TextView textViewRestaurant;
-        //For opening the entry
         private int id;
         public ImageView thumb;
+        public String imgPath;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -80,6 +89,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                     intent.putExtra("description", selectedEntry.getDescription());
                     intent.putExtra("tags", selectedEntry.getTags());
                     intent.putExtra("rating", selectedEntry.getRating());
+                    intent.putExtra("imgPath", selectedEntry.getPhotoPath());
                     context.startActivity(intent);
                 }
             }
