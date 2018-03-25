@@ -74,6 +74,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:layout_gravity="fill_horizontal|top|center_vertical|fill"

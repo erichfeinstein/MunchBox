@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class EditEntry extends Activity {
 
@@ -22,6 +25,19 @@ public class EditEntry extends Activity {
         Bitmap image = BitmapFactory.decodeFile(imgPath);
         ImageView myImage = (ImageView) findViewById(R.id.imageView);
         myImage.setImageBitmap(image);
+    }
+
+    public void saveEntryButton(View view) {
+        EditText name = (EditText) findViewById(R.id.name);
+        EditText restaurant = (EditText) findViewById(R.id.restaurant);
+        EditText description = (EditText) findViewById(R.id.description);
+
+        Intent intent = new Intent(EditEntry.this, MainActivity.class);
+        intent.putExtra("name", name.getText().toString());
+        intent.putExtra("restaurant", restaurant.getText().toString());
+        intent.putExtra("description", description.getText().toString());
+        startActivity(intent);
+        //missing rating
     }
 
     @Override

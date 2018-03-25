@@ -125,7 +125,7 @@ public class JournalEntry
         return rating;
     }
 
-    public void renameDish(String newName)
+    public void setNameOfDish(String newName)
     {
          nameOfDish = newName;
     }
@@ -135,7 +135,7 @@ public class JournalEntry
         return nameOfDish;
     }
 
-    public void newDescription(String newDescription)
+    public void setDescription(String newDescription)
     {
         description = newDescription;
     }
@@ -147,7 +147,7 @@ public class JournalEntry
 
     //This one is for changing the name of the restaurant. Ideally, since Google will determine the restaurant, this will never be used.
     //Giving users the option is important, however.
-    public void changeRestaurantName(String newName)
+    public void setRestaurantName(String newName)
     {
         restaurantName = newName;
     }
