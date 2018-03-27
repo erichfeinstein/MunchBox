@@ -45,11 +45,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.id = entry.getIdentifier();
         Bitmap img = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(entry.getPhotoPath()), THUMBSIZE, THUMBSIZE);
         holder.thumb.setImageBitmap(img);
-
-
-        //ImageView img = holder.getThumb();
-        //img.setImageBitmap(entry.getThumbnail());
-        //holder.thumb = img;
     }
 
     @Override

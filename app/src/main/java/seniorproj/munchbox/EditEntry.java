@@ -5,13 +5,21 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class EditEntry extends Activity {
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private ArrayList<String> tags;
 
     private String imgPath;
 
@@ -28,6 +36,32 @@ public class EditEntry extends Activity {
         Bitmap image = BitmapFactory.decodeFile(imgPath);
         ImageView myImage = (ImageView) findViewById(R.id.imageView);
         myImage.setImageBitmap(image);
+
+        recyclerView = (RecyclerView) findViewById(R.id.tagsView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        //Run image analysis
+        if (tags == null) {
+            tags = new ArrayList<String>();
+            tags.add("tag 1");
+            tags.add("tag 2");
+            tags.add("tag 3");
+            tags.add("tag 4");
+            tags.add("tag 1");
+            tags.add("tag 2");
+            tags.add("tag 3");
+            tags.add("tag 4");
+            tags.add("tag 1");
+            tags.add("tag 2");
+            tags.add("tag 3");
+            tags.add("tag 4");
+            tags.add("tag 1");
+            tags.add("tag 2");
+            tags.add("tag 3");
+            tags.add("tag 4");
+        }
+        loadTags(tags);
     }
 
     public void saveEntryButton(View view) {
@@ -45,6 +79,11 @@ public class EditEntry extends Activity {
         intent.putExtra("rating", ratingAsInt);
 
         startActivity(intent);
+    }
+
+    private void loadTags(ArrayList<String> tagsList) {
+        adapter = new TagsAdapter(tagsList, this);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
