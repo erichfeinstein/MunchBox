@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         String restaurant = getIntent().getStringExtra("restaurant");
         String description = getIntent().getStringExtra("description");
         String imgPath = getIntent().getStringExtra("imgPath");
+        int rating = getIntent().getIntExtra("rating", 0);
         if (name != null && restaurant != null && description != null) {
             JournalEntry newEntry = new JournalEntry();
             newEntry.setNameOfDish(name);
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             newEntry.setDescription(description);
             newEntry.setIdentifier(journal.size());
             newEntry.setPhotoPath(imgPath);
+            newEntry.rateDish(rating);
             journal.add(newEntry);
         }
 

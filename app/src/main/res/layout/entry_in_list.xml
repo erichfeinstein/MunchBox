@@ -24,8 +24,7 @@
                 android:id="@+id/foodThumbnail"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
-                android:src="@android:drawable/btn_star_big_on"
-                />
+                android:src="@android:drawable/btn_star_big_on" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

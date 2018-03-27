@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 public class EditEntry extends Activity {
@@ -33,14 +34,17 @@ public class EditEntry extends Activity {
         EditText name = (EditText) findViewById(R.id.name);
         EditText restaurant = (EditText) findViewById(R.id.restaurant);
         EditText description = (EditText) findViewById(R.id.description);
+        RatingBar rating = (RatingBar) findViewById(R.id.rating);
+        int ratingAsInt = (int) (rating.getRating() * 2.0); //Multiply by 2 because ratings are stored on a 1-10 scale using ints
 
         Intent intent = new Intent(EditEntry.this, MainActivity.class);
         intent.putExtra("name", name.getText().toString());
         intent.putExtra("restaurant", restaurant.getText().toString());
         intent.putExtra("description", description.getText().toString());
         intent.putExtra("imgPath", imgPath);
+        intent.putExtra("rating", ratingAsInt);
+
         startActivity(intent);
-        //missing rating
     }
 
     @Override
