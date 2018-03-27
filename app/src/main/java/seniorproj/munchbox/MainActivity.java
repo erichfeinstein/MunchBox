@@ -5,18 +5,23 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -54,7 +59,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (journal == null) {
-            journal = new ArrayList<JournalEntry>();
+            SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+            Gson gson = new Gson();
+            String json = prefs.getString("Journal", "");
+            journal = gson.fromJson(json, new TypeToken<List<JournalEntry>>(){}.getType());
+            if (journal == null) journal = new ArrayList<JournalEntry>();
         }
 
         //Detect if new entry needs to be created
@@ -71,6 +80,15 @@ public class MainActivity extends AppCompatActivity {
             newEntry.setPhotoPath(imgPath);
             journal.add(newEntry);
         }
+
+        //Save journal to SharedPrefs using Gson
+        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(journal);
+        System.out.println(json);
+        prefsEditor.putString("Journal", json);
+        prefsEditor.commit();
 
         if (!hasPermissions(this, permissions)) {
             ActivityCompat.requestPermissions(this, permissions, PERMISSION_ALL);

@@ -34,19 +34,6 @@ public class JournalEntry
     private Bitmap thumbnail = null;
     private String photoPath;
 
-    /*Returns all information in the order of: name, restaurant, tags */
-    public ArrayList<String> getKeywords()
-    {
-        ArrayList<String> returnList = new ArrayList<String>();
-        returnList.add(nameOfDish);
-        returnList.add(restaurantName);
-        for (String tag: tags)
-        {
-            returnList.add(tag);
-        }
-        return returnList;
-    }
-
     public JournalEntry(Bitmap thumb, String path)
     {
         rating = 0;
@@ -86,6 +73,18 @@ public class JournalEntry
         }
     }
 
+    /*Returns all information in the order of: name, restaurant, tags */
+    public ArrayList<String> getKeywords()
+    {
+        ArrayList<String> returnList = new ArrayList<String>();
+        returnList.add(nameOfDish);
+        returnList.add(restaurantName);
+        for (String tag: tags)
+        {
+            returnList.add(tag);
+        }
+        return returnList;
+    }
     //These methods will used to change the information in each datapoint.
     //They will be used both for the first time entering and for editing existing datapoints.
     public void incrementFrequency()
