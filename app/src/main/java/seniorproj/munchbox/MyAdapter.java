@@ -13,6 +13,7 @@ import android.widget.Toast;
 import android.content.Intent;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private List<JournalEntry> entriesList;
     private Context context;
 
-    public MyAdapter(List<JournalEntry> entriesList, Context context) {
+    public MyAdapter(ArrayList<JournalEntry> entriesList, Context context) {
         this.entriesList = entriesList;
         this.context = context;
     }

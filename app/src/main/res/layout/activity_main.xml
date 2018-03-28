@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:orientation="horizontal"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:backgroundTint="@android:color/white"
         android:layout_marginRight="5dp"
         android:layout_marginLeft="5dp"
         android:background="@drawable/less_round_edge">
@@ -38,7 +38,6 @@
             android:id="@+id/searchField"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:layout_weight="1"
             android:layout_gravity="center"
             android:gravity="center"
@@ -53,17 +52,12 @@
 
         <Button
             android:id="@+id/toggleButton"
-            android:layout_width="70dp"
-            android:layout_height="20dp"
+            android:onClick="sortByButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="1dp"
-            android:textSize="14dp"
             android:paddingLeft="10px"
-            android:background="@drawable/less_round_edge"
-            android:textColor="@android:color/white"
-            android:text="Sort by">
-
+            android:background="@drawable/more_menu">
         </Button>
 
 

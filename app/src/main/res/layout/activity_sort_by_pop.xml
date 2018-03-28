@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainmenu"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/nicer_border"
+    android:backgroundTint="@color/colorVeryDark">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Sort By options appear here"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textSize="40sp" />
+</FrameLayout>

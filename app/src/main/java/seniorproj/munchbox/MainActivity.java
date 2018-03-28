@@ -69,6 +69,15 @@ public class MainActivity extends AppCompatActivity {
             if (journal == null) journal = new ArrayList<JournalEntry>();
         }
 
+        adapter = new MyAdapter(journal, this);
+        recyclerView = (RecyclerView) findViewById(R.id.entriesView);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        reloadList(journal);
+        journalCopy = new ArrayList<>(journal);
+
         //Detect if new entry needs to be created
         String name = getIntent().getStringExtra("name");
         String restaurant = getIntent().getStringExtra("restaurant");
@@ -98,15 +107,9 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, permissions, PERMISSION_ALL);
         }
 
-        recyclerView = (RecyclerView) findViewById(R.id.entriesView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        reloadList(journal);
-        journalCopy = new ArrayList<>(journal);
 
         //Create a .nomedia file so images captured by MunchBox don't get scanned by MediaScanner
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
@@ -161,6 +164,12 @@ public class MainActivity extends AppCompatActivity {
                 journal.add(item);
             }
         }
+    }
+
+    public void sortByButton(View view) {
+        /* Choose sort-by option */
+        Intent changeSortIntent = new Intent(MainActivity.this, SortByPop.class);
+        startActivity(changeSortIntent);
     }
 
     public void createEntryButton(View view) {

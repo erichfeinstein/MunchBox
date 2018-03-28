@@ -42,6 +42,13 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity
+            android:name=".SortByPop"
+            android:theme="@style/AppTheme.PopUpTheme"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+
         <provider
             android:name = "android.support.v4.content.FileProvider"
             android:authorities="seniorproj.munchbox.fileprovider"
