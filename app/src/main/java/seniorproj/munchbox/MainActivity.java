@@ -2,6 +2,7 @@ package seniorproj.munchbox;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,8 +19,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.PopupWindow;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -160,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         journal.clear();
         for(JournalEntry item: journalCopy){
             //Filter by name of dish and restaurant name
+            //TODO filter by keywords, not just these fields
             if(item.getNameOfDish().toLowerCase().contains(text) || item.getRestaurantName().toLowerCase().contains(text)){
                 journal.add(item);
             }
@@ -167,9 +173,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sortByButton(View view) {
-        /* Choose sort-by option */
-        Intent changeSortIntent = new Intent(MainActivity.this, SortByPop.class);
-        startActivity(changeSortIntent);
+        LayoutInflater inflater = getLayoutInflater();
+        PopupWindow popup = new PopupWindow(inflater.inflate(R.layout.activity_sort_by_pop,(ViewGroup)findViewById(R.layout.activity_main)));
+        popup.setFocusable(true);
+        popup.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
+        popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        popup.showAsDropDown(view);
     }
 
     public void createEntryButton(View view) {
