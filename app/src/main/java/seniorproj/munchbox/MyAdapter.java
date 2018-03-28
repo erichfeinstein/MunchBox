@@ -76,7 +76,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 Intent intent = new Intent(context, ViewEntry.class);
                 MainActivity activity = (MainActivity) context;
                 if (activity != null) {
-                    JournalEntry selectedEntry = activity.getJournal().get(id);
+                    JournalEntry selectedEntry = new JournalEntry();
+                    for (int i = 0; i < activity.getJournal().size(); i++) {
+                        if (activity.getJournal().get(i).getIdentifier() == id) {
+                            selectedEntry = activity.getJournal().get(i);
+                        }
+                    }
                     intent.putExtra("id", id);
                     intent.putExtra("dishName", selectedEntry.getNameOfDish());
                     intent.putExtra("restaurantName", selectedEntry.getRestaurantName());

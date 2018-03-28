@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -41,9 +42,11 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    private MyAdapter adapter;
+    private SearchView searchView;
 
     private static ArrayList<JournalEntry> journal;
+    private static ArrayList<JournalEntry> journalCopy;
 
     private String recentImagePath;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -103,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         reloadList(journal);
+        journalCopy = new ArrayList<>(journal);
 
         //Create a .nomedia file so images captured by MunchBox don't get scanned by MediaScanner
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
@@ -112,6 +116,50 @@ public class MainActivity extends AppCompatActivity {
             nomedia.createNewFile();
         } catch (IOException e) {
             e.getMessage();
+        }
+
+        //Filter results by text of searchField
+        //TODO: Sort all of journal by different methods
+        searchView = findViewById(R.id.searchField);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (query == null) {
+                    journal = new ArrayList<>(journalCopy);
+                    reloadList(journal);
+                    return true;
+                }
+                else {
+                    filter(query);
+                    reloadList(journal);
+                    return true;
+                }
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText == null) {
+                    journal = new ArrayList<>(journalCopy);
+                    reloadList(journal);
+                    return true;
+                }
+                else {
+                    filter(newText);
+                    reloadList(journal);
+                    return true;
+                }
+            }
+        });
+    }
+
+    public void filter(String text) {
+        text = text.toLowerCase();
+        journal.clear();
+        for(JournalEntry item: journalCopy){
+            //Filter by name of dish and restaurant name
+            if(item.getNameOfDish().toLowerCase().contains(text) || item.getRestaurantName().toLowerCase().contains(text)){
+                journal.add(item);
+            }
         }
     }
 
@@ -124,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
     //Changes what the list UI displays
     public void reloadList(ArrayList<JournalEntry> newList)
     {
-        adapter = new MyAdapter(newList, this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -202,18 +249,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void createEntry(Bitmap newEntryPhoto, String imagePath) {
         journal.add(new JournalEntry(newEntryPhoto, recentImagePath));
-    }
-
-    //TODO does this ever get called? I don't think so -Eric
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bitmap thumb = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(recentImagePath), THUMBSIZE, THUMBSIZE);
-            createEntry(thumb, recentImagePath);
-            Intent intent = new Intent(MainActivity.this, EditEntry.class);
-            intent.putExtra("foodImagePath", recentImagePath);
-            startActivity(intent);
-            recentImagePath = "";
-        }
     }
 
     private File createImageFile() throws IOException {
