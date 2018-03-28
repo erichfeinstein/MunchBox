@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor prefsEditor = prefs.edit();
         Gson gson = new Gson();
         String json = gson.toJson(journal);
-        System.out.println(json);
         prefsEditor.putString("Journal", json);
         prefsEditor.commit();
 

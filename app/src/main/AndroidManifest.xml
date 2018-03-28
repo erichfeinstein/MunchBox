@@ -32,7 +32,8 @@
 
         <activity
             android:name=".EditEntry"
-            android:label="Edit Entry" >
+            android:label="Edit Entry"
+            android:windowSoftInputMode="adjustPan">
         </activity>
 
         <activity
