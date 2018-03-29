@@ -16,6 +16,7 @@
             android:orientation="vertical">
 
             <Button
+                android:onClick="sortByDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/borders"
@@ -23,6 +24,7 @@
                 android:textColor="@android:color/black"
                 android:singleLine="true"/>
             <Button
+                android:onClick="sortByReview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/borders"

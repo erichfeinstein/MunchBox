@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +39,7 @@ import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -46,10 +48,9 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private MyAdapter adapter;
     private SearchView searchView;
-
+    private static RecyclerView recyclerView;
+    private static MyAdapter adapter;
     private static ArrayList<JournalEntry> journal;
     private static ArrayList<JournalEntry> journalCopy;
 
@@ -80,8 +81,11 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
+
+        searchView = findViewById(R.id.searchField);
+        boolean resetList = getIntent().getBooleanExtra("resetList", false);
+        if (resetList) filter("");
         reloadList(journal);
-        journalCopy = new ArrayList<>(journal);
 
         //Detect if new entry needs to be created
         String name = getIntent().getStringExtra("name");
@@ -99,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
             newEntry.rateDish(rating);
             journal.add(newEntry);
         }
+        journalCopy = new ArrayList<>(journal);
 
         //Save journal to SharedPrefs using Gson
         SharedPreferences prefs = getPreferences(MODE_PRIVATE);
@@ -127,8 +132,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //Filter results by text of searchField
-        //TODO: Sort all of journal by different methods
-        searchView = findViewById(R.id.searchField);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -160,7 +163,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void filter(String text) {
+    @Override
+    public void onResume() {
+        //Resume the search
+        super.onResume();
+        searchView.setQuery(searchView.getQuery().toString(), true);
+    }
+
+    public static void filter(String text) {
         text = text.toLowerCase();
         journal.clear();
         for(JournalEntry item: journalCopy){
@@ -188,94 +198,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Changes what the list UI displays
-    public void reloadList(ArrayList<JournalEntry> newList)
+    public static void reloadList(ArrayList<JournalEntry> newList)
     {
         recyclerView.setAdapter(adapter);
     }
 
-    //Basic Search Function will be improved later
-    public ArrayList<JournalEntry> searchTerm(String search)
-    {
-        ArrayList<JournalEntry> tempList = new ArrayList<JournalEntry>();
-        for(JournalEntry i: journal)
-        {
-            ArrayList<String> words = i.getKeywords();
-            for(String x: words)
-            {
-                x = x.toLowerCase(Locale.US);
-                search = search.toLowerCase(Locale.US);
-                if(x.indexOf(search) != -1)
-                {
-                    tempList.add(i);
-                }
-            }
-        }
-        return tempList;
+    public void sortByDate(View view) {
+        Collections.sort(journal);
+        reloadList(journal);
     }
 
-    //Only returns restaurants with the search term
-    public ArrayList<JournalEntry> searchTermRestaurantsOnly(String search)
+    public void sortByReview(View view)
     {
-        ArrayList<JournalEntry> tempList = new ArrayList<JournalEntry>();
-        for(JournalEntry i: journal)
-        {
-            String restName = i.getRestaurantName();
-            restName = restName.toLowerCase(Locale.US);
-            search = search.toLowerCase(Locale.US);
-            if(restName.indexOf(search) != -1)
-            {
-                tempList.add(i);
-            }
-        }
-        return tempList;
-    }
-
-    //Sort By Specific Things
-    public ArrayList<JournalEntry> searchByDate(Date searchDay)
-    {
-        ArrayList<JournalEntry> tempList = new ArrayList<>();
-        for(JournalEntry search: journal)
-        {
-            if(search.getEntryDate().compareTo(searchDay) == 0)
-            {
-                tempList.add(search);
-            }
-        }
-        return tempList;
-    }
-
-    public ArrayList<JournalEntry> sortByReview(String search)
-    {
-        ArrayList<JournalEntry> tempList = searchTerm(search);
-        for(JournalEntry found: tempList)
-        {
-            System.out.println(found.getIdentifier() + ": " + found.getRating());
-        }
-        ArrayList<JournalEntry> sortedList = new ArrayList<JournalEntry>();
+        journalCopy = new ArrayList(journal);
+        journal.clear();
         for(int i = 10; i >= 0; i--)
         {
-            for(JournalEntry found : tempList)
+            for(JournalEntry found : journalCopy)
             {
                 if (found.getRating() == i)
                 {
-                    sortedList.add(found);
+                    journal.add(found);
                 }
             }
         }
-        return sortedList;
+        reloadList(journal);
     }
 
     private void createEntry(Bitmap newEntryPhoto, String imagePath) {
         journal.add(new JournalEntry(newEntryPhoto, recentImagePath));
-    }
-
-    private File createImageFile() throws IOException {
-        String time = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String fileName = "JPEG_" + time + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File photo = File.createTempFile(fileName, ".jpg", storageDir);
-        recentImagePath = photo.getAbsolutePath();
-        return photo;
     }
 
     public List<JournalEntry> getJournal() {
@@ -324,5 +275,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    public static void resetJournal() {
+        filter("");
     }
 }

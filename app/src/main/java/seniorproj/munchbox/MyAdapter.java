@@ -43,6 +43,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         JournalEntry entry = entriesList.get(position);
         holder.textViewDish.setText(entry.getNameOfDish());
         holder.textViewRestaurant.setText(entry.getRestaurantName());
+        holder.textViewRating.setText(entry.getRatingAsStars());
         holder.id = entry.getIdentifier();
         Bitmap img = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(entry.getPhotoPath()), THUMBSIZE, THUMBSIZE);
         holder.thumb.setImageBitmap(img);
@@ -57,6 +58,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         public TextView textViewDish;
         public TextView textViewRestaurant;
+        public TextView textViewRating;
         private int id;
         public ImageView thumb;
         public String imgPath;
@@ -65,6 +67,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             super(itemView);
             textViewDish = (TextView)itemView.findViewById(R.id.dish);
             textViewRestaurant = (TextView)itemView.findViewById(R.id.restaurant);
+            textViewRating = (TextView)itemView.findViewById(R.id.rating);
             thumb = (ImageView) itemView.findViewById(R.id.foodThumbnail);
             id = itemView.getId();
             itemView.setOnClickListener(this);
@@ -88,8 +91,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                     intent.putExtra("restaurantName", selectedEntry.getRestaurantName());
                     intent.putExtra("description", selectedEntry.getDescription());
                     intent.putExtra("tags", selectedEntry.getTags());
-                    intent.putExtra("rating", selectedEntry.getRating());
+                    intent.putExtra("rating", selectedEntry.getRatingAsStars());
                     intent.putExtra("imgPath", selectedEntry.getPhotoPath());
+                    MainActivity.resetJournal(); //Always reset journal before leaving MainActivity
                     context.startActivity(intent);
                 }
             }
