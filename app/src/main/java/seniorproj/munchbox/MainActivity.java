@@ -174,10 +174,12 @@ public class MainActivity extends AppCompatActivity {
         text = text.toLowerCase();
         journal.clear();
         for(JournalEntry item: journalCopy){
-            //Filter by name of dish and restaurant name
-            //TODO filter by keywords, not just these fields
-            if(item.getNameOfDish().toLowerCase().contains(text) || item.getRestaurantName().toLowerCase().contains(text)){
-                journal.add(item);
+            ArrayList<String> keywords = item.getKeywords();
+            for (int i = 0; i < keywords.size(); i++) {
+                if (keywords.get(i).toLowerCase().contains(text)) {
+                    journal.add(item);
+                    break;
+                }
             }
         }
     }
