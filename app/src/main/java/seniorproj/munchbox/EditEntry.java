@@ -13,7 +13,11 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.api.services.vision.v1.model.EntityAnnotation;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EditEntry extends Activity {
 
