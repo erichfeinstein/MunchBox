@@ -1,5 +1,16 @@
 Danny Miles
 
+Week of 3/25
+
+3/30: Continued work on Vision API. Implemented Vision
+using a different (but still Google) library, but still having issues with requests being made to Google servers, as well as with the debugger not firing on breakpoints. Will work with the group in order to solve these
+issues over the coming days.
+
+3/29: Continued modifying Google Vision code. Switched to using client services for API contact, but am currently running into issues; however, have modified framework in such a way that
+further work will be simpler to change and fix. Also made slight fixes to the permissions system.
+
+3/27: Began refactoring code to accomodate new design for journal entry addition. Began modification of Google Vision code; currently having issues with HTTP requests.
+
 Week of 3/18
 
 3/23: Began implementation of Google Vision functionality. Code is in place and theoretically functional, but will require significant testing and tweaks
@@ -33,5 +44,4 @@ Week of 2/18
 
 
 2/20: Refreshed myself on basics of Android Studio development, researched the utilization of Android system features
-for app use; in particular, the 
-Set up Android Studio development environment, coordinated version control protocols among team members.
+for app use. Set up Android Studio development environment, coordinated version control protocols among team members.
