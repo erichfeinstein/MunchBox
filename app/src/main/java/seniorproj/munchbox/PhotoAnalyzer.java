@@ -74,7 +74,7 @@ public class PhotoAnalyzer extends AsyncTask<Void, Void, Void> {
 
     public PhotoAnalyzer(String photoPath) {
         setFilePath(photoPath);
-        generateLabels();
+     //   generateLabels();
     }
 
     public List<String> getLabels() {
