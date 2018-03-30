@@ -38,6 +38,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -225,6 +226,60 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         reloadList(journal);
+    }
+
+    public void sortAlphabeticallyByDishName(View view)
+    {
+        journalCopy = new ArrayList(journal);
+        ArrayList<String> stringList = new ArrayList<String>();
+        for(JournalEntry j: journalCopy)
+        {
+            stringList.add(j.getNameOfDish());
+        }
+        Collections.sort(stringList, String.CASE_INSENSITIVE_ORDER);
+        journal.clear();
+        for(String s: stringList)
+        {
+            journal.add(findEntryByName(s, journalCopy));
+        }
+
+        reloadList(journal);
+    }
+
+    public void sortByDistance(View view)
+    {
+        double currentX = 40;
+        double currentY = 60;
+        checkDistances(currentX, currentY);
+
+        journalCopy = new ArrayList(journal);
+        journal.clear();
+
+
+
+        reloadList(journal);
+    }
+
+    public JournalEntry findEntryByName(String name, ArrayList<JournalEntry> journal)
+    {
+        for(JournalEntry j: journal)
+        {
+            if(name.equalsIgnoreCase(j.getNameOfDish()))
+            {
+                return j;
+            }
+        }
+        return null;
+    }
+
+    public void checkDistances(double x, double y)
+    {
+        for(JournalEntry j: journal)
+        {
+            double newX = Math.pow(Math.abs(j.getXLocation() - x), 2);
+            double newY = Math.pow(Math.abs(j.getYLocation() - y), 2);
+            j.setDistanceLastChecked((Double)Math.sqrt(newX + newY));
+        }
     }
 
     private void createEntry(Bitmap newEntryPhoto, String imagePath) {
