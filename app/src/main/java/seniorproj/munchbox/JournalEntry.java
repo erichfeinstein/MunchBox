@@ -7,8 +7,6 @@ import android.media.Image;
 import android.media.ThumbnailUtils;
 import android.os.Environment;
 
-import com.google.api.services.vision.v1.model.EntityAnnotation;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,15 +40,7 @@ public class JournalEntry
         //restaurantName = GoogleFindRestaurantName();
         //Generate tags
         PhotoAnalyzer labelGen = new PhotoAnalyzer(path);
-        try {
-            List<EntityAnnotation> labels = labelGen.generateLabels(4);
-            for (int i = 0; i < labels.size(); i++){
-                tags.add(labels.get(i).getDescription());
-            }
-        }
-        catch (IOException e) {
-            System.out.print(e.toString());
-        }
+   //     tags = (ArrayList)labelGen.getLabels();
         description = "";
         thumbnail = thumb;
         photoPath = path;
@@ -64,7 +54,8 @@ public class JournalEntry
         nameOfDish = "";
         restaurantName = "";
         //restaurantName = GoogleFindRestaurantName();
-        //tags.add(GoogleFindTags);
+//        PhotoAnalyzer labelGen = new PhotoAnalyzer(photoPath);
+//        tags = (ArrayList)labelGen.getLabels();
         description = "";
         frequency = 1;
         entryDate = Calendar.getInstance().getTime();  //generate date on entry creation
@@ -138,6 +129,10 @@ public class JournalEntry
     public String getDescription()
     {
         return description;
+    }
+
+    public void setTags(List<String> newTags) {
+        tags = (ArrayList)newTags;
     }
 
     //This one is for changing the name of the restaurant. Ideally, since Google will determine the restaurant, this will never be used.

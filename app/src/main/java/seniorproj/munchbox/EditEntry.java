@@ -14,12 +14,13 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EditEntry extends Activity {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private ArrayList<String> tags;
+    private List<String> tags;
 
     private String imgPath;
 
@@ -40,6 +41,8 @@ public class EditEntry extends Activity {
         recyclerView = (RecyclerView) findViewById(R.id.tagsView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        PhotoAnalyzer labelGen = new PhotoAnalyzer(imgPath);
+   //     tags = labelGen.getLabels();
 
         //Run image analysis
         if (tags == null) {
@@ -81,7 +84,7 @@ public class EditEntry extends Activity {
         startActivity(intent);
     }
 
-    private void loadTags(ArrayList<String> tagsList) {
+    private void loadTags(List<String> tagsList) {
         adapter = new TagsAdapter(tagsList, this);
         recyclerView.setAdapter(adapter);
     }
