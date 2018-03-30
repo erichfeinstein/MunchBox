@@ -184,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressWarnings("ResourceType")
     public void sortByButton(View view) {
         LayoutInflater inflater = getLayoutInflater();
         PopupWindow popup = new PopupWindow(inflater.inflate(R.layout.activity_sort_by_pop,(ViewGroup)findViewById(R.layout.activity_main)));

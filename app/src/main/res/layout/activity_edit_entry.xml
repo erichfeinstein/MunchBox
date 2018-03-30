@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center_horizontal"
     android:background="@android:color/background_light"
     android:orientation="vertical"
     tools:context="seniorproj.munchbox.EditEntry">
@@ -27,9 +26,13 @@
                     android:textSize="20dp"/>
         </RelativeLayout>
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
                 <LinearLayout
                     android:id="@+id/info_enter"
@@ -175,4 +178,5 @@
                 </LinearLayout>
 
         </RelativeLayout>
+        </ScrollView>
 </LinearLayout>

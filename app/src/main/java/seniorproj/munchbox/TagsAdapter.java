@@ -1,5 +1,6 @@
 package seniorproj.munchbox;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,7 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
@@ -42,13 +45,13 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         if (position == tagsList.size()) {
             holder.button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Code for entering new tag... popupview?
-                    Toast.makeText(context, "Enter new tag", Toast.LENGTH_LONG).show();
+                    EditEntry a = (EditEntry) context;
+                    a.openAddTag(holder.button);
                 }
             });
         } else {
