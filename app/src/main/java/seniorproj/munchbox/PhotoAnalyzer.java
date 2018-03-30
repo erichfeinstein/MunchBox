@@ -2,71 +2,87 @@ package seniorproj.munchbox;
 
 
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.vision.v1.Vision;
-import com.google.api.services.vision.v1.model.*;
-import com.google.api.services.vision.v1.VisionScopes;
-import com.google.common.collect.ImmutableList;
-import java.io.IOException;
+import android.os.AsyncTask;
+
+import com.google.api.gax.rpc.ClientContext;
+import com.google.cloud.vision.v1.AnnotateImageRequest;
+import com.google.cloud.vision.v1.AnnotateImageResponse;
+import com.google.cloud.vision.v1.BatchAnnotateImagesResponse;
+import com.google.cloud.vision.v1.EntityAnnotation;
+import com.google.cloud.vision.v1.Feature;
+import com.google.cloud.vision.v1.Feature.Type;
+import com.google.cloud.vision.v1.Image;
+import com.google.cloud.vision.v1.ImageAnnotatorClient;
+import com.google.cloud.vision.v1.ImageAnnotatorSettings;
+
 import java.io.RandomAccessFile;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
+import com.google.protobuf.ByteString;
 
 /**
  * Created by Danny on 3/23/2018.
  */
 
-public class PhotoAnalyzer {
-
+public class PhotoAnalyzer extends AsyncTask<Void, Void, Void> {
 
     private String filePath;
-    private Image photo;
-    private Vision vision = null;
     private List<EntityAnnotation> labels;
 
-    public List<EntityAnnotation> generateLabels(int maxResults) throws IOException {
+    @Override
+    protected Void doInBackground(Void... params) {
 
-        List<EntityAnnotation> requests = new ArrayList<>();
-        RandomAccessFile file = new RandomAccessFile(filePath, "r");
-        byte[] data = new byte[(int)file.length()];
-        file.readFully(data);
+        try {
+            ImageAnnotatorClient vision = ImageAnnotatorClient.create();
+            List<AnnotateImageRequest> requests = new ArrayList<>();
+            RandomAccessFile file = new RandomAccessFile(filePath, "r");
+            byte[] data = new byte[(int) file.length()];
+            file.readFully(data);
+            ByteString imgBytes = ByteString.copyFrom(data);
 
-        AnnotateImageRequest request =
-                new AnnotateImageRequest().setImage(new Image().encodeContent(data)).setFeatures(ImmutableList.of(
-                        new Feature().setType("LABEL_DETECTION").setMaxResults(maxResults)));
+            Image photo = Image.newBuilder().setContent(imgBytes).build();
+            Feature feature = Feature.newBuilder().setType(Type.LABEL_DETECTION).build();
+            AnnotateImageRequest request =
+                    AnnotateImageRequest.newBuilder().addFeatures(feature).setImage(photo).build();
+            BatchAnnotateImagesResponse response = vision.batchAnnotateImages(requests);
+            List<AnnotateImageResponse> responses = response.getResponsesList();
 
-        Vision.Images.Annotate annotate = vision.images().annotate(new BatchAnnotateImagesRequest().setRequests(ImmutableList.of(request)));
-        annotate.setDisableGZipContent(true);
+            for (AnnotateImageResponse res : responses) {
+                if (res.hasError()) {
+                    System.out.printf("Error: %s\n", res.getError().getMessage());
+                }
+                for (EntityAnnotation annotation : res.getLabelAnnotationsList()) {
+                    labels.add(annotation);
+                }
+            }
 
-
-        BatchAnnotateImagesResponse batchResponse = annotate.execute();
-        assert batchResponse.getResponses().size() == 1;
-        AnnotateImageResponse response = batchResponse.getResponses().get(0);
-        if (response.getLabelAnnotations() == null) {
-            throw new IOException(response.getError() != null ? response.getError().getMessage() : "Error.");
+            vision.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return labels = response.getLabelAnnotations();
+        return null;
     }
 
-    public Vision getVisionService() throws IOException, GeneralSecurityException {
-        GoogleCredential credential = GoogleCredential.getApplicationDefault().createScoped(VisionScopes.all());
-        JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-        return new Vision.Builder(GoogleNetHttpTransport.newTrustedTransport(), jsonFactory, credential).setApplicationName("MunchBox").build();
+    public void generateLabels() {
+        try {
+          execute();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public PhotoAnalyzer(String photoPath) {
-        try {
-            vision = getVisionService();
-        }
-        catch (Exception e) {
-            System.out.print(e.toString());
-        }
         setFilePath(photoPath);
+     //   generateLabels();
+    }
 
+    public List<String> getLabels() {
+        List<String> returnLabels = new ArrayList<String>();
+        for (int i = 0; i < labels.size(); i++) {
+            returnLabels.add(labels.get(i).getDescription());
+        }
+        return returnLabels;
     }
 
     public void setFilePath(String filePath) {

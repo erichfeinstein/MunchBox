@@ -29,41 +29,35 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:orientation="horizontal"
-        android:backgroundTint="@color/cardview_dark_background"
+        android:backgroundTint="@android:color/white"
         android:layout_marginRight="5dp"
         android:layout_marginLeft="5dp"
         android:background="@drawable/less_round_edge">
 
-        <EditText
+        <android.support.v7.widget.SearchView
             android:id="@+id/searchField"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="5dp"
-            android:background="@drawable/less_round_edge"
-            android:backgroundTint="@color/colorPrimaryDark"
-            android:hint="Search your entries"
-            android:paddingLeft="20px"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:theme="@style/EntrySearch"
+            app:searchHintIcon="@null"
+            app:queryHint="Search your entries..."
             android:singleLine="true"
-            android:textColor="@android:color/white"
-            android:textColorHint="@android:color/darker_gray" />
+            android:background="@drawable/less_round_edge"
+            android:backgroundTint="@android:color/white"
+            android:textColorHint="@android:color/darker_gray"
+            android:visibility="visible" />
 
         <Button
             android:id="@+id/toggleButton"
-            android:layout_width="70dp"
-            android:layout_height="20dp"
+            android:onClick="sortByButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="1dp"
-            android:textSize="14dp"
             android:paddingLeft="10px"
-            android:background="@drawable/less_round_edge"
-            android:textColor="@android:color/white"
-            android:text="Sort by">
-
+            android:background="@drawable/more_menu">
         </Button>
 
 
@@ -74,6 +68,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:layout_gravity="fill_horizontal|top|center_vertical|fill"

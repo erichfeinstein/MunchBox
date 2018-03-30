@@ -52,6 +52,7 @@
                                     android:src="@android:drawable/btn_star_big_on" />
 
                                 <EditText
+                                    android:id="@+id/name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="100dp"
                                     android:layout_marginTop="10dp"
@@ -59,8 +60,9 @@
                                     android:layout_marginRight="10dp"
                                     android:layout_marginBottom="10dp"
                                     android:padding="8dp"
-
-                                    android:hint="Enter a description..."
+                                    android:singleLine="true"
+                                    android:textSize="25dp"
+                                    android:hint="Enter a name..."
                                     android:background="@drawable/seemless_border"
                                     android:layout_weight="1"/>
                         </LinearLayout>
@@ -68,61 +70,81 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/borders"
-                            android:orientation="horizontal">
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/seemless_border"
-                                    android:padding="8dp"
-                                    android:text="Name"
-                                    android:textSize="20dp"/>
+                            android:background="@drawable/seemless_border"
+                            android:orientation="vertical">
 
-                                <EditText
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="8dp"
-                                    android:layout_marginRight="8dp"
-                                    android:gravity="right"
-                                    android:background="@drawable/seemless_border"
-                                    android:textColor="@android:color/black"
-                                    android:singleLine="true"
-                                    android:hint="Enter an entry name..."
-                                    android:padding="8dp"/>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/borders"
-                            android:orientation="horizontal">
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:padding="8dp"
-                                    android:text="Location"
-                                    android:textSize="20dp"/>
-
+                                    android:background="@drawable/borders"
+                                    android:orientation="vertical">
+                                        <EditText
+                                            android:id="@+id/restaurant"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="left"
+                                            android:textColor="@android:color/black"
+                                            android:background="@drawable/seemless_border"
+                                            android:textStyle="bold"
+                                            android:singleLine="true"
+                                            android:hint="Location"
+                                            android:padding="10dp"/>
+                                        <android.support.v7.widget.RecyclerView
+                                            android:id="@+id/locationsView"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:paddingLeft="4dp"
+                                            android:paddingRight="4dp"
+                                            android:paddingTop="4dp"
+                                            android:paddingBottom="8dp"
+                                            android:layout_gravity="center"
+                                            android:requiresFadingEdge="horizontal"
+                                            android:fadingEdgeLength="7dp">
+                                        </android.support.v7.widget.RecyclerView>
+                                </LinearLayout>
                                 <EditText
+                                    android:id="@+id/description"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="90dp"
+                                    android:gravity="left"
+                                    android:background="@drawable/borders"
+                                    android:textColor="@android:color/black"
+                                    android:hint="Enter a description..."
+                                    android:padding="10dp"/>
+
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="8dp"
-                                    android:layout_marginRight="8dp"
-                                    android:gravity="right"
-                                    android:background="@drawable/seemless_border"
-                                    android:textColor="@android:color/black"
-                                    android:singleLine="true"
-                                    android:hint="Replaced by Maps API..."
-                                    android:padding="8dp"/>
+                                    android:background="@drawable/borders"
+                                    android:orientation="vertical">
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Tags:"
+                                            android:paddingLeft="10dp"
+                                            android:paddingTop="4dp"
+                                            android:paddingBottom="4dp"/>
+                                        <android.support.v7.widget.RecyclerView
+                                            android:id="@+id/tagsView"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:paddingLeft="4dp"
+                                            android:paddingRight="4dp"
+                                            android:paddingTop="4dp"
+                                            android:paddingBottom="8dp"
+                                            android:layout_gravity="center"
+                                            android:requiresFadingEdge="horizontal"
+                                            android:fadingEdgeLength="7dp">
+                                        </android.support.v7.widget.RecyclerView>
+                                </LinearLayout>
                         </LinearLayout>
-
                 </LinearLayout>
 
                 <RatingBar
+                    android:id="@+id/rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/info_enter"
-
                     android:layout_centerHorizontal="true"
                     android:layout_margin="10dp"
                     android:isIndicator="false"
@@ -136,7 +158,7 @@
                         <Button
                             android:id="@+id/createNewEntry"
                             style="@style/Widget.AppCompat.Button.Colored"
-                            android:onClick="createEntryButton"
+                            android:onClick="saveEntryButton"
                             android:layout_width="75dp"
                             android:layout_height="75dp"
                             android:layout_alignParentRight="true"

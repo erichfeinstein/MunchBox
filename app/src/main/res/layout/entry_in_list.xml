@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="75dp"
+    android:layout_height="64dp"
     android:layout_marginBottom="2dp"
     android:layout_marginTop="2dp"
     android:layout_marginLeft="4dp"
@@ -22,33 +22,51 @@
 
             <seniorproj.munchbox.SquareImageView
                 android:id="@+id/foodThumbnail"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:src="@android:drawable/btn_star_big_on"
-                />
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@android:drawable/btn_star_big_on" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/dish"
-                    android:paddingTop="2dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Dish name"
-                    android:singleLine="true"
-                    android:textSize="28sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/dish"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Dish name"
+                        android:singleLine="true"
+                        android:layout_gravity="center"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="10dp"
+                        android:layout_gravity="center"
+                        android:textSize="15sp"
+                        android:singleLine="true"
+                        android:text="Rating"/>
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/restaurant"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:text="Restaurant"
                     android:textStyle="italic"
                     android:singleLine="true"
-                    android:textSize="22sp">
+                    android:textSize="18sp">
 
                 </TextView>
             </LinearLayout>
