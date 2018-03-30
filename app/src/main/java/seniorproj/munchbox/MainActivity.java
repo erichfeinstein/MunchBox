@@ -2,6 +2,7 @@ package seniorproj.munchbox;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,11 +15,17 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.PopupWindow;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -32,6 +39,7 @@ import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -40,10 +48,11 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-
+    private SearchView searchView;
+    private static RecyclerView recyclerView;
+    private static MyAdapter adapter;
     private static ArrayList<JournalEntry> journal;
+    private static ArrayList<JournalEntry> journalCopy;
 
     private String recentImagePath;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -66,6 +75,18 @@ public class MainActivity extends AppCompatActivity {
             if (journal == null) journal = new ArrayList<JournalEntry>();
         }
 
+        adapter = new MyAdapter(journal, this);
+        recyclerView = (RecyclerView) findViewById(R.id.entriesView);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+
+        searchView = findViewById(R.id.searchField);
+        boolean resetList = getIntent().getBooleanExtra("resetList", false);
+        if (resetList) filter("");
+        reloadList(journal);
+
         //Detect if new entry needs to be created
         String name = getIntent().getStringExtra("name");
         String restaurant = getIntent().getStringExtra("restaurant");
@@ -82,13 +103,13 @@ public class MainActivity extends AppCompatActivity {
             newEntry.rateDish(rating);
             journal.add(newEntry);
         }
+        journalCopy = new ArrayList<>(journal);
 
         //Save journal to SharedPrefs using Gson
         SharedPreferences prefs = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = prefs.edit();
         Gson gson = new Gson();
         String json = gson.toJson(journal);
-        System.out.println(json);
         prefsEditor.putString("Journal", json);
         prefsEditor.commit();
 
@@ -96,14 +117,9 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, permissions, PERMISSION_ALL);
         }
 
-        recyclerView = (RecyclerView) findViewById(R.id.entriesView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        reloadList(journal);
 
         //Create a .nomedia file so images captured by MunchBox don't get scanned by MediaScanner
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
@@ -114,6 +130,67 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.getMessage();
         }
+
+        //Filter results by text of searchField
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (query == null) {
+                    journal = new ArrayList<>(journalCopy);
+                    reloadList(journal);
+                    return true;
+                }
+                else {
+                    filter(query);
+                    reloadList(journal);
+                    return true;
+                }
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText == null) {
+                    journal = new ArrayList<>(journalCopy);
+                    reloadList(journal);
+                    return true;
+                }
+                else {
+                    filter(newText);
+                    reloadList(journal);
+                    return true;
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        //Resume the search
+        super.onResume();
+        searchView.setQuery(searchView.getQuery().toString(), true);
+    }
+
+    public static void filter(String text) {
+        text = text.toLowerCase();
+        journal.clear();
+        for(JournalEntry item: journalCopy){
+            ArrayList<String> keywords = item.getKeywords();
+            for (int i = 0; i < keywords.size(); i++) {
+                if (keywords.get(i).toLowerCase().contains(text)) {
+                    journal.add(item);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void sortByButton(View view) {
+        LayoutInflater inflater = getLayoutInflater();
+        PopupWindow popup = new PopupWindow(inflater.inflate(R.layout.activity_sort_by_pop,(ViewGroup)findViewById(R.layout.activity_main)));
+        popup.setFocusable(true);
+        popup.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
+        popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        popup.showAsDropDown(view);
     }
 
     public void createEntryButton(View view) {
@@ -123,107 +200,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Changes what the list UI displays
-    public void reloadList(ArrayList<JournalEntry> newList)
+    public static void reloadList(ArrayList<JournalEntry> newList)
     {
-        adapter = new MyAdapter(newList, this);
         recyclerView.setAdapter(adapter);
     }
 
-    //Basic Search Function will be improved later
-    public ArrayList<JournalEntry> searchTerm(String search)
-    {
-        ArrayList<JournalEntry> tempList = new ArrayList<JournalEntry>();
-        for(JournalEntry i: journal)
-        {
-            ArrayList<String> words = i.getKeywords();
-            for(String x: words)
-            {
-                x = x.toLowerCase(Locale.US);
-                search = search.toLowerCase(Locale.US);
-                if(x.indexOf(search) != -1)
-                {
-                    tempList.add(i);
-                }
-            }
-        }
-        return tempList;
+    public void sortByDate(View view) {
+        Collections.sort(journal);
+        reloadList(journal);
     }
 
-    //Only returns restaurants with the search term
-    public ArrayList<JournalEntry> searchTermRestaurantsOnly(String search)
+    public void sortByReview(View view)
     {
-        ArrayList<JournalEntry> tempList = new ArrayList<JournalEntry>();
-        for(JournalEntry i: journal)
-        {
-            String restName = i.getRestaurantName();
-            restName = restName.toLowerCase(Locale.US);
-            search = search.toLowerCase(Locale.US);
-            if(restName.indexOf(search) != -1)
-            {
-                tempList.add(i);
-            }
-        }
-        return tempList;
-    }
-
-    //Sort By Specific Things
-    public ArrayList<JournalEntry> searchByDate(Date searchDay)
-    {
-        ArrayList<JournalEntry> tempList = new ArrayList<>();
-        for(JournalEntry search: journal)
-        {
-            if(search.getEntryDate().compareTo(searchDay) == 0)
-            {
-                tempList.add(search);
-            }
-        }
-        return tempList;
-    }
-
-    public ArrayList<JournalEntry> sortByReview(String search)
-    {
-        ArrayList<JournalEntry> tempList = searchTerm(search);
-        for(JournalEntry found: tempList)
-        {
-            System.out.println(found.getIdentifier() + ": " + found.getRating());
-        }
-        ArrayList<JournalEntry> sortedList = new ArrayList<JournalEntry>();
+        journalCopy = new ArrayList(journal);
+        journal.clear();
         for(int i = 10; i >= 0; i--)
         {
-            for(JournalEntry found : tempList)
+            for(JournalEntry found : journalCopy)
             {
                 if (found.getRating() == i)
                 {
-                    sortedList.add(found);
+                    journal.add(found);
                 }
             }
         }
-        return sortedList;
+        reloadList(journal);
     }
 
     private void createEntry(Bitmap newEntryPhoto, String imagePath) {
         journal.add(new JournalEntry(newEntryPhoto, recentImagePath));
-    }
-
-    //TODO does this ever get called? I don't think so -Eric
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bitmap thumb = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(recentImagePath), THUMBSIZE, THUMBSIZE);
-            createEntry(thumb, recentImagePath);
-            Intent intent = new Intent(MainActivity.this, EditEntry.class);
-            intent.putExtra("foodImagePath", recentImagePath);
-            startActivity(intent);
-            recentImagePath = "";
-        }
-    }
-
-    private File createImageFile() throws IOException {
-        String time = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String fileName = "JPEG_" + time + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File photo = File.createTempFile(fileName, ".jpg", storageDir);
-        recentImagePath = photo.getAbsolutePath();
-        return photo;
     }
 
     public List<JournalEntry> getJournal() {
@@ -272,5 +277,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    public static void resetJournal() {
+        filter("");
     }
 }

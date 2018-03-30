@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
@@ -31,28 +32,61 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.tag_in_list, parent, false);
-        return new ViewHolder(v);
+        if (viewType == R.layout.tag_in_list) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.tag_in_list, parent, false);
+            return new ViewHolder(v);
+        } else {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.add_tag_in_list, parent, false);
+            return new ViewHolder(v);
+        }
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String tag = tagsList.get(position);
-        holder.tagView.setText(tag);
+        if (position == tagsList.size()) {
+            holder.button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Code for entering new tag... popupview?
+                    Toast.makeText(context, "Enter new tag", Toast.LENGTH_LONG).show();
+                }
+            });
+        } else {
+            String tag = tagsList.get(position);
+            holder.tagView.setText(tag);
+        }
+    }
 
+    //Add tag button on end
+    @Override
+    public int getItemViewType(int position) {
+        return (position == tagsList.size()) ? R.layout.add_tag_in_list : R.layout.tag_in_list;
     }
 
     @Override
     public int getItemCount() {
-        return tagsList.size();
+        return tagsList.size() + 1;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView tagView;
+        private ImageView button;
 
         public ViewHolder(View itemView) {
             super(itemView);
             tagView = (TextView)itemView.findViewById(R.id.tagText);
+            button = (ImageView)itemView.findViewById(R.id.cancel);
+            button.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition(); // gets item position
+            if (position != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
+                tagsList.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, tagsList.size());
+            }
         }
     }
 

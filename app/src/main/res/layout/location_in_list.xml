@@ -5,32 +5,23 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="4dp"
     android:layout_marginRight="4dp"
-    android:background="@drawable/tag_layout">
+    android:background="@drawable/location_layout">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp">
-        <ImageView
-            android:id="@+id/cancel"
-            android:padding="7dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/x_cancel"
-            />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
         <TextView
             android:id="@+id/tagText"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@id/cancel"
-            android:gravity="center"
+            android:layout_height="wrap_content"
             android:paddingRight="6dp"
-            android:paddingBottom="2dp"
+            android:paddingLeft="6dp"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp"
+            android:layout_centerInParent="true"
             android:singleLine="true"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            android:textSize="15dp"
-            android:text="sample"
             android:layout_centerHorizontal="true" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

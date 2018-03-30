@@ -13,6 +13,7 @@ import android.widget.Toast;
 import android.content.Intent;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private List<JournalEntry> entriesList;
     private Context context;
 
-    public MyAdapter(List<JournalEntry> entriesList, Context context) {
+    public MyAdapter(ArrayList<JournalEntry> entriesList, Context context) {
         this.entriesList = entriesList;
         this.context = context;
     }
@@ -42,6 +43,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         JournalEntry entry = entriesList.get(position);
         holder.textViewDish.setText(entry.getNameOfDish());
         holder.textViewRestaurant.setText(entry.getRestaurantName());
+        holder.textViewRating.setText(entry.getRatingAsStars());
         holder.id = entry.getIdentifier();
         Bitmap img = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(entry.getPhotoPath()), THUMBSIZE, THUMBSIZE);
         holder.thumb.setImageBitmap(img);
@@ -56,6 +58,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         public TextView textViewDish;
         public TextView textViewRestaurant;
+        public TextView textViewRating;
         private int id;
         public ImageView thumb;
         public String imgPath;
@@ -64,6 +67,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             super(itemView);
             textViewDish = (TextView)itemView.findViewById(R.id.dish);
             textViewRestaurant = (TextView)itemView.findViewById(R.id.restaurant);
+            textViewRating = (TextView)itemView.findViewById(R.id.rating);
             thumb = (ImageView) itemView.findViewById(R.id.foodThumbnail);
             id = itemView.getId();
             itemView.setOnClickListener(this);
@@ -73,18 +77,23 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public void onClick(View view) {
             int position = getAdapterPosition(); // gets item position
             if (position != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
-                Toast.makeText(context, "Opening journal with ID " + id, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, ViewEntry.class);
                 MainActivity activity = (MainActivity) context;
                 if (activity != null) {
-                    JournalEntry selectedEntry = activity.getJournal().get(id);
+                    JournalEntry selectedEntry = new JournalEntry();
+                    for (int i = 0; i < activity.getJournal().size(); i++) {
+                        if (activity.getJournal().get(i).getIdentifier() == id) {
+                            selectedEntry = activity.getJournal().get(i);
+                        }
+                    }
                     intent.putExtra("id", id);
                     intent.putExtra("dishName", selectedEntry.getNameOfDish());
                     intent.putExtra("restaurantName", selectedEntry.getRestaurantName());
                     intent.putExtra("description", selectedEntry.getDescription());
                     intent.putExtra("tags", selectedEntry.getTags());
-                    intent.putExtra("rating", selectedEntry.getRating());
+                    intent.putExtra("rating", selectedEntry.getRatingAsStars());
                     intent.putExtra("imgPath", selectedEntry.getPhotoPath());
+                    MainActivity.resetJournal(); //Always reset journal before leaving MainActivity
                     context.startActivity(intent);
                 }
             }

@@ -18,7 +18,7 @@ import java.util.List;
  * Created by Paul and Danny on 2/22/2018.
  */
 
-public class JournalEntry
+public class JournalEntry implements Comparable<JournalEntry>
 {
   private int identifier; //system-assigned
     private String nameOfDish;
@@ -64,6 +64,13 @@ public class JournalEntry
         }
     }
 
+    //Used for sorting in MainActivity
+    //Note: Only for comparing date of entry creation. Also the default sort option
+    @Override
+    public int compareTo(JournalEntry otherEntry) {
+        return getEntryDate().compareTo(otherEntry.getEntryDate());
+    }
+
     /*Returns all information in the order of: name, restaurant, tags */
     public ArrayList<String> getKeywords()
     {
@@ -76,6 +83,7 @@ public class JournalEntry
         }
         return returnList;
     }
+
     //These methods will used to change the information in each datapoint.
     //They will be used both for the first time entering and for editing existing datapoints.
     public void incrementFrequency()
@@ -109,6 +117,22 @@ public class JournalEntry
     public int getRating()
     {
         return rating;
+    }
+
+    public String getRatingAsStars(){
+        StringBuilder stars = new StringBuilder();
+        if (getRating() % 2 == 0){
+            for (int i = 0; i < getRating(); i+=2) {
+                stars.append("★");
+            }
+            return stars.toString();
+        } else {
+            for (int i = 0; i < getRating()-1; i+=2) {
+                stars.append("★");
+            }
+            stars.append("½");
+            return stars.toString();
+        }
     }
 
     public void setNameOfDish(String newName)

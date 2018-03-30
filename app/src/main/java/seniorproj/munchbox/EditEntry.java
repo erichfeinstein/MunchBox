@@ -13,14 +13,22 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.api.services.vision.v1.model.EntityAnnotation;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EditEntry extends Activity {
 
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-    private List<String> tags;
+
+    private RecyclerView tagsRecyclerView;
+    private RecyclerView.Adapter tagsAdapter;
+    private ArrayList<String> tags;
+
+    private RecyclerView locationsRecyclerView;
+    private RecyclerView.Adapter locationsAdapter;
+    private ArrayList<String> locations;
 
     private String imgPath;
 
@@ -38,32 +46,48 @@ public class EditEntry extends Activity {
         ImageView myImage = (ImageView) findViewById(R.id.imageView);
         myImage.setImageBitmap(image);
 
-        recyclerView = (RecyclerView) findViewById(R.id.tagsView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        tagsRecyclerView = (RecyclerView) findViewById(R.id.tagsView);
+        tagsRecyclerView.setHasFixedSize(true);
+        tagsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         PhotoAnalyzer labelGen = new PhotoAnalyzer(imgPath);
-   //     tags = labelGen.getLabels();
 
-        //Run image analysis
+        locationsRecyclerView = (RecyclerView) findViewById(R.id.locationsView);
+        locationsRecyclerView.setHasFixedSize(true);
+        locationsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        //     tags = labelGen.getLabels();
+
+        //Run GPS location analysis. If null... ?
+        if (locations == null) {
+            locations = new ArrayList<String>();
+        }
+        //Run image analysis. If null... "Add tags" in place of list
         if (tags == null) {
             tags = new ArrayList<String>();
-            tags.add("tag 1");
-            tags.add("tag 2");
-            tags.add("tag 3");
-            tags.add("tag 4");
-            tags.add("tag 1");
-            tags.add("tag 2");
-            tags.add("tag 3");
-            tags.add("tag 4");
-            tags.add("tag 1");
-            tags.add("tag 2");
-            tags.add("tag 3");
-            tags.add("tag 4");
-            tags.add("tag 1");
-            tags.add("tag 2");
-            tags.add("tag 3");
-            tags.add("tag 4");
         }
+
+        //Dummy tags and locations
+        //TODO remove
+        tags.add("Burger");
+        tags.add("Sushi");
+        tags.add("Spicy");
+        tags.add("Mexican");
+        tags.add("Asian");
+        tags.add("Chinese");
+        tags.add("Yummy");
+        tags.add("Sour");
+        tags.add("Sweet");
+        tags.add("Noodles");
+        tags.add("Sexy");
+        locations.add("Jolly");
+        locations.add("Superior Pho");
+        locations.add("Five Guys");
+        locations.add("Chipotle");
+        locations.add("Simply Greek");
+        locations.add("Chopstick");
+        locations.add("Qdoba");
+        locations.add("Potbelly");
+
+        loadLocations(locations);
         loadTags(tags);
     }
 
@@ -84,9 +108,14 @@ public class EditEntry extends Activity {
         startActivity(intent);
     }
 
-    private void loadTags(List<String> tagsList) {
-        adapter = new TagsAdapter(tagsList, this);
-        recyclerView.setAdapter(adapter);
+    private void loadLocations(ArrayList<String> locationsList) {
+        locationsAdapter = new LocationsAdapter(locationsList, this);
+        locationsRecyclerView.setAdapter(locationsAdapter);
+    }
+
+    private void loadTags(ArrayList<String> tagsList) {
+        tagsAdapter = new TagsAdapter(tagsList, this);
+        tagsRecyclerView.setAdapter(tagsAdapter);
     }
 
     @Override
