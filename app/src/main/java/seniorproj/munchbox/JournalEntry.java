@@ -39,7 +39,7 @@ public class JournalEntry implements Comparable<JournalEntry>
         restaurantName = "";
         //restaurantName = GoogleFindRestaurantName();
         //Generate tags
-        PhotoAnalyzer labelGen = new PhotoAnalyzer(path);
+   //     PhotoAnalyzer labelGen = new PhotoAnalyzer(path);
    //     tags = (ArrayList)labelGen.getLabels();
         description = "";
         thumbnail = thumb;
