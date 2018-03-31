@@ -7,9 +7,14 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import java.io.IOException;
@@ -21,7 +26,7 @@ public class EditEntry extends Activity {
 
     private RecyclerView tagsRecyclerView;
     private RecyclerView.Adapter tagsAdapter;
-    private ArrayList<String> tags;
+    private static ArrayList<String> tags;
 
     private RecyclerView locationsRecyclerView;
     private RecyclerView.Adapter locationsAdapter;
@@ -46,7 +51,7 @@ public class EditEntry extends Activity {
         tagsRecyclerView = (RecyclerView) findViewById(R.id.tagsView);
         tagsRecyclerView.setHasFixedSize(true);
         tagsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        PhotoAnalyzer labelGen = new PhotoAnalyzer(imgPath);
+    //    PhotoAnalyzer labelGen = new PhotoAnalyzer(image, this, this);
 
         locationsRecyclerView = (RecyclerView) findViewById(R.id.locationsView);
         locationsRecyclerView.setHasFixedSize(true);
@@ -113,6 +118,18 @@ public class EditEntry extends Activity {
     private void loadTags(ArrayList<String> tagsList) {
         tagsAdapter = new TagsAdapter(tagsList, this);
         tagsRecyclerView.setAdapter(tagsAdapter);
+    }
+
+    @SuppressWarnings("ResourceType")
+    public void openAddTag(View view) {
+        //TODO: Move the screen up when any Edit Text in this Activity opens (if needed). Also, make the Edit Text in this PopupWindow stick to top of keyboard (or something intuitive)
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        LayoutInflater inflater = getLayoutInflater();
+        PopupWindow popup = new PopupWindow(inflater.inflate(R.layout.enter_new_tag,(ViewGroup)findViewById(R.layout.activity_edit_entry)));
+        popup.setFocusable(true);
+        popup.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
+        popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        popup.showAsDropDown(view);
     }
 
     @Override

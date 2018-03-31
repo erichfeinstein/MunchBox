@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Paul and Danny on 2/22/2018.
@@ -31,6 +32,9 @@ public class JournalEntry implements Comparable<JournalEntry>
     private Date entryDate = null;
     private Bitmap thumbnail = null;
     private String photoPath;
+    private double distanceLastChecked;
+    private double xLocation = 0;
+    private double yLocation = 0;
 
     public JournalEntry(Bitmap thumb, String path)
     {
@@ -39,18 +43,24 @@ public class JournalEntry implements Comparable<JournalEntry>
         restaurantName = "";
         //restaurantName = GoogleFindRestaurantName();
         //Generate tags
-        PhotoAnalyzer labelGen = new PhotoAnalyzer(path);
+   //     PhotoAnalyzer labelGen = new PhotoAnalyzer(path);
    //     tags = (ArrayList)labelGen.getLabels();
         description = "";
         thumbnail = thumb;
         photoPath = path;
         //this.photoID = R.drawable.sample_image;
         frequency = 1;
+        Random r = new Random();
+        xLocation = r.nextInt(1000 - 0) + 1;
+        yLocation = r.nextInt(1000 - 0) + 1;
         entryDate = Calendar.getInstance().getTime();  //generate date on entry creation
     }
 
     public JournalEntry() {
         rating = 0;
+        Random r = new Random();
+        xLocation = r.nextInt(1000 - 0) + 1;
+        yLocation = r.nextInt(1000 - 0) + 1;
         nameOfDish = "";
         restaurantName = "";
         //restaurantName = GoogleFindRestaurantName();
@@ -221,4 +231,34 @@ public class JournalEntry implements Comparable<JournalEntry>
     public String getPhotoPath() { return photoPath; }
 
     public void setPhotoPath(String photoPath) { this.photoPath = photoPath; }
+
+    public void setDistanceLastChecked(double newDistance)
+    {
+        distanceLastChecked = newDistance;
+    }
+
+    public double getDistanceLastChecked()
+    {
+        return distanceLastChecked;
+    }
+
+    public double getXLocation()
+    {
+        return xLocation;
+    }
+
+    public void setXLocation(double newX)
+    {
+        xLocation = newX;
+    }
+
+    public double getYLocation()
+    {
+        return yLocation;
+    }
+
+    public void setYLocation(double newY)
+    {
+        yLocation = newY;
+    }
 }
