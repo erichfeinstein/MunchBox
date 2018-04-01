@@ -33,6 +33,11 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ViewHolder> {
         this.context = context;
     }
 
+    public void addTag(String tag) {
+        tagsList.add(tag);
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == R.layout.tag_in_list) {

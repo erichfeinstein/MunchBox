@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,6 +9,7 @@
     tools:context="seniorproj.munchbox.EditEntry">
 
         <RelativeLayout
+            android:id="@+id/edit_entry_title"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:padding="15dp"
@@ -28,155 +29,168 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
-
-                <LinearLayout
-                    android:id="@+id/info_enter"
+            android:layout_height="match_parent"
+            android:layout_below="@id/edit_entry_title">
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
                         <LinearLayout
+                            android:id="@+id/info_enter"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/borders">
-
-                                <seniorproj.munchbox.SquareImageView
-                                    android:id="@+id/imageView"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginBottom="10dp"
-                                    android:layout_width="100dp"
-                                    android:layout_height="100dp"
-                                    android:gravity="center"
-                                    android:src="@android:drawable/btn_star_big_on" />
-
-                                <EditText
-                                    android:id="@+id/name"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="100dp"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginRight="10dp"
-                                    android:layout_marginBottom="10dp"
-                                    android:padding="8dp"
-                                    android:singleLine="true"
-                                    android:textSize="25dp"
-                                    android:hint="Enter a name..."
-                                    android:background="@drawable/seemless_border"
-                                    android:layout_weight="1"/>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/seemless_border"
                             android:orientation="vertical">
-
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:background="@drawable/borders"
-                                    android:orientation="vertical">
+                                    android:background="@drawable/borders">
+
+                                        <seniorproj.munchbox.SquareImageView
+                                            android:id="@+id/imageView"
+                                            android:layout_marginTop="10dp"
+                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginBottom="10dp"
+                                            android:layout_width="100dp"
+                                            android:layout_height="100dp"
+                                            android:gravity="center"
+                                            android:src="@android:drawable/btn_star_big_on" />
+
                                         <EditText
-                                            android:id="@+id/restaurant"
+                                            android:id="@+id/name"
                                             android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:gravity="left"
-                                            android:textColor="@android:color/black"
-                                            android:background="@drawable/seemless_border"
-                                            android:textStyle="bold"
+                                            android:layout_height="100dp"
+                                            android:layout_marginTop="10dp"
+                                            android:layout_marginLeft="10dp"
+                                            android:layout_marginRight="10dp"
+                                            android:layout_marginBottom="10dp"
+                                            android:padding="8dp"
                                             android:singleLine="true"
-                                            android:hint="Location"
-                                            android:padding="10dp"/>
-                                        <android.support.v7.widget.RecyclerView
-                                            android:id="@+id/locationsView"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:paddingLeft="4dp"
-                                            android:paddingRight="4dp"
-                                            android:paddingTop="4dp"
-                                            android:paddingBottom="8dp"
-                                            android:layout_gravity="center"
-                                            android:requiresFadingEdge="horizontal"
-                                            android:fadingEdgeLength="7dp">
-                                        </android.support.v7.widget.RecyclerView>
+                                            android:textSize="25dp"
+                                            android:hint="Enter a name..."
+                                            android:background="@drawable/seemless_border"
+                                            android:layout_weight="1"/>
                                 </LinearLayout>
-                                <EditText
-                                    android:id="@+id/description"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="90dp"
-                                    android:gravity="left"
-                                    android:background="@drawable/borders"
-                                    android:textColor="@android:color/black"
-                                    android:hint="Enter a description..."
-                                    android:padding="10dp"/>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:background="@drawable/borders"
+                                    android:background="@drawable/seemless_border"
                                     android:orientation="vertical">
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="Tags:"
-                                            android:paddingLeft="10dp"
-                                            android:paddingTop="4dp"
-                                            android:paddingBottom="4dp"/>
-                                        <android.support.v7.widget.RecyclerView
-                                            android:id="@+id/tagsView"
+
+                                        <LinearLayout
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:paddingLeft="4dp"
-                                            android:paddingRight="4dp"
-                                            android:paddingTop="4dp"
-                                            android:paddingBottom="8dp"
-                                            android:layout_gravity="center"
-                                            android:requiresFadingEdge="horizontal"
-                                            android:fadingEdgeLength="7dp">
-                                        </android.support.v7.widget.RecyclerView>
+                                            android:background="@drawable/borders"
+                                            android:orientation="vertical">
+                                                <EditText
+                                                    android:id="@+id/restaurant"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:gravity="left"
+                                                    android:textColor="@android:color/black"
+                                                    android:background="@drawable/seemless_border"
+                                                    android:textStyle="bold"
+                                                    android:singleLine="true"
+                                                    android:hint="Location"
+                                                    android:padding="10dp"/>
+                                                <android.support.v7.widget.RecyclerView
+                                                    android:id="@+id/locationsView"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:paddingLeft="4dp"
+                                                    android:paddingRight="4dp"
+                                                    android:paddingTop="4dp"
+                                                    android:paddingBottom="8dp"
+                                                    android:layout_gravity="center"
+                                                    android:requiresFadingEdge="horizontal"
+                                                    android:fadingEdgeLength="7dp">
+                                                </android.support.v7.widget.RecyclerView>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/borders"
+                                            android:orientation="vertical">
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="Tags:"
+                                                    android:paddingLeft="10dp"
+                                                    android:paddingTop="4dp"
+                                                    android:paddingBottom="4dp"/>
+                                                <android.support.v7.widget.RecyclerView
+                                                    android:id="@+id/tagsView"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:paddingLeft="4dp"
+                                                    android:paddingRight="4dp"
+                                                    android:paddingTop="4dp"
+                                                    android:paddingBottom="8dp"
+                                                    android:layout_gravity="center"
+                                                    android:requiresFadingEdge="horizontal"
+                                                    android:fadingEdgeLength="7dp">
+                                                </android.support.v7.widget.RecyclerView>
+                                        </LinearLayout>
+
+                                        <EditText
+                                            android:id="@+id/description"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="90dp"
+                                            android:gravity="center_vertical|left"
+                                            android:background="@drawable/borders"
+                                            android:textColor="@android:color/black"
+                                            android:hint="Enter a description..."
+                                            android:lines="3"
+                                            android:padding="10dp"/>
                                 </LinearLayout>
                         </LinearLayout>
-                </LinearLayout>
 
-                <RatingBar
-                    android:id="@+id/rating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/info_enter"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="10dp"
-                    android:isIndicator="false"
-                    android:numStars="5" />
+                        <TextView
+                            android:id="@+id/rating_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Rating"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"
+                            android:layout_below="@id/info_enter"/>
+                        <RatingBar
+                            android:id="@+id/rating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/rating_label"
+                            android:layout_centerHorizontal="true"
+                            android:scaleX="2"
+                            android:scaleY="2"
+                            android:layout_marginTop="20dp"
+                            android:isIndicator="false"
+                            android:progressDrawable="@drawable/rating_bar_mb"
+                            android:numStars="5" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true">
-                        <Button
-                            android:id="@+id/createNewEntry"
-                            style="@style/Widget.AppCompat.Button.Colored"
-                            android:onClick="saveEntryButton"
-                            android:layout_width="75dp"
-                            android:layout_height="75dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginRight="25dp"
-                            android:layout_marginBottom="25dp"
-                            android:background="@drawable/button"
-                            android:elevation="8dp"
-                            android:text="Save"
-                            android:textSize="15dp"
-                            android:textColor="@android:color/white"
-                            android:visibility="visible" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/rating"
+                            android:layout_marginTop="50dp"
+                            android:layout_alignParentRight="true">
+                                <Button
+                                    android:id="@+id/createNewEntry"
+                                    style="@style/Widget.AppCompat.Button.Colored"
+                                    android:onClick="saveEntryButton"
+                                    android:layout_width="75dp"
+                                    android:layout_height="75dp"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginRight="25dp"
+                                    android:layout_marginBottom="25dp"
+                                    android:background="@drawable/button"
+                                    android:elevation="8dp"
+                                    android:text="Save"
+                                    android:textSize="15dp"
+                                    android:textColor="@android:color/white"
+                                    android:visibility="visible" />
+                        </LinearLayout>
 
-                </LinearLayout>
-
-        </RelativeLayout>
+                </RelativeLayout>
         </ScrollView>
-</LinearLayout>
+</RelativeLayout>

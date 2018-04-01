@@ -93,8 +93,10 @@ public class MainActivity extends AppCompatActivity {
         String restaurant = getIntent().getStringExtra("restaurant");
         String description = getIntent().getStringExtra("description");
         String imgPath = getIntent().getStringExtra("imgPath");
+        ArrayList<String> tags = getIntent().getStringArrayListExtra("tags");
         int rating = getIntent().getIntExtra("rating", 0);
-        if (name != null && restaurant != null && description != null) {
+
+        if (imgPath != null) {
             JournalEntry newEntry = new JournalEntry();
             newEntry.setNameOfDish(name);
             newEntry.setRestaurantName(restaurant);
@@ -102,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
             newEntry.setIdentifier(journal.size());
             newEntry.setPhotoPath(imgPath);
             newEntry.rateDish(rating);
+            newEntry.setTags(tags);
             journal.add(newEntry);
         }
         journalCopy = new ArrayList<>(journal);
