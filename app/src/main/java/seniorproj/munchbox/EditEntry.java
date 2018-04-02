@@ -116,6 +116,7 @@ public class EditEntry extends Activity {
 
     //Saves either new entry or updates info of existing entry
     public void saveEntryButton(View view) {
+        finish();
         int ratingAsInt = (int) (rating.getRating() * 2.0); //Multiply by 2 because ratings are stored on a 1-10 scale using ints
         Intent intent = new Intent(EditEntry.this, MainActivity.class);
         intent.putExtra("name", name.getText().toString());
@@ -126,6 +127,15 @@ public class EditEntry extends Activity {
         intent.putExtra("tags", tags);
         intent.putExtra("id", id); //In MainActivity, check if not -1
         startActivity(intent);
+    }
+
+    //TODO add confirm delete
+    public void deleteEntryButton(View view) {
+        finish();
+        Intent backToMain = new Intent(EditEntry.this, MainActivity.class);
+        backToMain.putExtra("id", id); //Pass the id of the entry to delete
+        backToMain.putExtra("toDelete", true);
+        startActivity(backToMain);
     }
 
     private void loadLocations(ArrayList<String> locationsList) {

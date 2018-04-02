@@ -88,44 +88,57 @@ public class MainActivity extends AppCompatActivity {
         if (resetList) filter("");
         reloadList(journal);
 
-        //Detect if new entry needs to be created
-        String name = getIntent().getStringExtra("name");
-        String restaurant = getIntent().getStringExtra("restaurant");
-        String description = getIntent().getStringExtra("description");
-        String imgPath = getIntent().getStringExtra("imgPath");
-        ArrayList<String> tags = getIntent().getStringArrayListExtra("tags");
-        int rating = getIntent().getIntExtra("rating", 0);
-        int id = getIntent().getIntExtra("id", -1);
-
-        //Make new entry
-        if (imgPath != null && id == -1) {
-            JournalEntry newEntry = new JournalEntry();
-            newEntry.setNameOfDish(name);
-            newEntry.setRestaurantName(restaurant);
-            newEntry.setDescription(description);
-            newEntry.setIdentifier(journal.size());
-            newEntry.setPhotoPath(imgPath);
-            newEntry.setRating(rating);
-            newEntry.setTags(tags);
-            journal.add(newEntry);
-        }
-        //Update existing  entry
-        if (imgPath != null && id != -1) {
-            //Find entry with id
-            JournalEntry updatedEntry = new JournalEntry(); //To be overwritten with updated entry
+        //Detect if an entry needs to be deleted
+        boolean toDelete = getIntent().getBooleanExtra("toDelete", false);
+        if (toDelete) {
+            int id = getIntent().getIntExtra("id", -1);
+            //Delete entry
             for (int i = 0; i < journal.size(); i++) {
-                if (id == journal.get(i).getIdentifier()) {
-                    updatedEntry = journal.get(i);
-                    System.out.println("Found entry with ID " + id);
+                if (journal.get(i).getIdentifier() == id) {
+                    journal.remove(i);
                 }
             }
-            updatedEntry.setNameOfDish(name);
-            updatedEntry.setRestaurantName(restaurant);
-            updatedEntry.setDescription(description);
-            updatedEntry.setIdentifier(journal.size());
-            updatedEntry.setPhotoPath(imgPath);
-            updatedEntry.setRating(rating);
-            updatedEntry.setTags(tags);
+        }
+        //Else check if new entry is being made or entry is being updated
+        else {
+            //Detect if new entry needs to be created
+            String name = getIntent().getStringExtra("name");
+            String restaurant = getIntent().getStringExtra("restaurant");
+            String description = getIntent().getStringExtra("description");
+            String imgPath = getIntent().getStringExtra("imgPath");
+            ArrayList<String> tags = getIntent().getStringArrayListExtra("tags");
+            int rating = getIntent().getIntExtra("rating", 0);
+            int id = getIntent().getIntExtra("id", -1);
+
+            //Make new entry
+            if (imgPath != null && id == -1) {
+                JournalEntry newEntry = new JournalEntry();
+                newEntry.setNameOfDish(name);
+                newEntry.setRestaurantName(restaurant);
+                newEntry.setDescription(description);
+                newEntry.setIdentifier(journal.size());
+                newEntry.setPhotoPath(imgPath);
+                newEntry.setRating(rating);
+                newEntry.setTags(tags);
+                journal.add(newEntry);
+            }
+            //Update existing  entry
+            if (imgPath != null && id != -1) {
+                //Find entry with id
+                for (int i = 0; i < journal.size(); i++) {
+                    if (id == journal.get(i).getIdentifier()) {
+                        JournalEntry updateEntry = journal.get(i);
+                        System.out.println("Found entry with ID " + id);
+                        updateEntry.setNameOfDish(name);
+                        updateEntry.setRestaurantName(restaurant);
+                        updateEntry.setDescription(description);
+                        updateEntry.setIdentifier(journal.size());
+                        updateEntry.setPhotoPath(imgPath);
+                        updateEntry.setRating(rating);
+                        updateEntry.setTags(tags);
+                    }
+                }
+            }
         }
         journalCopy = new ArrayList<>(journal);
 
