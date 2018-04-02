@@ -95,17 +95,37 @@ public class MainActivity extends AppCompatActivity {
         String imgPath = getIntent().getStringExtra("imgPath");
         ArrayList<String> tags = getIntent().getStringArrayListExtra("tags");
         int rating = getIntent().getIntExtra("rating", 0);
+        int id = getIntent().getIntExtra("id", -1);
 
-        if (imgPath != null) {
+        //Make new entry
+        if (imgPath != null && id == -1) {
             JournalEntry newEntry = new JournalEntry();
             newEntry.setNameOfDish(name);
             newEntry.setRestaurantName(restaurant);
             newEntry.setDescription(description);
             newEntry.setIdentifier(journal.size());
             newEntry.setPhotoPath(imgPath);
-            newEntry.rateDish(rating);
+            newEntry.setRating(rating);
             newEntry.setTags(tags);
             journal.add(newEntry);
+        }
+        //Update existing  entry
+        if (imgPath != null && id != -1) {
+            //Find entry with id
+            JournalEntry updatedEntry = new JournalEntry(); //To be overwritten with updated entry
+            for (int i = 0; i < journal.size(); i++) {
+                if (id == journal.get(i).getIdentifier()) {
+                    updatedEntry = journal.get(i);
+                    System.out.println("Found entry with ID " + id);
+                }
+            }
+            updatedEntry.setNameOfDish(name);
+            updatedEntry.setRestaurantName(restaurant);
+            updatedEntry.setDescription(description);
+            updatedEntry.setIdentifier(journal.size());
+            updatedEntry.setPhotoPath(imgPath);
+            updatedEntry.setRating(rating);
+            updatedEntry.setTags(tags);
         }
         journalCopy = new ArrayList<>(journal);
 

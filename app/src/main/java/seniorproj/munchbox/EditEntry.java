@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +38,25 @@ public class EditEntry extends Activity {
     private LocationsAdapter locationsAdapter;
     private ArrayList<String> locations;
 
+    private EditText name;
+    private EditText restaurant;
+    private EditText description;
+    private RatingBar rating;
+
     private String imgPath;
+
+    private int id; //If this is -1, it means this is a new entry... if not, update existing entry
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_entry);
+
+        name = (EditText) findViewById(R.id.name);
+        restaurant = (EditText) findViewById(R.id.restaurant);
+        description = (EditText) findViewById(R.id.description);
+        rating = (RatingBar) findViewById(R.id.rating);
 
         //Get image and display it
         imgPath = getIntent().getStringExtra("imageAddr");
@@ -69,6 +83,23 @@ public class EditEntry extends Activity {
         //Run image analysis. If null... "Add tags" in place of list
         tags = new ArrayList<String>();
 
+        id = getIntent().getIntExtra("id", -1);
+        if (id != -1) {
+            String nameText = getIntent().getStringExtra("dish");
+            String restaurantText = getIntent().getStringExtra("restaurant");
+            String descriptionText = getIntent().getStringExtra("description");
+            tags = getIntent().getStringArrayListExtra("tagsList");
+            int ratingValue = getIntent().getIntExtra("rating", 0);
+            String imgPath = getIntent().getStringExtra("imgPath");
+
+            name.setText(nameText);
+            restaurant.setText(restaurantText);
+            description.setText(descriptionText);
+            loadTags(tags);
+            rating.setRating(((float)ratingValue)/2);
+            //Image already taken care of above
+        }
+
         //Dummy locations
         //TODO remove
         locations.add("Jolly");
@@ -79,18 +110,13 @@ public class EditEntry extends Activity {
         locations.add("Chopstick");
         locations.add("Qdoba");
         locations.add("Potbelly");
-
         loadLocations(locations);
         loadTags(tags);
     }
 
+    //Saves either new entry or updates info of existing entry
     public void saveEntryButton(View view) {
-        EditText name = (EditText) findViewById(R.id.name);
-        EditText restaurant = (EditText) findViewById(R.id.restaurant);
-        EditText description = (EditText) findViewById(R.id.description);
-        RatingBar rating = (RatingBar) findViewById(R.id.rating);
         int ratingAsInt = (int) (rating.getRating() * 2.0); //Multiply by 2 because ratings are stored on a 1-10 scale using ints
-
         Intent intent = new Intent(EditEntry.this, MainActivity.class);
         intent.putExtra("name", name.getText().toString());
         intent.putExtra("restaurant", restaurant.getText().toString());
@@ -98,7 +124,7 @@ public class EditEntry extends Activity {
         intent.putExtra("imgPath", imgPath);
         intent.putExtra("rating", ratingAsInt);
         intent.putExtra("tags", tags);
-
+        intent.putExtra("id", id); //In MainActivity, check if not -1
         startActivity(intent);
     }
 
@@ -110,6 +136,7 @@ public class EditEntry extends Activity {
     private void loadTags(ArrayList<String> tagsList) {
         tagsAdapter = new TagsAdapter(tagsList, this);
         tagsRecyclerView.setAdapter(tagsAdapter);
+        tagsAdapter.notifyDataSetChanged();
     }
 
     @SuppressWarnings("ResourceType")
@@ -158,7 +185,15 @@ public class EditEntry extends Activity {
     public void onBackPressed(){
         finish();
         Intent backToList = new Intent(EditEntry.this, MainActivity.class);
-        //TODO If StringExtra imageAddr is not null, delete image from directory (entry was in process of being created, but we don't want to save the image)
+        //Delete image for cancelled entry
+        File toDelete = new File(imgPath);
+        if (toDelete.exists()) {
+            if (toDelete.delete()) {
+                System.out.println("File deleted");
+            } else {
+                System.out.println("File not deleted");
+            }
+        }
         startActivity(backToList);
     }
 }

@@ -12,19 +12,28 @@
             android:id="@+id/edit_entry_title"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:padding="15dp"
             android:background="@drawable/borders">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="-10dp"
-                    android:layout_marginBottom="-10dp"
+                    android:padding="15dp"
                     android:gravity="center"
                     android:text="Edit Entry"
                     android:textColor="@android:color/black"
                     android:textStyle="bold"
                     android:textSize="20dp"/>
+
+                <Button
+                    android:onClick="deleteEntry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:layout_alignParentRight="true"
+                    android:textSize="20dp"
+                    android:textColor="@android:color/holo_red_light"
+                    android:gravity="center"
+                    android:text="Delete"/>
         </RelativeLayout>
 
         <ScrollView

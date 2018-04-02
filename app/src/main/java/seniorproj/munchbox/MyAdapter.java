@@ -92,7 +92,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                     intent.putExtra("description", selectedEntry.getDescription());
                     intent.putExtra("tags", selectedEntry.getTags());
                     intent.putExtra("rating", selectedEntry.getRatingAsStars());
+                    intent.putExtra("ratingNum", selectedEntry.getRating());
                     intent.putExtra("imgPath", selectedEntry.getPhotoPath());
+                    intent.putExtra("id", selectedEntry.getIdentifier());
                     MainActivity.resetJournal(); //Always reset journal before leaving MainActivity
                     context.startActivity(intent);
                 }

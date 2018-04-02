@@ -17,6 +17,7 @@ import android.widget.Toast;
 import android.content.Intent;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,6 +37,10 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ViewHolder> {
     public void addTag(String tag) {
         tagsList.add(tag);
         notifyDataSetChanged();
+    }
+
+    public void setTagsList(List<String> tagsList) {
+        this.tagsList = tagsList;
     }
 
     @Override
