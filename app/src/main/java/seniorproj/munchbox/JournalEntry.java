@@ -106,19 +106,19 @@ public class JournalEntry implements Comparable<JournalEntry>
         return frequency;
     }
 
-    public void rateDish(int newRating)
+    public void setRating(int rating)
     {
-        if(newRating < 0)
+        if(rating < 0)
         {
-            rating = 0;
+            this.rating = 0;
         }
-        else if(newRating > 10)
+        else if(rating > 10)
         {
-            rating = 10;
+            this.rating = 10;
         }
         else
         {
-            rating = newRating;
+            this.rating = rating;
         }
     }
 
