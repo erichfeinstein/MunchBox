@@ -196,14 +196,17 @@ public class EditEntry extends Activity {
         finish();
         Intent backToList = new Intent(EditEntry.this, MainActivity.class);
         //Delete image for cancelled entry
-        File toDelete = new File(imgPath);
-        if (toDelete.exists()) {
-            if (toDelete.delete()) {
-                System.out.println("File deleted");
-            } else {
-                System.out.println("File not deleted");
+        if (id == -1) {
+            File toDelete = new File(imgPath);
+            if (toDelete.exists()) {
+                if (toDelete.delete()) {
+                    System.out.println("File deleted");
+                } else {
+                    System.out.println("File not deleted");
+                }
             }
         }
         startActivity(backToList);
     }
+    //TODO I'd like the Save button to disappear when the keyboard is up. Related: tap outside keyboard to close it?
 }

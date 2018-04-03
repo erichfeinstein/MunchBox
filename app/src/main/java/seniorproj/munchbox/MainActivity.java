@@ -198,6 +198,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        //
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.setIconified(false);
+            }
+        });
     }
 
     @Override

@@ -73,9 +73,10 @@
                                             android:layout_marginRight="10dp"
                                             android:layout_marginBottom="10dp"
                                             android:padding="8dp"
+                                            android:inputType="textCapWords"
                                             android:singleLine="true"
                                             android:textSize="25dp"
-                                            android:hint="Enter a name..."
+                                            android:hint="Enter a title..."
                                             android:background="@drawable/seemless_border"
                                             android:layout_weight="1"/>
                                 </LinearLayout>
@@ -98,6 +99,7 @@
                                                     android:gravity="left"
                                                     android:textColor="@android:color/black"
                                                     android:background="@drawable/seemless_border"
+                                                    android:inputType="textCapWords"
                                                     android:textStyle="bold"
                                                     android:singleLine="true"
                                                     android:hint="Location"
@@ -148,6 +150,7 @@
                                             android:layout_height="90dp"
                                             android:gravity="center_vertical|left"
                                             android:background="@drawable/borders"
+                                            android:inputType="textCapSentences"
                                             android:textColor="@android:color/black"
                                             android:hint="Enter a description..."
                                             android:lines="3"

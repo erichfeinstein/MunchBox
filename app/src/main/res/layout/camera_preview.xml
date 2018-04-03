@@ -45,26 +45,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <Button
+            <ImageButton
                 android:id="@+id/button_capture"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_centerInParent="true"
                 android:background="@drawable/button"
-                android:text="Take\nPicture"
-                android:textColor="@android:color/white"
-                android:textSize="20dp"
+                android:src="@drawable/take_picture"
+                android:scaleType="fitCenter"
+                android:padding="10dp"
                 android:textStyle="bold" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/button_confirm"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_centerInParent="true"
+                android:src="@drawable/confirm_picture"
                 android:background="@drawable/button"
-                android:text="Confirm\nPicture"
-                android:textColor="@android:color/white"
-                android:textSize="20dp"
+                android:scaleType="fitCenter"
+                android:padding="10dp"
                 android:textStyle="bold" />
 
         </RelativeLayout>
