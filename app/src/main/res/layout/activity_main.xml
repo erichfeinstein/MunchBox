@@ -43,6 +43,7 @@
             android:gravity="center"
             android:theme="@style/EntrySearch"
             app:searchHintIcon="@null"
+            android:clickable="true"
             app:queryHint="Search your entries..."
             android:singleLine="true"
             android:background="@drawable/less_round_edge"
