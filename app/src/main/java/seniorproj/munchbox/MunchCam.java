@@ -38,6 +38,7 @@ public class MunchCam extends Activity {
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int LOADING_ALPHA_VALUE = 128;
     public static final int FULL_ALPHA_VALUE = 255;
+    public static final int QUALITY = 100;
 
 
     @Override
@@ -136,17 +137,14 @@ public class MunchCam extends Activity {
                 recentImagePath = pictureFile.getPath().toString();
                 Bitmap bmp = BitmapFactory.decodeByteArray(recentData, 0, recentData.length);
 
-                //Ignore EXIF info and just rotate
+                //Ignore EXIF info and just rotate and crop
                 Matrix matrix = new Matrix();
                 matrix.postRotate(90);
-                bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
-
-                //Crop
-                bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getWidth());
+                bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getHeight(), bmp.getHeight(), matrix, true);
 
                 //Convert rotated image to byte array then save
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                bmp.compress(Bitmap.CompressFormat.JPEG, QUALITY, stream);
                 byte[] newData = stream.toByteArray();
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(newData);

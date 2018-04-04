@@ -70,19 +70,15 @@ public class EditEntry extends Activity {
         tagsRecyclerView.setHasFixedSize(true);
         tagsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         labels = new ArrayList<>();
-        PhotoAnalyzer labelGen = new PhotoAnalyzer(image, this, this);
 
         locationsRecyclerView = (RecyclerView) findViewById(R.id.locationsView);
         locationsRecyclerView.setHasFixedSize(true);
         locationsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        tags = labelGen.getLabels();
 
         //Run GPS location analysis. If null... ?
         if (locations == null) {
             locations = new ArrayList<String>();
         }
-        //Run image analysis. If null... "Add tags" in place of list
-        tags = new ArrayList<String>();
 
         id = getIntent().getIntExtra("id", -1);
         if (id != -1) {
@@ -103,16 +99,17 @@ public class EditEntry extends Activity {
 
         //Dummy locations
         //TODO remove
-        locations.add("Jolly");
-        locations.add("Superior Pho");
-        locations.add("Five Guys");
-        locations.add("Chipotle");
-        locations.add("Simply Greek");
-        locations.add("Chopstick");
-        locations.add("Qdoba");
-        locations.add("Potbelly");
+        locations.add("To");
+        locations.add("Be");
+        locations.add("Replaced");
+        locations.add("by");
+        locations.add("API");
+        locations.add("Results");
         loadLocations(locations);
-        loadTags(tags);
+
+        //Run image analysis
+        PhotoAnalyzer labelGen = new PhotoAnalyzer(image, this, this);
+        tags = labelGen.getLabels();
     }
 
     //Saves either new entry or updates info of existing entry
@@ -210,5 +207,11 @@ public class EditEntry extends Activity {
         }
         startActivity(backToList);
     }
+
+    public void onBackgroundTaskComplete(ArrayList<String> result) {
+        tags = result;
+        loadTags(tags);
+    }
+
     //TODO I'd like the Save button to disappear when the keyboard is up. Related: tap outside keyboard to close it?
 }

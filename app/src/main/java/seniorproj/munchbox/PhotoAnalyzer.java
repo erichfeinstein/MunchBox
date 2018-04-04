@@ -50,14 +50,14 @@ public class PhotoAnalyzer {
     private static String API_KEY;
     private static final String ANDROID_PACKAGE_HEADER = "X-Android-Package";
     private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
-    private Activity activity;
+    private EditEntry editEntryActivity;
 
     /*Flow of control: constructor -> uploadImage -> callCloudVision */
 
     public PhotoAnalyzer(Bitmap image, Context context, Activity activity) {
         this.context = context;
         API_KEY = context.getString(R.string.mykey);
-        this.activity = activity;
+        this.editEntryActivity = (EditEntry) activity;
         labels = new ArrayList<EntityAnnotation>();
         uploadImage(image);
     }
@@ -101,14 +101,14 @@ public class PhotoAnalyzer {
         protected void onPostExecute(ArrayList<EntityAnnotation> result) {
             Activity activity = mainWeakReference.get();
             labels = result;
+            editEntryActivity.onBackgroundTaskComplete(getLabels());
             //This bit is where the sample code sets the labels to the image. I don't think we do it here - Danny
-
         }
     }
 
     private void callCloudVision(final Bitmap bitmap) {
         try {
-            RequestTask labelTask = new RequestTask(activity, prepareAnnotationRequest(bitmap), labels);
+            RequestTask labelTask = new RequestTask(editEntryActivity, prepareAnnotationRequest(bitmap), labels);
             labelTask.execute();
         }
         catch (IOException e) {
