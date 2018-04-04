@@ -70,12 +70,12 @@ public class EditEntry extends Activity {
         tagsRecyclerView.setHasFixedSize(true);
         tagsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         labels = new ArrayList<>();
-        PhotoAnalyzer labelGen = new PhotoAnalyzer(image, this, this, labels);
+        PhotoAnalyzer labelGen = new PhotoAnalyzer(image, this, this);
 
         locationsRecyclerView = (RecyclerView) findViewById(R.id.locationsView);
         locationsRecyclerView.setHasFixedSize(true);
         locationsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        //     tags = labelGen.getLabels();
+        tags = labelGen.getLabels();
 
         //Run GPS location analysis. If null... ?
         if (locations == null) {
@@ -96,7 +96,7 @@ public class EditEntry extends Activity {
             name.setText(nameText);
             restaurant.setText(restaurantText);
             description.setText(descriptionText);
-            loadTags(tags);
+            loadTags(tags); //Right now this doesn't work: the tags aren't populated by the time we get here. Need to discuss -Danny
             rating.setRating(((float)ratingValue)/2);
             //Image already taken care of above
         }

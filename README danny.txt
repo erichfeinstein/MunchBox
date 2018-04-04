@@ -2,6 +2,8 @@ Danny Miles
 
 Week of 4/1
 
+4/3: Continued work on Vision implementation. Labels are finally being succesfully retrieved; now working on passing information back from asynchrous thread that retrieves it.
+
 4/1: Attended group meeting to discuss progress on project. Identified source of errors regarding Vision implementation, began taking steps to repair it. 
 
 Week of 3/25
