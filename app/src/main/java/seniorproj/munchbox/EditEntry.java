@@ -17,6 +17,9 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import com.google.api.services.vision.v1.model.EntityAnnotation;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +29,8 @@ public class EditEntry extends Activity {
 
     private RecyclerView tagsRecyclerView;
     private RecyclerView.Adapter tagsAdapter;
-    private static ArrayList<String> tags;
+    private ArrayList<String> tags;
+    private ArrayList<EntityAnnotation> labels;
 
     private RecyclerView locationsRecyclerView;
     private RecyclerView.Adapter locationsAdapter;
@@ -51,7 +55,8 @@ public class EditEntry extends Activity {
         tagsRecyclerView = (RecyclerView) findViewById(R.id.tagsView);
         tagsRecyclerView.setHasFixedSize(true);
         tagsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-    //    PhotoAnalyzer labelGen = new PhotoAnalyzer(image, this, this);
+        labels = new ArrayList<>();
+        PhotoAnalyzer labelGen = new PhotoAnalyzer(image, this, this, labels);
 
         locationsRecyclerView = (RecyclerView) findViewById(R.id.locationsView);
         locationsRecyclerView.setHasFixedSize(true);
@@ -106,7 +111,7 @@ public class EditEntry extends Activity {
         intent.putExtra("description", description.getText().toString());
         intent.putExtra("imgPath", imgPath);
         intent.putExtra("rating", ratingAsInt);
-
+        finish();
         startActivity(intent);
     }
 

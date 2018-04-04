@@ -12,14 +12,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.gax.rpc.ClientContext;
 import com.google.api.services.vision.v1.Vision;
 import com.google.api.services.vision.v1.VisionRequest;
 import com.google.api.services.vision.v1.VisionRequestInitializer;
@@ -52,7 +50,7 @@ import com.google.common.io.BaseEncoding;
 public class PhotoAnalyzer {
 
     private String filePath;
-    private List<EntityAnnotation> labels;
+    private  ArrayList<EntityAnnotation> labels;
     private Bitmap bitmap;
     private static final String TAG = Activity.class.getSimpleName();
     private Context context;
@@ -61,55 +59,13 @@ public class PhotoAnalyzer {
     private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
     private Activity activity;
 
-//    @Override
-//    protected Void doInBackground(Void... params) {
-//
-//        try {
-//            ImageAnnotatorClient vision = ImageAnnotatorClient.create();
-//            List<AnnotateImageRequest> requests = new ArrayList<>();
-//            RandomAccessFile file = new RandomAccessFile(filePath, "r");
-//            byte[] data = new byte[(int) file.length()];
-//            file.readFully(data);
-//            ByteString imgBytes = ByteString.copyFrom(data);
-//
-//            Image photo = Image.newBuilder().setContent(imgBytes).build();
-//            Feature feature = Feature.newBuilder().setType(Type.LABEL_DETECTION).build();
-//            AnnotateImageRequest request =
-//                    AnnotateImageRequest.newBuilder().addFeatures(feature).setImage(photo).build();
-//            BatchAnnotateImagesResponse response = vision.batchAnnotateImages(requests);
-//            List<AnnotateImageResponse> responses = response.getResponsesList();
-//
-//            for (AnnotateImageResponse res : responses) {
-//                if (res.hasError()) {
-//                    System.out.printf("Error: %s\n", res.getError().getMessage());
-//                }
-//                for (EntityAnnotation annotation : res.getLabelAnnotationsList()) {
-//                    labels.add(annotation);
-//                }
-//            }
-//
-//            vision.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-    //}
+    /*Flow of control: constructor -> uploadImage -> callCloudVision */
 
-//    public void generateLabels() {
-//        try {
-//          execute();
-//        }
-//        catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    public PhotoAnalyzer(Bitmap image, Context context, Activity activity) {
-      //  setFilePath(photoPath);
+    public PhotoAnalyzer(Bitmap image, Context context, Activity activity, List<EntityAnnotation> labels) {
         this.context = context;
-      //  generateLabels();
         API_KEY = context.getString(R.string.mykey);
         this.activity = activity;
+        labels = labels;
         uploadImage(image);
     }
 
@@ -138,10 +94,12 @@ public class PhotoAnalyzer {
     private static class RequestTask extends AsyncTask<Object, Void, String> {
         private final WeakReference<Activity> mainWeakReference;
         private Vision.Images.Annotate request;
+        private ArrayList<EntityAnnotation> labelsInput;
 
-        RequestTask(Activity activity, Vision.Images.Annotate annotate) {
+        RequestTask(Activity activity, Vision.Images.Annotate annotate, ArrayList<EntityAnnotation> labelsField) {
             mainWeakReference = new WeakReference(activity);
             request = annotate;
+            labelsInput = labelsField;
         }
 
         @Override
@@ -149,6 +107,7 @@ public class PhotoAnalyzer {
             try {
                 Log.d(TAG, "created cloud vision request object, sending");
                 BatchAnnotateImagesResponse response = request.execute();
+                labelsInput = (ArrayList<EntityAnnotation>)(response.getResponses().get(0).getLabelAnnotations());
                 return convertResponseToString(response);
             } catch (GoogleJsonResponseException e) {
                 Log.d(TAG, "failed to make API request because " + e.getContent());
@@ -167,7 +126,7 @@ public class PhotoAnalyzer {
 
     private void callCloudVision(final Bitmap bitmap) {
         try {
-            RequestTask labelTask = new RequestTask(activity, prepareAnnotationRequest(bitmap));
+            RequestTask labelTask = new RequestTask(activity, prepareAnnotationRequest(bitmap), labels);
             labelTask.execute();
         }
         catch (IOException e) {

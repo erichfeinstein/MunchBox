@@ -1,5 +1,9 @@
 Danny Miles
 
+Week of 4/1
+
+4/1: Attended group meeting to discuss progress on project. Identified source of errors regarding Vision implementation, began taking steps to repair it. 
+
 Week of 3/25
 
 3/30: Continued work on Vision API. Implemented Vision
