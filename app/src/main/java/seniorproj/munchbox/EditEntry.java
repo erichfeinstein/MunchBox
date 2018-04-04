@@ -53,7 +53,7 @@ public class EditEntry extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_entry);
 
-        name = (EditText) findViewById(R.id.name);
+        name = (EditText) findViewById(R.id.title);
         restaurant = (EditText) findViewById(R.id.restaurant);
         description = (EditText) findViewById(R.id.description);
         rating = (RatingBar) findViewById(R.id.rating);

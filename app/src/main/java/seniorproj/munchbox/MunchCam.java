@@ -34,6 +34,8 @@ public class MunchCam extends Activity {
     private Camera recentCamera;
 
     private ImageButton confirmButton;
+    private ImageButton captureButton;
+    private Button cancelButton;
 
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int LOADING_ALPHA_VALUE = 128;
@@ -54,9 +56,10 @@ public class MunchCam extends Activity {
         FrameLayout prev = (FrameLayout) findViewById(R.id.camera_preview);
         prev.addView(munchCamPreview);
 
-        final ImageButton captureButton = (ImageButton) findViewById(R.id.button_capture);
+        captureButton = (ImageButton) findViewById(R.id.button_capture);
         confirmButton = (ImageButton) findViewById(R.id.button_confirm);
-        final Button cancelButton = (Button) findViewById(R.id.button_cancel);
+        cancelButton = (Button) findViewById(R.id.button_cancel);
+
         confirmButton.setVisibility(View.INVISIBLE);
         confirmButton.setEnabled(false);
         cancelButton.setVisibility(View.INVISIBLE);
@@ -94,7 +97,13 @@ public class MunchCam extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        recreate();
+                        cam.startPreview();
+                        captureButton.setEnabled(true);
+                        captureButton.setVisibility(View.VISIBLE);
+                        confirmButton.setVisibility(View.INVISIBLE);
+                        confirmButton.setEnabled(false);
+                        cancelButton.setVisibility(View.INVISIBLE);
+                        cancelButton.setEnabled(false);
                     }
                 }
         );
@@ -187,9 +196,21 @@ public class MunchCam extends Activity {
 
     @Override
     public void onBackPressed(){
-        finish();
-        Intent backToList = new Intent(MunchCam.this, MainActivity.class);
-        backToList.putExtra("resetList", true);
-        startActivity(backToList);
+        if (captureButton.isEnabled() == false) {
+            //Don't restart activity, just reset everything that is needed to be
+            cam.startPreview();
+            captureButton.setEnabled(true);
+            captureButton.setVisibility(View.VISIBLE);
+            confirmButton.setVisibility(View.INVISIBLE);
+            confirmButton.setEnabled(false);
+            cancelButton.setVisibility(View.INVISIBLE);
+            cancelButton.setEnabled(false);
+        }
+        else {
+            finish();
+            Intent backToList = new Intent(MunchCam.this, MainActivity.class);
+            backToList.putExtra("resetList", true);
+            startActivity(backToList);
+        }
     }
 }
