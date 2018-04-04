@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -43,6 +44,8 @@ public class EditEntry extends Activity {
     private EditText description;
     private RatingBar rating;
 
+    private Button button;
+
     private String imgPath;
 
     private int id; //If this is -1, it means this is a new entry... if not, update existing entry
@@ -57,6 +60,8 @@ public class EditEntry extends Activity {
         restaurant = (EditText) findViewById(R.id.restaurant);
         description = (EditText) findViewById(R.id.description);
         rating = (RatingBar) findViewById(R.id.rating);
+
+        button = (Button) findViewById(R.id.save);
 
         //Get image and display it
         imgPath = getIntent().getStringExtra("imageAddr");

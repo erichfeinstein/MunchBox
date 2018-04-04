@@ -73,7 +73,7 @@
                                             android:layout_marginRight="10dp"
                                             android:layout_marginBottom="10dp"
                                             android:padding="8dp"
-                                            android:inputType="textCapWords"
+                                            android:inputType="textCapWords|textAutoCorrect|textAutoComplete"
                                             android:singleLine="true"
                                             android:textSize="25dp"
                                             android:hint="Enter a title..."
@@ -99,7 +99,7 @@
                                                     android:gravity="left"
                                                     android:textColor="@android:color/black"
                                                     android:background="@drawable/seemless_border"
-                                                    android:inputType="textCapWords"
+                                                    android:inputType="textCapWords|textAutoCorrect|textAutoComplete"
                                                     android:textStyle="bold"
                                                     android:singleLine="true"
                                                     android:hint="Location"
@@ -150,7 +150,7 @@
                                             android:layout_height="90dp"
                                             android:gravity="center_vertical|left"
                                             android:background="@drawable/borders"
-                                            android:inputType="textCapSentences"
+                                            android:inputType="textCapSentences|textAutoCorrect|textAutoComplete"
                                             android:textColor="@android:color/black"
                                             android:hint="Enter a description..."
                                             android:lines="3"
@@ -172,36 +172,29 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/rating_label"
+                            android:layout_marginBottom="80dp"
                             android:layout_centerHorizontal="true"
-                            android:scaleX="2"
                             android:scaleY="2"
+                            android:scaleX="2"
                             android:layout_marginTop="20dp"
                             android:isIndicator="false"
                             android:progressDrawable="@drawable/rating_bar_mb"
                             android:numStars="5" />
                 </RelativeLayout>
         </ScrollView>
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/save"
+            android:background="@color/colorPrimaryDark"
+            android:onClick="saveEntryButton"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="50dp"
-            android:layout_alignParentRight="true">
-                <Button
-                    android:id="@+id/createNewEntry"
-                    style="@style/Widget.AppCompat.Button.Colored"
-                    android:onClick="saveEntryButton"
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginBottom="25dp"
-                    android:background="@drawable/button"
-                    android:elevation="8dp"
-                    android:text="Save"
-                    android:textSize="15dp"
-                    android:textColor="@android:color/white"
-                    android:visibility="visible" />
-        </LinearLayout>
+            android:elevation="8dp"
+            android:text="Save"
+            android:padding="5dp"
+            android:textSize="20dp"
+            android:textColor="@android:color/white"
+            android:visibility="visible" />
+
 </RelativeLayout>
