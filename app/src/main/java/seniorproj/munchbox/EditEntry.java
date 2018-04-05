@@ -16,24 +16,25 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
-import java.io.File;
+import com.google.api.services.vision.v1.model.EntityAnnotation;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
 
 public class EditEntry extends Activity {
 
 
     private RecyclerView tagsRecyclerView;
+    private ArrayList<EntityAnnotation> labels;
     private TagsAdapter tagsAdapter;
     private ArrayList<String> tags;
-
     private RecyclerView locationsRecyclerView;
     private LocationsAdapter locationsAdapter;
     private ArrayList<String> locations;
@@ -42,6 +43,8 @@ public class EditEntry extends Activity {
     private EditText restaurant;
     private EditText description;
     private RatingBar rating;
+
+    private Button button;
 
     private String imgPath;
 
@@ -53,10 +56,12 @@ public class EditEntry extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_entry);
 
-        name = (EditText) findViewById(R.id.name);
+        name = (EditText) findViewById(R.id.title);
         restaurant = (EditText) findViewById(R.id.restaurant);
         description = (EditText) findViewById(R.id.description);
         rating = (RatingBar) findViewById(R.id.rating);
+
+        button = (Button) findViewById(R.id.save);
 
         //Get image and display it
         imgPath = getIntent().getStringExtra("imageAddr");
@@ -69,19 +74,16 @@ public class EditEntry extends Activity {
         tagsRecyclerView = (RecyclerView) findViewById(R.id.tagsView);
         tagsRecyclerView.setHasFixedSize(true);
         tagsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-    //    PhotoAnalyzer labelGen = new PhotoAnalyzer(image, this, this);
+        labels = new ArrayList<>();
 
         locationsRecyclerView = (RecyclerView) findViewById(R.id.locationsView);
         locationsRecyclerView.setHasFixedSize(true);
         locationsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        //     tags = labelGen.getLabels();
 
         //Run GPS location analysis. If null... ?
         if (locations == null) {
             locations = new ArrayList<String>();
         }
-        //Run image analysis. If null... "Add tags" in place of list
-        tags = new ArrayList<String>();
 
         id = getIntent().getIntExtra("id", -1);
         if (id != -1) {
@@ -95,23 +97,24 @@ public class EditEntry extends Activity {
             name.setText(nameText);
             restaurant.setText(restaurantText);
             description.setText(descriptionText);
-            loadTags(tags);
+            loadTags(tags); //Right now this doesn't work: the tags aren't populated by the time we get here. Need to discuss -Danny
             rating.setRating(((float)ratingValue)/2);
             //Image already taken care of above
         }
 
         //Dummy locations
         //TODO remove
-        locations.add("Jolly");
-        locations.add("Superior Pho");
-        locations.add("Five Guys");
-        locations.add("Chipotle");
-        locations.add("Simply Greek");
-        locations.add("Chopstick");
-        locations.add("Qdoba");
-        locations.add("Potbelly");
+        locations.add("To");
+        locations.add("Be");
+        locations.add("Replaced");
+        locations.add("by");
+        locations.add("API");
+        locations.add("Results");
         loadLocations(locations);
-        loadTags(tags);
+
+        //Run image analysis
+        PhotoAnalyzer labelGen = new PhotoAnalyzer(image, this, this);
+        tags = labelGen.getLabels();
     }
 
     //Saves either new entry or updates info of existing entry
@@ -126,6 +129,7 @@ public class EditEntry extends Activity {
         intent.putExtra("rating", ratingAsInt);
         intent.putExtra("tags", tags);
         intent.putExtra("id", id); //In MainActivity, check if not -1
+        finish();
         startActivity(intent);
     }
 
@@ -196,14 +200,23 @@ public class EditEntry extends Activity {
         finish();
         Intent backToList = new Intent(EditEntry.this, MainActivity.class);
         //Delete image for cancelled entry
-        File toDelete = new File(imgPath);
-        if (toDelete.exists()) {
-            if (toDelete.delete()) {
-                System.out.println("File deleted");
-            } else {
-                System.out.println("File not deleted");
+        if (id == -1) {
+            File toDelete = new File(imgPath);
+            if (toDelete.exists()) {
+                if (toDelete.delete()) {
+                    System.out.println("File deleted");
+                } else {
+                    System.out.println("File not deleted");
+                }
             }
         }
         startActivity(backToList);
     }
+
+    public void onBackgroundTaskComplete(ArrayList<String> result) {
+        tags = result;
+        loadTags(tags);
+    }
+
+    //TODO I'd like the Save button to disappear when the keyboard is up. Related: tap outside keyboard to close it?
 }

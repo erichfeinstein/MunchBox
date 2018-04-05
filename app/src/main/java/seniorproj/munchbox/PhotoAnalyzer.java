@@ -8,18 +8,15 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.gax.rpc.ClientContext;
 import com.google.api.services.vision.v1.Vision;
 import com.google.api.services.vision.v1.VisionRequest;
 import com.google.api.services.vision.v1.VisionRequestInitializer;
@@ -29,13 +26,9 @@ import com.google.api.services.vision.v1.model.BatchAnnotateImagesRequest;
 import com.google.api.services.vision.v1.model.AnnotateImageRequest;
 import com.google.api.services.vision.v1.model.Image;
 import com.google.api.services.vision.v1.model.Feature;
-import com.google.cloud.vision.v1.Feature.Type;
-import com.google.cloud.vision.v1.ImageAnnotatorClient;
-import com.google.cloud.vision.v1.ImageAnnotatorSettings;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.lang.ref.WeakReference;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -51,65 +44,21 @@ import com.google.common.io.BaseEncoding;
 
 public class PhotoAnalyzer {
 
-    private String filePath;
-    private List<EntityAnnotation> labels;
-    private Bitmap bitmap;
+    private  ArrayList<EntityAnnotation> labels;
     private static final String TAG = Activity.class.getSimpleName();
     private Context context;
     private static String API_KEY;
     private static final String ANDROID_PACKAGE_HEADER = "X-Android-Package";
     private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
-    private Activity activity;
+    private EditEntry editEntryActivity;
 
-//    @Override
-//    protected Void doInBackground(Void... params) {
-//
-//        try {
-//            ImageAnnotatorClient vision = ImageAnnotatorClient.create();
-//            List<AnnotateImageRequest> requests = new ArrayList<>();
-//            RandomAccessFile file = new RandomAccessFile(filePath, "r");
-//            byte[] data = new byte[(int) file.length()];
-//            file.readFully(data);
-//            ByteString imgBytes = ByteString.copyFrom(data);
-//
-//            Image photo = Image.newBuilder().setContent(imgBytes).build();
-//            Feature feature = Feature.newBuilder().setType(Type.LABEL_DETECTION).build();
-//            AnnotateImageRequest request =
-//                    AnnotateImageRequest.newBuilder().addFeatures(feature).setImage(photo).build();
-//            BatchAnnotateImagesResponse response = vision.batchAnnotateImages(requests);
-//            List<AnnotateImageResponse> responses = response.getResponsesList();
-//
-//            for (AnnotateImageResponse res : responses) {
-//                if (res.hasError()) {
-//                    System.out.printf("Error: %s\n", res.getError().getMessage());
-//                }
-//                for (EntityAnnotation annotation : res.getLabelAnnotationsList()) {
-//                    labels.add(annotation);
-//                }
-//            }
-//
-//            vision.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-    //}
-
-//    public void generateLabels() {
-//        try {
-//          execute();
-//        }
-//        catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    /*Flow of control: constructor -> uploadImage -> callCloudVision */
 
     public PhotoAnalyzer(Bitmap image, Context context, Activity activity) {
-      //  setFilePath(photoPath);
         this.context = context;
-      //  generateLabels();
         API_KEY = context.getString(R.string.mykey);
-        this.activity = activity;
+        this.editEntryActivity = (EditEntry) activity;
+        labels = new ArrayList<EntityAnnotation>();
         uploadImage(image);
     }
 
@@ -122,52 +71,44 @@ public class PhotoAnalyzer {
         }
     }
 
-    public List<String> getLabels() {
-        List<String> returnLabels = new ArrayList<String>();
-        for (int i = 0; i < labels.size(); i++) {
-            returnLabels.add(labels.get(i).getDescription());
-        }
-        return returnLabels;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-
-    private static class RequestTask extends AsyncTask<Object, Void, String> {
+    private class RequestTask extends AsyncTask<Object, Void, ArrayList<EntityAnnotation>> {
         private final WeakReference<Activity> mainWeakReference;
         private Vision.Images.Annotate request;
+        private ArrayList<EntityAnnotation> labelsInput;
 
-        RequestTask(Activity activity, Vision.Images.Annotate annotate) {
+        RequestTask(Activity activity, Vision.Images.Annotate annotate, ArrayList<EntityAnnotation> labels) {
             mainWeakReference = new WeakReference(activity);
             request = annotate;
+            labelsInput = labels;
         }
 
         @Override
-        protected String doInBackground(Object... params) {
+        protected ArrayList<EntityAnnotation> doInBackground(Object... params) {
             try {
                 Log.d(TAG, "created cloud vision request object, sending");
                 BatchAnnotateImagesResponse response = request.execute();
-                return convertResponseToString(response);
+                labelsInput = (ArrayList<EntityAnnotation>)(response.getResponses().get(0).getLabelAnnotations());
+                return labelsInput;
             } catch (GoogleJsonResponseException e) {
                 Log.d(TAG, "failed to make API request because " + e.getContent());
             } catch (IOException e) {
                 Log.d(TAG, "failed to make API request because of IOException " + e.getMessage());
             }
-            return "Cloud vision API request failed. Check log for details.";
+            System.out.println("Vision request failed.");
+            return null;
         }
 
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(ArrayList<EntityAnnotation> result) {
             Activity activity = mainWeakReference.get();
+            labels = result;
+            editEntryActivity.onBackgroundTaskComplete(getLabels());
             //This bit is where the sample code sets the labels to the image. I don't think we do it here - Danny
-            System.out.println(result);
         }
     }
 
     private void callCloudVision(final Bitmap bitmap) {
         try {
-            RequestTask labelTask = new RequestTask(activity, prepareAnnotationRequest(bitmap));
+            RequestTask labelTask = new RequestTask(editEntryActivity, prepareAnnotationRequest(bitmap), labels);
             labelTask.execute();
         }
         catch (IOException e) {
@@ -180,6 +121,7 @@ public class PhotoAnalyzer {
 
         List<EntityAnnotation> labels = response.getResponses().get(0).getLabelAnnotations();
         if (labels != null) {
+
             for (EntityAnnotation label : labels) {
                 message.append(String.format(Locale.US, "%.3f: %s", label.getScore(), label.getDescription()));
                 message.append("\n");
@@ -195,7 +137,7 @@ public class PhotoAnalyzer {
     private Vision.Images.Annotate prepareAnnotationRequest(Bitmap bitmap) throws IOException {
         HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
         JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
-         final Bitmap image = bitmap;
+        final Bitmap image = bitmap;
 
         VisionRequestInitializer requestInitializer =
                 new VisionRequestInitializer(API_KEY) {
@@ -213,7 +155,7 @@ public class PhotoAnalyzer {
             }
         };
 
-        Vision.Builder builder = new Vision.Builder(httpTransport, jsonFactory, null);
+        Vision.Builder builder = new Vision.Builder(httpTransport, jsonFactory, null).setApplicationName("MunchBox");
         builder.setVisionRequestInitializer(requestInitializer);
 
         Vision vision = builder.build();
@@ -228,10 +170,11 @@ public class PhotoAnalyzer {
                                     byte[] bytes = output.toByteArray();
 
                                     encodedImage.encodeContent(bytes);
+                                    annotateImageRequest.setImage(encodedImage);
                                     annotateImageRequest.setFeatures(new ArrayList<Feature>() {{
                                         Feature labelDetection = new Feature();
                                         labelDetection.setType("LABEL_DETECTION");
-                                        labelDetection.setMaxResults(4);
+                                        labelDetection.setMaxResults(8);
                                         add(labelDetection);
                                     }});
 
@@ -242,6 +185,23 @@ public class PhotoAnalyzer {
         Log.d(TAG, "created vision request object, sending");
 
         return annotateRequest;
+    }
+
+    public ArrayList<String> getLabels() {
+        ArrayList<String> returnLabels = new ArrayList<String>();
+        for (int i = 0; i < labels.size(); i++) {
+            String curLabel = labels.get(i).getDescription();
+            if (curLabel.equals("food")
+                    || curLabel.equals("cuisine")
+                    || curLabel.equals("dish")
+                    || curLabel.equals("meal")
+                    || curLabel.equals("lunch")
+                    || curLabel.equals("dinner")
+                    || curLabel.equals("recipe")
+                    || curLabel.contains("vegetarian")) continue;
+            else returnLabels.add(curLabel);
+        }
+        return returnLabels;
     }
 
     /*Package stuff for use with the HTTP injections. */
