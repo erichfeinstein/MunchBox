@@ -34,6 +34,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <seniorproj.munchbox.SquareImageView
+        android:id="@+id/loading_screen"
+        android:layout_below="@id/padder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </seniorproj.munchbox.SquareImageView>
+
+    <ProgressBar
+        android:id="@+id/loading_view"
+        style="?android:attr/progressBarStyle"
+        android:layout_alignBottom="@id/loading_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"/>
+
+
     <FrameLayout
         android:id="@+id/button_frame"
         android:layout_width="match_parent"
@@ -47,23 +64,21 @@
 
             <ImageButton
                 android:id="@+id/button_capture"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
                 android:layout_centerInParent="true"
                 android:background="@drawable/button"
                 android:src="@drawable/take_picture"
-                android:scaleType="fitCenter"
                 android:padding="10dp"
                 android:textStyle="bold" />
 
             <ImageButton
                 android:id="@+id/button_confirm"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
                 android:layout_centerInParent="true"
-                android:src="@drawable/confirm_picture"
+                android:src="@drawable/confirm_button"
                 android:background="@drawable/button"
-                android:scaleType="fitCenter"
                 android:padding="10dp"
                 android:textStyle="bold" />
 

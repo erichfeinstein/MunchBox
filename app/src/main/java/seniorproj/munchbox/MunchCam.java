@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -37,6 +38,8 @@ public class MunchCam extends Activity {
     private ImageButton captureButton;
     private Button cancelButton;
 
+    private ProgressBar loading;
+
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int LOADING_ALPHA_VALUE = 128;
     public static final int FULL_ALPHA_VALUE = 255;
@@ -60,10 +63,14 @@ public class MunchCam extends Activity {
         confirmButton = (ImageButton) findViewById(R.id.button_confirm);
         cancelButton = (Button) findViewById(R.id.button_cancel);
 
+        loading = (ProgressBar) findViewById(R.id.loading_view);
+
         confirmButton.setVisibility(View.INVISIBLE);
         confirmButton.setEnabled(false);
         cancelButton.setVisibility(View.INVISIBLE);
         cancelButton.setEnabled(false);
+
+        loading.setVisibility(View.INVISIBLE);
 
         captureButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -85,6 +92,7 @@ public class MunchCam extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        loading.setVisibility(View.VISIBLE);
                         // save image and send to new activity
                         confirmHelper();
                         Intent intent = new Intent(MunchCam.this, EditEntry.class);
