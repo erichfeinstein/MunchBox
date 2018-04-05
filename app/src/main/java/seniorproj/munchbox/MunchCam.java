@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.net.Uri;
@@ -39,6 +40,8 @@ public class MunchCam extends Activity {
     private Button cancelButton;
 
     private ProgressBar loading;
+    private FrameLayout prev;
+    private SquareImageView picture_frame;
 
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int LOADING_ALPHA_VALUE = 128;
@@ -56,7 +59,8 @@ public class MunchCam extends Activity {
         params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
         cam.setParameters(params);
         munchCamPreview = new MunchCamPreview(this, cam);
-        FrameLayout prev = (FrameLayout) findViewById(R.id.camera_preview);
+        prev = (FrameLayout) findViewById(R.id.camera_preview);
+        picture_frame = findViewById(R.id.picture_frame);
         prev.addView(munchCamPreview);
 
         captureButton = (ImageButton) findViewById(R.id.button_capture);
@@ -64,13 +68,12 @@ public class MunchCam extends Activity {
         cancelButton = (Button) findViewById(R.id.button_cancel);
 
         loading = (ProgressBar) findViewById(R.id.loading_view);
+        loading.setVisibility(View.INVISIBLE);
 
         confirmButton.setVisibility(View.INVISIBLE);
         confirmButton.setEnabled(false);
         cancelButton.setVisibility(View.INVISIBLE);
         cancelButton.setEnabled(false);
-
-        loading.setVisibility(View.INVISIBLE);
 
         captureButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -93,6 +96,7 @@ public class MunchCam extends Activity {
                     @Override
                     public void onClick(View v) {
                         loading.setVisibility(View.VISIBLE);
+                        loading.setBackgroundColor(Color.parseColor("#66000000"));
                         // save image and send to new activity
                         confirmHelper();
                         Intent intent = new Intent(MunchCam.this, EditEntry.class);

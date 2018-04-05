@@ -34,22 +34,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <seniorproj.munchbox.SquareImageView
-        android:id="@+id/loading_screen"
-        android:layout_below="@id/padder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </seniorproj.munchbox.SquareImageView>
-
     <ProgressBar
         android:id="@+id/loading_view"
-        style="?android:attr/progressBarStyle"
-        android:layout_alignBottom="@id/loading_screen"
-        android:layout_width="wrap_content"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_below="@id/padder"
+        android:layout_alignBottom="@id/picture_frame"
+        android:padding="180dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"/>
-
 
     <FrameLayout
         android:id="@+id/button_frame"
