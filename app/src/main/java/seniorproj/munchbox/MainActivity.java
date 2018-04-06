@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.os.Environment;
@@ -27,6 +28,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 
+import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -88,6 +90,10 @@ public class MainActivity extends AppCompatActivity {
         if (resetList) filter("");
         reloadList(journal);
 
+        //Start LocationGetter. Can call locationGetter.getLocation() to receive Location object.
+        LocationGetter locationGetter = new LocationGetter(this);
+        locationGetter.startListening();
+
         //Detect if an entry needs to be deleted
         boolean toDelete = getIntent().getBooleanExtra("toDelete", false);
         if (toDelete) {
@@ -112,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
             //Make new entry
             if (imgPath != null && id == -1) {
+
                 JournalEntry newEntry = new JournalEntry();
                 newEntry.setNameOfDish(name);
                 newEntry.setRestaurantName(restaurant);

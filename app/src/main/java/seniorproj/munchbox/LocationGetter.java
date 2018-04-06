@@ -1,5 +1,6 @@
 package seniorproj.munchbox;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -7,6 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.google.android.gms.location.places.Place;
@@ -32,6 +34,8 @@ public class LocationGetter {
     private Context context;
     private LocationManager locationManager;
     private LocationListener locationListener;
+    private Location mlocation;
+    private PlaceLikelihood likelyPlace;
 
     public LocationGetter(Context mContext){
         context = mContext;
@@ -39,8 +43,9 @@ public class LocationGetter {
 
         // Define a listener that responds to location updates
         locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {}
+            public void onLocationChanged(Location location) {
 
+            }
             public void onStatusChanged(String provider, int status, Bundle extras) {}
 
             public void onProviderEnabled(String provider) {}
@@ -53,9 +58,8 @@ public class LocationGetter {
 
     public void startListening(){
         // Register the listener with the Location Manager to receive location updates
-        if(context.checkPermission(Context.LOCATION_SERVICE, android.os.Process.myPid(), android.os.Process.myUid())
+        if(ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-
         }
         else{
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
@@ -63,8 +67,8 @@ public class LocationGetter {
     }
 
     public Location getLocation(){
-        if(context.checkPermission(Context.LOCATION_SERVICE, android.os.Process.myPid(), android.os.Process.myUid())
-                != PackageManager.PERMISSION_GRANTED){
+        if(ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
             /*
             Need to ask for permission and then recall this function.
              */
@@ -74,21 +78,31 @@ public class LocationGetter {
         else{
             return locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         }
-
     }
 
-    public void googleMapLocation(Location location){
+    /* Currently not working. Finishing HTTP implementation instead*/
+    public PlaceLikelihood googleMapLocation(Location location){
         PlaceDetectionClient p = Places.getPlaceDetectionClient(context);
-        if(context.checkPermission(Context.LOCATION_SERVICE, android.os.Process.myPid(), android.os.Process.myUid())
+        if(ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             System.out.println("sigh...");
         }
         else {
-                Task<PlaceLikelihoodBufferResponse> placeResult = p.getCurrentPlace(null);
+            //System.out.println("Get Current Place Start");
+            Task<PlaceLikelihoodBufferResponse> placeResult = p.getCurrentPlace(null);
+            //System.out.println("Get Current Place End");
             placeResult.addOnCompleteListener(new OnCompleteListener<PlaceLikelihoodBufferResponse>() {
                 @Override
                 public void onComplete(@NonNull Task<PlaceLikelihoodBufferResponse> task) {
-                    PlaceLikelihoodBufferResponse likelyPlaces = task.getResult();
+                    //System.out.println("Complete");
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        PlaceLikelihoodBufferResponse buffer = task.getResult();
+                        for (PlaceLikelihood placeLikelihood: buffer){
+                            if(likelyPlace != null){
+                                likelyPlace = placeLikelihood;
+                            }
+                        }
+                    }
 
                     /*
                     Data storage
@@ -101,6 +115,6 @@ public class LocationGetter {
                 }
             });
         }
-
+        return likelyPlace;
     }
 }

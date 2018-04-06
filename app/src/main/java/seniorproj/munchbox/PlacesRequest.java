@@ -1,26 +1,18 @@
 package seniorproj.munchbox;
 
-import android.os.Message;
-import android.renderscript.ScriptGroup;
-
-/**
- * Created by jxy367 on 2/23/2018.
- */
-
 import android.os.AsyncTask;
+import android.os.Message;
 import android.util.JsonReader;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-Takes URLs and gets JSON object. Exact JSON parsing to be decided on later.
-doInBackground is generic and will be used again later.
-For our purposes, the URLs should be properly formatted google distance matrix urls.
- */
-public class DistanceMatrixRequest extends AsyncTask<URL, Integer, List<Distance>> {
+public class PlacesRequest extends AsyncTask<URL, Integer, List<Distance>> {
     @Override
     protected List<Distance> doInBackground(URL... urls) {
         long completed;
@@ -163,4 +155,3 @@ public class DistanceMatrixRequest extends AsyncTask<URL, Integer, List<Distance
         return new TravelTime(time, seconds);
     }
 }
-
