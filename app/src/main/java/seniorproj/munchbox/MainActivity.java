@@ -306,7 +306,20 @@ public class MainActivity extends AppCompatActivity {
         journalCopy = new ArrayList(journal);
         journal.clear();
 
+        checkDistances(currentX, currentY);
 
+        for(JournalEntry j: journalCopy)
+        {
+            double dist = j.getDistanceLastChecked();
+            for(int i = 0; i < journal.size(); i++)
+            {
+                if(dist <= journal.get(i).getDistanceLastChecked())
+                {
+                    journal.add(i, j);
+                    i = journal.size();
+                }
+            }
+        }
 
         reloadList(journal);
     }

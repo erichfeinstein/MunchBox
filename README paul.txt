@@ -26,3 +26,8 @@ Week 5:
 Deleted listItem. It was way past irrelevant and deleted it removes the possibility of anybody getting confused.
 Created sortAlphabetically, and all the addons it demanded
 Created sortBy Distance. I'm not sure how the distance with Google Maps is gonna work, so it's basic.
+
+Week 6:
+Finished sortByDistance, allowing users to find the entries that are nearest to them. Not fully implemented, since Google Maps must be integrated for it to work as intended
+JournalEntries now have random coordinates for testing purposes.
+JournalEntries now have TravelTime for testing purposes.

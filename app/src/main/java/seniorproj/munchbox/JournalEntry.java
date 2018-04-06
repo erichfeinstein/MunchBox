@@ -35,6 +35,8 @@ public class JournalEntry implements Comparable<JournalEntry>
     private double distanceLastChecked;
     private double xLocation = 0;
     private double yLocation = 0;
+    Random r = new Random();
+    private TravelTime toGetThere;
 
     public JournalEntry(Bitmap thumb, String path)
     {
@@ -49,24 +51,20 @@ public class JournalEntry implements Comparable<JournalEntry>
         thumbnail = thumb;
         photoPath = path;
         //this.photoID = R.drawable.sample_image;
+        createRandomLocation();
         frequency = 1;
-        Random r = new Random();
-        xLocation = r.nextInt(1000 - 0) + 1;
-        yLocation = r.nextInt(1000 - 0) + 1;
         entryDate = Calendar.getInstance().getTime();  //generate date on entry creation
     }
 
     public JournalEntry() {
         rating = 0;
-        Random r = new Random();
-        xLocation = r.nextInt(1000 - 0) + 1;
-        yLocation = r.nextInt(1000 - 0) + 1;
         nameOfDish = "";
         restaurantName = "";
         //restaurantName = GoogleFindRestaurantName();
 //        PhotoAnalyzer labelGen = new PhotoAnalyzer(photoPath);
 //        tags = (ArrayList)labelGen.getLabels();
         description = "";
+        createRandomLocation();
         frequency = 1;
         entryDate = Calendar.getInstance().getTime();  //generate date on entry creation
         if (tags != null && tags.size() > 0) {
@@ -260,5 +258,18 @@ public class JournalEntry implements Comparable<JournalEntry>
     public void setYLocation(double newY)
     {
         yLocation = newY;
+    }
+
+    //temporary method for testing distance algorithm
+    public void createRandomLocation()
+    {
+        xLocation = r.nextInt(10000 - 0) + 1;
+        yLocation = r.nextInt(10000 - 0) + 1;
+    }
+
+    public TravelTime createTravelTime()
+    {
+        TravelTime travel = new TravelTime("" + distanceLastChecked, (int)distanceLastChecked);
+        return travel;
     }
 }
