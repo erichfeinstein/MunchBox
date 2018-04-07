@@ -32,6 +32,7 @@
                 android:textColor="@android:color/black"
                 android:singleLine="true"/>
             <Button
+                android:onClick="sortByDistance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/borders"
