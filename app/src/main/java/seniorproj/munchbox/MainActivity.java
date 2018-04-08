@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Location;
 import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.PopupWindow;
 
 import com.google.android.gms.location.places.PlaceLikelihood;
+import com.google.type.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -38,6 +38,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,10 +90,6 @@ public class MainActivity extends AppCompatActivity {
         boolean resetList = getIntent().getBooleanExtra("resetList", false);
         if (resetList) filter("");
         reloadList(journal);
-
-        //Start LocationGetter. Can call locationGetter.getLocation() to receive Location object.
-        LocationGetter locationGetter = new LocationGetter(this);
-        locationGetter.startListening();
 
         //Detect if an entry needs to be deleted
         boolean toDelete = getIntent().getBooleanExtra("toDelete", false);

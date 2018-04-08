@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import com.google.api.services.vision.v1.model.EntityAnnotation;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
@@ -82,7 +84,26 @@ public class EditEntry extends Activity {
 
         //Run GPS location analysis. If null... ?
         if (locations == null) {
-            locations = new ArrayList<String>();
+            locations = new ArrayList<>();
+            //Start LocationGetter. Can call locationGetter.getLocation() to receive Location object.
+            LocationGetter locationGetter = new LocationGetter(this);
+            locationGetter.startListening();
+
+            //Get current location and identify closest food place
+            Location currentLocation = locationGetter.getLocation();
+            URL u = URLMaker.placesURL(this, currentLocation);
+            PlacesRequest p = new PlacesRequest();
+            p.execute(u);
+            ArrayList<String> restaurant_names;
+            try {
+                restaurant_names = (ArrayList<String>) p.get();
+                if(restaurant_names.size() > 0) {
+                    locations.add(restaurant_names.get(0));
+                }
+            }
+            catch (Exception e){
+                System.out.println(e.toString());
+            }
         }
 
         id = getIntent().getIntExtra("id", -1);
@@ -102,14 +123,6 @@ public class EditEntry extends Activity {
             //Image already taken care of above
         }
 
-        //Dummy locations
-        //TODO remove
-        locations.add("To");
-        locations.add("Be");
-        locations.add("Replaced");
-        locations.add("by");
-        locations.add("API");
-        locations.add("Results");
         loadLocations(locations);
 
         //Run image analysis
