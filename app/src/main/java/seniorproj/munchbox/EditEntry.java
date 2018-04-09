@@ -98,8 +98,12 @@ public class EditEntry extends Activity {
             try {
                 restaurant_names = (ArrayList<String>) p.get();
                 if(restaurant_names.size() > 0) {
-                    locations.add(restaurant_names.get(0));
+                    for (int i = 0; i < restaurant_names.size(); i++) {
+                        locations.add(restaurant_names.get(i));
+                    }
+                    restaurant.setText(locations.get(0)); //Set location text to best guess
                 }
+                restaurant.setHint("Enter a location...");
             }
             catch (Exception e){
                 System.out.println(e.toString());
