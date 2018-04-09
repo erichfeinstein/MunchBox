@@ -91,23 +91,25 @@ public class EditEntry extends Activity {
 
             //Get current location and identify closest food place
             Location currentLocation = locationGetter.getLocation();
-            URL u = URLMaker.placesURL(this, currentLocation);
-            PlacesRequest p = new PlacesRequest();
-            p.execute(u);
-            ArrayList<String> restaurant_names;
-            try {
-                restaurant_names = (ArrayList<String>) p.get();
-                if(restaurant_names.size() > 0) {
-                    for (int i = 0; i < restaurant_names.size(); i++) {
-                        locations.add(restaurant_names.get(i));
+            if (currentLocation != null) {
+                URL u = URLMaker.placesURL(this, currentLocation);
+                PlacesRequest p = new PlacesRequest();
+                p.execute(u);
+                ArrayList<String> restaurant_names;
+                try {
+                    restaurant_names = (ArrayList<String>) p.get();
+                    if (restaurant_names.size() > 0) {
+                        for (int i = 0; i < restaurant_names.size(); i++) {
+                            locations.add(restaurant_names.get(i));
+                        }
+                        restaurant.setText(locations.get(0)); //Set location text to best guess
                     }
-                    restaurant.setText(locations.get(0)); //Set location text to best guess
+                } catch (Exception e) {
+                    System.out.println(e.toString());
                 }
-                restaurant.setHint("Enter a location...");
             }
-            catch (Exception e){
-                System.out.println(e.toString());
-            }
+            restaurant.setHint("Enter a location..."); //Here is after attempt to find locations.
+            //If the attempt fails and no locations are found, change hint to prompt user to enter their own location
         }
 
         id = getIntent().getIntExtra("id", -1);
@@ -150,7 +152,8 @@ public class EditEntry extends Activity {
         startActivity(intent);
     }
 
-    //TODO add confirm delete
+    //TODO Replace 'Delete' with 'Save' button
+    //Add this code to ViewEntry under a drop down menu for deleting
     public void deleteEntryButton(View view) {
         finish();
         Intent backToMain = new Intent(EditEntry.this, MainActivity.class);
@@ -212,11 +215,16 @@ public class EditEntry extends Activity {
         v.clearFocus();
     }
 
+    //TODO Add a PopupWindow asking user to confirm that they want to... (see comments in code)
     @Override
     public void onBackPressed(){
+        //"Discard changes to this entry?"
         finish();
         Intent backToList = new Intent(EditEntry.this, MainActivity.class);
+
         //Delete image for cancelled entry
+
+        //"Cancel creating this entry?"
         if (id == -1) {
             File toDelete = new File(imgPath);
             if (toDelete.exists()) {
@@ -234,6 +242,4 @@ public class EditEntry extends Activity {
         tags = result;
         loadTags(tags);
     }
-
-    //TODO I'd like the Save button to disappear when the keyboard is up. Related: tap outside keyboard to close it?
 }
