@@ -3,7 +3,7 @@ package seniorproj.munchbox;
 import android.os.Message;
 import android.renderscript.ScriptGroup;
 
-/**
+/*
  * Created by jxy367 on 2/23/2018.
  */
 
@@ -24,105 +24,78 @@ public class DistanceMatrixRequest extends AsyncTask<URL, Integer, List<Distance
     @Override
     protected List<Distance> doInBackground(URL... urls) {
         long completed;
-        ArrayList<Distance> d = new ArrayList<Distance>();
-        for (completed = 0; completed<urls.length; completed++) {
-            //System.out.println(completed);
-            d.add(request(urls[(int)completed]));
-            if (isCancelled()) break;
-        }
-        return d;
+        ArrayList<Distance> d = new ArrayList<>();
+        return request(urls[0]);
     }
 
-    private Distance request(URL url){
+    private List<Distance> request(URL url){
         try {
             URL u = url;
             URLConnection conn = u.openConnection();
             InputStream is = conn.getInputStream();
-            Distance distanceInformation = readJsonStream(is);
+            List<Distance> distanceInformation = readJsonStream(is);
             return distanceInformation;
-
         }
         catch(Exception e){
             System.out.println(e.toString());
-            return new Distance("Error", 0);
+            return new ArrayList<>();
         }
     }
 
     //JSON data grabbing
-    private Distance readJsonStream(InputStream in) throws IOException {
+    private List<Distance> readJsonStream(InputStream in) throws IOException {
+        ArrayList<Distance> distances = new ArrayList<>();
         JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
+        reader.beginObject();
         try {
-            return readMessage(reader);
+            while(reader.hasNext()) {
+                String name = reader.nextName();
+                if (name.equals("rows")) {
+                    reader.beginArray();
+                    reader.beginObject();
+                    name = reader.nextName();
+                    distances = readDistanceObjects(reader);
+                    reader.endObject();
+                    reader.endArray();
+                }
+                else {
+                    reader.skipValue();
+                }
+            }
+            reader.endObject();
         } finally {
             reader.close();
         }
+        return distances;
     }
 
-    private List<Distance> readMessagesArray(JsonReader reader) throws IOException {
-        List<Distance> messages = new ArrayList<Distance>();
-        reader.beginObject();
-        while (reader.hasNext()) {
-            messages.add(readMessage(reader));
+    private ArrayList<Distance> readDistanceObjects(JsonReader reader) throws IOException{
+        ArrayList<Distance> distances = new ArrayList<>();
+        reader.beginArray();
+        while(reader.hasNext()){
+            Distance d = readDistanceObject(reader);
+            if(d != null){
+                distances.add(d);
+            }
         }
         reader.endArray();
-        return messages;
+        return distances;
     }
 
-    private Distance readMessage(JsonReader reader) throws IOException {
-        String destinationAddress = null;
-        String originAddress = null;
+    private Distance readDistanceObject(JsonReader reader) throws IOException{
         Distance distance = null;
-        TravelTime travelTime = null;
         reader.beginObject();
-        while (reader.hasNext()) {
+        while(reader.hasNext()){
             String name = reader.nextName();
-            if (name.equals("destination_addresses")) {
-                destinationAddress = getAddressFromArray(reader);
-            } else if (name.equals("origin_addresses")) {
-                originAddress = getAddressFromArray(reader);
-            } else if (name.equals("rows")) {
-                reader.beginArray();
-                reader.beginObject();
-            } else if (name.equals("elements")){
-                reader.beginArray();
-                reader.beginObject();
-            } else if (name.equals("distance")) {
+            if(name.equals("distance")){
                 distance = readDistance(reader);
-            } else if (name.equals("duration")) {
-                travelTime = readDuration(reader);
-            } else {
+            }
+            else{
                 reader.skipValue();
             }
         }
         reader.endObject();
-        /*
-        System.out.println("Destination address: " + destinationAddress);
-        System.out.println("Origin address: " + originAddress);
-        System.out.println(distance.toString());
-        System.out.println(travelTime.toString());
-        */
         return distance;
-    }
-
-    /*
-    private List<Double> readDoublesArray(JsonReader reader) throws IOException {
-        List<Double> doubles = new ArrayList<Double>();
-
-        reader.beginArray();
-        while (reader.hasNext()) {
-            doubles.add(reader.nextDouble());
-        }
-        reader.endArray();
-        return doubles;
-    }
-    */
-
-    private String getAddressFromArray(JsonReader reader) throws IOException {
-        String address = null;
-        reader.beginArray();
-        address = reader.nextString();
-        reader.endArray();
-        return address;
     }
 
     private Distance readDistance(JsonReader reader) throws IOException {
@@ -139,28 +112,7 @@ public class DistanceMatrixRequest extends AsyncTask<URL, Integer, List<Distance
                 reader.skipValue();
             }
         }
-
         reader.endObject();
         return new Distance(distance, distanceMeters);
-    }
-
-    private TravelTime readDuration(JsonReader reader) throws IOException {
-        String time = null;
-        int seconds = -1;
-
-        reader.beginObject();
-        while (reader.hasNext()) {
-            String name = reader.nextName();
-            if (name.equals("text")) {
-                time = reader.nextString();
-            } else if (name.equals("value")) {
-                seconds = reader.nextInt();
-            } else {
-                reader.skipValue();
-            }
-        }
-        reader.endObject();
-        return new TravelTime(time, seconds);
-    }
-}
+    }}
 
