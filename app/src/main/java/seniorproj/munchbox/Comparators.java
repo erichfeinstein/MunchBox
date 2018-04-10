@@ -7,35 +7,36 @@ import java.util.Comparator;
  */
 
 /*
-A class containing comparators for JournalEntry sorting purposes
+ * A class containing comparators for JournalEntry sorting purposes
  */
 
 public class Comparators {
-    private Comparator<JournalEntry> rateComparator;
-    private Comparator<JournalEntry> frequencyComparator;
-    private Comparator<JournalEntry> dateComparator;
-    private Comparator<JournalEntry> distanceComparator;
-
-    public Comparators(){
-        rateComparator = new Comparator<JournalEntry>(){
+    static Comparator<JournalEntry> getRateComparator(){
+        return new Comparator<JournalEntry>(){
             public int compare(JournalEntry j1, JournalEntry j2){
-                return j1.getRating() - j2.getRating();
+                return j2.getRating() - j1.getRating();
             }
         };
+    }
 
-        frequencyComparator = new Comparator<JournalEntry>(){
+    static Comparator<JournalEntry> getFrequencyComparator(){
+        return new Comparator<JournalEntry>(){
             public int compare(JournalEntry j1, JournalEntry j2){
-                return j1.getFrequency() - j2.getFrequency();
+                return j2.getFrequency() - j1.getFrequency();
             }
         };
+    }
 
-        dateComparator = new Comparator<JournalEntry>(){
+    static Comparator<JournalEntry> getDateComparator(){
+        return new Comparator<JournalEntry>(){
             public int compare(JournalEntry j1, JournalEntry j2){
-                return j1.getEntryDate().compareTo(j2.getEntryDate());
+                return j2.getEntryDate().compareTo(j1.getEntryDate());
             }
         };
+    }
 
-        distanceComparator = new Comparator<JournalEntry>(){
+    static Comparator<JournalEntry> getDistanceComparator(){
+        return new Comparator<JournalEntry>(){
             public int compare(JournalEntry j1, JournalEntry j2){
                 //return j1.getDistance() - j2.getDistance();
                 return 0; //For now
@@ -44,15 +45,11 @@ public class Comparators {
         };
     }
 
-    public Comparator<JournalEntry> getRateComparator(){
-        return rateComparator;
-    }
-
-    public Comparator<JournalEntry> getFrequencyComparator(){
-        return frequencyComparator;
-    }
-
-    public Comparator<JournalEntry> getDateComparator(){
-        return dateComparator;
+    static Comparator<JournalEntry> getDishNameComparator(){
+        return new Comparator<JournalEntry>(){
+            public int compare(JournalEntry j1, JournalEntry j2){
+                return j1.getNameOfDish().compareTo(j2.getNameOfDish());
+            }
+        };
     }
 }

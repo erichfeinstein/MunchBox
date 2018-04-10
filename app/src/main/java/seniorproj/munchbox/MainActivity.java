@@ -262,6 +262,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void sortByReview(View view)
     {
+        Collections.sort(journal,Comparators.getRateComparator());
+        reloadList(journal);
+        /*
         journalCopy = new ArrayList(journal);
         journal.clear();
         for(int i = 10; i >= 0; i--)
@@ -275,10 +278,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         reloadList(journal);
+        */
     }
 
     public void sortAlphabeticallyByDishName(View view)
     {
+        /*
         journalCopy = new ArrayList(journal);
         ArrayList<String> stringList = new ArrayList<String>();
         for(JournalEntry j: journalCopy)
@@ -292,6 +297,9 @@ public class MainActivity extends AppCompatActivity {
             journal.add(findEntryByName(s, journalCopy));
         }
 
+        reloadList(journal);
+        */
+        Collections.sort(journal, Comparators.getDishNameComparator());
         reloadList(journal);
     }
 

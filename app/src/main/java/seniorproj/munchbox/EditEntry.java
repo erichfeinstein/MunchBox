@@ -76,6 +76,7 @@ public class EditEntry extends Activity {
         tagsRecyclerView = (RecyclerView) findViewById(R.id.tagsView);
         tagsRecyclerView.setHasFixedSize(true);
         tagsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
         labels = new ArrayList<>();
 
         locationsRecyclerView = (RecyclerView) findViewById(R.id.locationsView);
@@ -83,6 +84,7 @@ public class EditEntry extends Activity {
         locationsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         //Run GPS location analysis. If null... ?
+        // LOCATION PROVIDER IS NAME OF RESTAURANT
         if (locations == null) {
             locations = new ArrayList<>();
             //Start LocationGetter. Can call locationGetter.getLocation() to receive Location object.
@@ -95,12 +97,12 @@ public class EditEntry extends Activity {
                 URL u = URLMaker.placesURL(this, currentLocation);
                 PlacesRequest p = new PlacesRequest();
                 p.execute(u);
-                ArrayList<String> restaurant_names;
+                ArrayList<Location> restaurants;
                 try {
-                    restaurant_names = (ArrayList<String>) p.get();
-                    if (restaurant_names.size() > 0) {
-                        for (int i = 0; i < restaurant_names.size(); i++) {
-                            locations.add(restaurant_names.get(i));
+                    restaurants = (ArrayList<Location>) p.get();
+                    if (restaurants.size() > 0) {
+                        for (int i = 0; i < restaurants.size(); i++) {
+                            locations.add(restaurants.get(i).getProvider());
                         }
                         restaurant.setText(locations.get(0)); //Set location text to best guess
                     }

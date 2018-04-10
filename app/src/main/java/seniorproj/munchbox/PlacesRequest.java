@@ -1,5 +1,6 @@
 package seniorproj.munchbox;
 
+import android.location.Location;
 import android.os.AsyncTask;
 import android.util.JsonReader;
 
@@ -11,19 +12,22 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlacesRequest extends AsyncTask<URL, Integer, List<String>> {
+public class PlacesRequest extends AsyncTask<URL, Integer, List<Location>> {
     @Override
-    protected List<String> doInBackground(URL... urls) {
+    protected List<Location> doInBackground(URL... urls) {
         long completed;
-        ArrayList<String> d = new ArrayList<>();
+        ArrayList<Location> d = new ArrayList<>();
         for (completed = 0; completed < urls.length; completed++) {
             d = request(urls[(int) completed]);
-            if (isCancelled()) break;
+            if (isCancelled()){
+                System.out.println("Cancelled");
+                break;
+            }
         }
         return d;
     }
 
-    private ArrayList<String> request(URL url) {
+    private ArrayList<Location> request(URL url) {
         try {
             URLConnection conn = url.openConnection();
             InputStream is = conn.getInputStream();
@@ -36,7 +40,7 @@ public class PlacesRequest extends AsyncTask<URL, Integer, List<String>> {
     }
 
     //JSON data grabbing
-    private ArrayList<String> readJsonStream(InputStream in) throws IOException {
+    private ArrayList<Location> readJsonStream(InputStream in) throws IOException {
         JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
         try {
             return readMessage(reader);
@@ -45,48 +49,86 @@ public class PlacesRequest extends AsyncTask<URL, Integer, List<String>> {
         }
     }
 
-    private ArrayList<String> readMessage(JsonReader reader) throws IOException {
-        ArrayList<String> names = null;
+    private ArrayList<Location> readMessage(JsonReader reader) throws IOException {
+        ArrayList<Location> locations = new ArrayList<>();
         reader.beginObject();
         while (reader.hasNext()) {
             String value = reader.nextName();
             if (value.equals("results")) {
-                names = getResultFromArray(reader);
+                locations = getResultFromArray(reader);
             } else {
                 reader.skipValue();
             }
         }
         reader.endObject();
-        return names;
+        return locations;
     }
 
-    private ArrayList<String> getResultFromArray(JsonReader reader) throws IOException {
-        ArrayList<String> names = new ArrayList<>();
+    private ArrayList<Location> getResultFromArray(JsonReader reader) throws IOException {
+        ArrayList<Location> locations = new ArrayList<>();
         reader.beginArray();
         while (reader.hasNext()) {
-            String name = getNameFromObject(reader);
-            if(name != null){
-                names.add(name);
+            Location l = getNameFromObject(reader);
+            if(l != null){
+                locations.add(l);
             }
         }
         reader.endArray();
-        return names;
+        return locations;
     }
 
-    private String getNameFromObject(JsonReader reader) throws IOException {
-        String restaurant_name = null;
+    private Location getNameFromObject(JsonReader reader) throws IOException {
         String name;
+        Location l = new Location("");
         reader.beginObject();
         while (reader.hasNext()) {
             name = reader.nextName();
-            if (name.equals("name")){
-                restaurant_name = reader.nextString();
+            if(name.equals("geometry")) {
+                l = getLocationFromObject(reader, l);
+            }
+            else if(name.equals("name")) {
+                l.setProvider(reader.nextString());
             }
             else{
                 reader.skipValue();
             }
         }
         reader.endObject();
-        return restaurant_name;
+        return l;
+    }
+
+    private Location getLocationFromObject(JsonReader reader, Location l) throws  IOException{
+        String name;
+        reader.beginObject();
+        while(reader.hasNext()){
+            name = reader.nextName();
+            if(name.equals("location")) {
+                l = getLatLngFromObject(reader, l);
+            }
+            else{
+                reader.skipValue();
+            }
+        }
+        reader.endObject();
+        return l;
+    }
+
+    private Location getLatLngFromObject(JsonReader reader, Location l) throws IOException{
+        String name;
+        reader.beginObject();
+        while(reader.hasNext()){
+            name = reader.nextName();
+            if(name.equals("lat")) {
+                l.setLatitude(reader.nextDouble());
+            }
+            else if(name.equals("lng")) {
+                l.setLongitude(reader.nextDouble());
+            }
+            else{
+                reader.skipValue();
+            }
+        }
+        reader.endObject();
+        return l;
     }
 }
