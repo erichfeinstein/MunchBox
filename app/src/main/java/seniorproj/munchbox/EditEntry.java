@@ -1,7 +1,9 @@
 package seniorproj.munchbox;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,6 +25,8 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.api.services.vision.v1.model.EntityAnnotation;
 import java.io.IOException;
 import java.net.URL;
@@ -217,28 +221,36 @@ public class EditEntry extends Activity {
         v.clearFocus();
     }
 
-    //TODO Add a PopupWindow asking user to confirm that they want to... (see comments in code)
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         //"Discard changes to this entry?"
-        finish();
-        Intent backToList = new Intent(EditEntry.this, MainActivity.class);
-
-        //Delete image for cancelled entry
-
-        //"Cancel creating this entry?"
-        if (id == -1) {
-            File toDelete = new File(imgPath);
-            if (toDelete.exists()) {
-                if (toDelete.delete()) {
-                    System.out.println("File deleted");
-                } else {
-                    System.out.println("File not deleted");
-                }
-            }
-        }
-        startActivity(backToList);
+        new AlertDialog.Builder(this)
+                .setTitle("Cancel")
+                .setMessage("Discard changes to this entry?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Toast.makeText(EditEntry.this, "Cancelling...", Toast.LENGTH_SHORT).show();
+                        finish();
+                        Intent backToList = new Intent(EditEntry.this, MainActivity.class);
+                        //Delete image for cancelled entry
+                        if (id == -1) {
+                            File toDelete = new File(imgPath);
+                            if (toDelete.exists()) {
+                                if (toDelete.delete()) {
+                                    System.out.println("File deleted");
+                                } else {
+                                    System.out.println("File not deleted");
+                                }
+                            }
+                        }
+                        startActivity(backToList);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null).show();
     }
+
+
 
     public void onBackgroundTaskComplete(ArrayList<String> result) {
         tags = result;

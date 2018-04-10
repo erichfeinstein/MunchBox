@@ -1,6 +1,11 @@
 Danny Miles
 
+Week of 4/8
+4/10: Implemented cancel functionality on the EditEntry screen.
+
 Week of 4/1
+
+4/4: Worked with Eric to finalize Vision implementation. Basic functionality achieved; now working on optimization and tag filtering.
 
 4/3: Continued work on Vision implementation. Labels are finally being succesfully retrieved; now working on passing information back from asynchrous thread that retrieves it.
 
