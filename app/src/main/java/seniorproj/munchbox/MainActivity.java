@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sortByDate(View view) {
-        Collections.sort(journal);
+        Collections.sort(journal, Comparators.getDateComparator());
         reloadList(journal);
     }
 

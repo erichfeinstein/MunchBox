@@ -11,7 +11,7 @@ import java.util.Comparator;
  */
 
 public class Comparators {
-    static Comparator<JournalEntry> getRateComparator(){
+    static Comparator<JournalEntry> getRateComparator(){ //Highest to lowest
         return new Comparator<JournalEntry>(){
             public int compare(JournalEntry j1, JournalEntry j2){
                 return j2.getRating() - j1.getRating();
@@ -19,7 +19,7 @@ public class Comparators {
         };
     }
 
-    static Comparator<JournalEntry> getFrequencyComparator(){
+    static Comparator<JournalEntry> getFrequencyComparator(){ //Highest to lowest
         return new Comparator<JournalEntry>(){
             public int compare(JournalEntry j1, JournalEntry j2){
                 return j2.getFrequency() - j1.getFrequency();
@@ -27,7 +27,7 @@ public class Comparators {
         };
     }
 
-    static Comparator<JournalEntry> getDateComparator(){
+    static Comparator<JournalEntry> getDateComparator(){ //Most recent first
         return new Comparator<JournalEntry>(){
             public int compare(JournalEntry j1, JournalEntry j2){
                 return j2.getEntryDate().compareTo(j1.getEntryDate());
@@ -35,7 +35,7 @@ public class Comparators {
         };
     }
 
-    static Comparator<JournalEntry> getDistanceComparator(){
+    static Comparator<JournalEntry> getDistanceComparator(){ //Closest to furthest
         return new Comparator<JournalEntry>(){
             public int compare(JournalEntry j1, JournalEntry j2){
                 //return j1.getDistance() - j2.getDistance();
@@ -45,7 +45,7 @@ public class Comparators {
         };
     }
 
-    static Comparator<JournalEntry> getDishNameComparator(){
+    static Comparator<JournalEntry> getDishNameComparator(){ //A to Z
         return new Comparator<JournalEntry>(){
             public int compare(JournalEntry j1, JournalEntry j2){
                 return j1.getNameOfDish().compareTo(j2.getNameOfDish());
