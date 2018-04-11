@@ -148,29 +148,25 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
-        System.out.println(journal.size());
         //Resume the search
         super.onResume();
         searchView.setQuery(searchView.getQuery().toString(), true);
 
+        //Read the journal from SharedPrefs
         SharedPreferences prefsJournal = getPreferences(MODE_PRIVATE);
         Gson gsonJournalRead = new Gson();
         String jsonJournal = prefsJournal.getString("Journal", "");
         journal = gsonJournalRead.fromJson(jsonJournal, new TypeToken<List<JournalEntry>>(){}.getType());
         if (journal == null) journal = new ArrayList<JournalEntry>();
 
+        //Re-enable create button after it was disabled to prevent double clicking
         Button createEntryButton = (Button) findViewById(R.id.createNewEntry);
-        createEntryButton.setEnabled(true); //Have to re-enable after it was disabled to prevent double clicking
+        createEntryButton.setEnabled(true);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = prefs.edit();
-        Gson gsonJournal = new Gson();
-        String jsonJournalWrite = gsonJournal.toJson(journal);
-        editor.putString("Journal", jsonJournalWrite);
-        editor.commit();
 
-        //Detect if new entry needs to be created
-        //Or if an existing entry is being updated
+        //Get all possible information for creating a new entry, editing an entry, and deleting an entry
         String name = prefs.getString("name", "");
         String restaurant = prefs.getString("restaurant", "");
         String description = prefs.getString("description", "");
@@ -182,11 +178,14 @@ public class MainActivity extends AppCompatActivity {
         String json = prefs.getString("tags", "");
         ArrayList tags = gson.fromJson(json, new TypeToken<List<String>>(){}.getType());
 
-        boolean addOrEdit = prefs.getBoolean("addOrEdit", false);
+        //Determine if we are creating a new entry, editing an entry, or deleting an entry (or none)
+        boolean toAdd = prefs.getBoolean("add", false);
+        boolean toEdit = prefs.getBoolean("edit", false);
+        boolean toDelete = prefs.getBoolean("toDelete", false); //no id: default value
 
         //Make new entry
-        if (addOrEdit && imgPath != null && id == -1) {
-            System.out.println("attempting make");
+        if (toAdd && imgPath != null) {
+            System.out.println("Making new entry with ID: " + journal.size());
             JournalEntry newEntry = new JournalEntry();
             newEntry.setNameOfDish(name);
             newEntry.setRestaurantName(restaurant);
@@ -198,13 +197,14 @@ public class MainActivity extends AppCompatActivity {
             journal.add(newEntry);
         }
         //Update existing  entry
-        if (addOrEdit && imgPath != null && id != -1) {
+        if (toEdit && imgPath != null) {
+            System.out.println("Editing entry");
             //Find entry with id
             for (int i = 0; i < journal.size(); i++) {
-                System.out.println("attempting edit");
                 if (id == journal.get(i).getIdentifier()) {
                     JournalEntry updateEntry = journal.get(i);
                     System.out.println("Found entry with ID " + id);
+
                     updateEntry.setNameOfDish(name);
                     updateEntry.setRestaurantName(restaurant);
                     updateEntry.setDescription(description);
@@ -216,8 +216,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        //Detect if an entry needs to be deleted
-        boolean toDelete = prefs.getBoolean("toDelete", false); //no id: default value
+        //Delete entry with given ID
         if (toDelete) {
             System.out.println("Deleting entry");
             //Delete entry
@@ -240,9 +239,29 @@ public class MainActivity extends AppCompatActivity {
         editor.remove("rating");
         editor.remove("id");
         editor.remove("tags");
-        editor.remove("addOrEdit");
-        editor.putBoolean("addOrEdit", false);
+
+        //Remove add and edit protocols
+        editor.remove("add");
+        editor.remove("edit");
+
         editor.commit();
+
+        //From onCreate
+        adapter = new MyAdapter(journal, this);
+        recyclerView = (RecyclerView) findViewById(R.id.entriesView);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        System.out.println("Journal size: " + journal.size());
+
+        //Write journal to SharedPrefs
+        //Using same SharedPrefs object as the reader in the beginning of onResume
+        SharedPreferences.Editor writerEditor = prefsJournal.edit();
+        Gson gsonJournal = new Gson();
+        String write = gsonJournal.toJson(journal);
+        writerEditor.putString("Journal", write);
+        writerEditor.commit();
 
         reloadList(journal);
     }

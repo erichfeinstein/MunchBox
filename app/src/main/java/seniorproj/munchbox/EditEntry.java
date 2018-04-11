@@ -157,6 +157,7 @@ public class EditEntry extends Activity {
         prefs.edit().remove("id").commit();
         //Add to prefs the details of the entry that is being edited/created
         SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("id", id);
         editor.putString("name", name.getText().toString());
         editor.putString("restaurant", restaurant.getText().toString());
         editor.putString("description", description.getText().toString());
@@ -167,7 +168,9 @@ public class EditEntry extends Activity {
         String json = gson.toJson(tags);
         editor.putString("tags", json);
 
-        editor.putBoolean("addOrEdit", true);
+        if (id == -1) editor.putBoolean("add", true); //New entry
+        else editor.putBoolean("edit", true); //Existing entry
+
         editor.commit();
 
         finish();
