@@ -31,6 +31,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.api.services.vision.v1.model.EntityAnnotation;
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -39,6 +41,7 @@ import java.io.File;
 
 public class EditEntry extends Activity {
 
+    private Context context;
 
     private RecyclerView tagsRecyclerView;
     private ArrayList<EntityAnnotation> labels;
@@ -64,6 +67,7 @@ public class EditEntry extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_entry);
+        context = this;
 
         name = (EditText) findViewById(R.id.title);
         restaurant = (EditText) findViewById(R.id.restaurant);
@@ -145,35 +149,29 @@ public class EditEntry extends Activity {
     //Saves either new entry or updates info of existing entry
     public void saveEntryButton(View view) {
         view.setEnabled(false);
-        finish();
         int ratingAsInt = (int) (rating.getRating() * 2.0); //Multiply by 2 because ratings are stored on a 1-10 scale using ints
-        Intent intent = new Intent(EditEntry.this, MainActivity.class);
-        intent.putExtra("name", name.getText().toString());
-        intent.putExtra("restaurant", restaurant.getText().toString());
-        intent.putExtra("description", description.getText().toString());
-        intent.putExtra("imgPath", imgPath);
-        intent.putExtra("rating", ratingAsInt);
-        intent.putExtra("tags", tags);
-        intent.putExtra("id", id); //In MainActivity, check if not -1
 
         //Prevent deletion
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.edit().remove("toDelete").commit();
         prefs.edit().remove("id").commit();
+        //Add to prefs the details of the entry that is being edited/created
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("name", name.getText().toString());
+        editor.putString("restaurant", restaurant.getText().toString());
+        editor.putString("description", description.getText().toString());
+        editor.putString("imgPath", imgPath);
+        editor.putInt("rating", ratingAsInt);
+        //Gson tags to String
+        Gson gson = new Gson();
+        String json = gson.toJson(tags);
+        editor.putString("tags", json);
+
+        editor.putBoolean("addOrEdit", true);
+        editor.commit();
 
         finish();
-        startActivity(intent);
     }
-
-    //Moved to ViewEntry
-    /*public void deleteEntryButton(View view) {
-        view.setEnabled(false);
-        finish();
-        Intent backToMain = new Intent(EditEntry.this, MainActivity.class);
-        backToMain.putExtra("id", id); //Pass the id of the entry to delete
-        backToMain.putExtra("toDelete", true);
-        startActivity(backToMain);
-    }*/
 
     private void loadLocations(ArrayList<String> locationsList) {
         locationsAdapter = new LocationsAdapter(locationsList, this);
@@ -245,7 +243,12 @@ public class EditEntry extends Activity {
             public void onClick(DialogInterface dialog, int whichButton) {
                 Toast.makeText(EditEntry.this, "Cancelling...", Toast.LENGTH_SHORT).show();
                 finish();
-                Intent backToList = new Intent(EditEntry.this, MainActivity.class);
+
+                /*
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("id", id);*/
+
                 //Delete image for cancelled entry
                 if (id == -1) {
                 File toDelete = new File(imgPath);
@@ -257,7 +260,6 @@ public class EditEntry extends Activity {
                     }
                 }
             }
-            startActivity(backToList);
             }
         });
         alert.setNegativeButton("No", new DialogInterface.OnClickListener() {

@@ -103,6 +103,7 @@ public class MunchCam extends Activity {
                         confirmHelper();
                         Intent intent = new Intent(MunchCam.this, EditEntry.class);
                         intent.putExtra("imageAddr", recentImagePath);
+                        finish();//Should not back to this
                         startActivity(intent);
                     }
                 }

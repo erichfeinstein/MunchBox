@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.PopupWindow;
 
 import com.google.gson.Gson;
@@ -80,60 +81,6 @@ public class MainActivity extends AppCompatActivity {
         if (resetList) filter("");
         reloadList(journal);
 
-        //Detect if an entry needs to be deleted
-        boolean toDelete = getIntent().getBooleanExtra("toDelete", false);
-        if (toDelete) {
-            int id = getIntent().getIntExtra("id", -1);
-            //Delete entry
-            for (int i = 0; i < journal.size(); i++) {
-                if (journal.get(i).getIdentifier() == id) {
-                    journal.remove(i);
-                }
-            }
-        }
-
-        //Else check if new entry is being made or entry is being updated
-        else {
-            //Detect if new entry needs to be created
-            String name = getIntent().getStringExtra("name");
-            String restaurant = getIntent().getStringExtra("restaurant");
-            String description = getIntent().getStringExtra("description");
-            String imgPath = getIntent().getStringExtra("imgPath");
-            ArrayList<String> tags = getIntent().getStringArrayListExtra("tags");
-            int rating = getIntent().getIntExtra("rating", 0);
-            int id = getIntent().getIntExtra("id", -1);
-
-            //Make new entry
-            if (imgPath != null && id == -1) {
-
-                JournalEntry newEntry = new JournalEntry();
-                newEntry.setNameOfDish(name);
-                newEntry.setRestaurantName(restaurant);
-                newEntry.setDescription(description);
-                newEntry.setIdentifier(journal.size());
-                newEntry.setPhotoPath(imgPath);
-                newEntry.setRating(rating);
-                newEntry.setTags(tags);
-                journal.add(newEntry);
-            }
-            //Update existing  entry
-            if (imgPath != null && id != -1) {
-                //Find entry with id
-                for (int i = 0; i < journal.size(); i++) {
-                    if (id == journal.get(i).getIdentifier()) {
-                        JournalEntry updateEntry = journal.get(i);
-                        System.out.println("Found entry with ID " + id);
-                        updateEntry.setNameOfDish(name);
-                        updateEntry.setRestaurantName(restaurant);
-                        updateEntry.setDescription(description);
-                        updateEntry.setIdentifier(journal.size());
-                        updateEntry.setPhotoPath(imgPath);
-                        updateEntry.setRating(rating);
-                        updateEntry.setTags(tags);
-                    }
-                }
-            }
-        }
         journalCopy = new ArrayList<>(journal);
 
         //Save journal to SharedPrefs using Gson
@@ -150,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
 
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
 
         //Create a .nomedia file so images captured by MunchBox don't get scanned by MediaScanner
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
@@ -192,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        //
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -203,26 +148,103 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
+        System.out.println(journal.size());
         //Resume the search
         super.onResume();
         searchView.setQuery(searchView.getQuery().toString(), true);
 
-        //Detect if an entry needs to be deleted
+        SharedPreferences prefsJournal = getPreferences(MODE_PRIVATE);
+        Gson gsonJournalRead = new Gson();
+        String jsonJournal = prefsJournal.getString("Journal", "");
+        journal = gsonJournalRead.fromJson(jsonJournal, new TypeToken<List<JournalEntry>>(){}.getType());
+        if (journal == null) journal = new ArrayList<JournalEntry>();
+
+        Button createEntryButton = (Button) findViewById(R.id.createNewEntry);
+        createEntryButton.setEnabled(true); //Have to re-enable after it was disabled to prevent double clicking
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = prefs.edit();
+        Gson gsonJournal = new Gson();
+        String jsonJournalWrite = gsonJournal.toJson(journal);
+        editor.putString("Journal", jsonJournalWrite);
+        editor.commit();
+
+        //Detect if new entry needs to be created
+        //Or if an existing entry is being updated
+        String name = prefs.getString("name", "");
+        String restaurant = prefs.getString("restaurant", "");
+        String description = prefs.getString("description", "");
+        String imgPath = prefs.getString("imgPath", "");
+        int rating = prefs.getInt("rating", 0);
+        int id = prefs.getInt("id", -1);
+        //Get tags from Gson
+        Gson gson = new Gson();
+        String json = prefs.getString("tags", "");
+        ArrayList tags = gson.fromJson(json, new TypeToken<List<String>>(){}.getType());
+
+        boolean addOrEdit = prefs.getBoolean("addOrEdit", false);
+
+        //Make new entry
+        if (addOrEdit && imgPath != null && id == -1) {
+            System.out.println("attempting make");
+            JournalEntry newEntry = new JournalEntry();
+            newEntry.setNameOfDish(name);
+            newEntry.setRestaurantName(restaurant);
+            newEntry.setDescription(description);
+            newEntry.setIdentifier(journal.size());
+            newEntry.setPhotoPath(imgPath);
+            newEntry.setRating(rating);
+            newEntry.setTags(tags);
+            journal.add(newEntry);
+        }
+        //Update existing  entry
+        if (addOrEdit && imgPath != null && id != -1) {
+            //Find entry with id
+            for (int i = 0; i < journal.size(); i++) {
+                System.out.println("attempting edit");
+                if (id == journal.get(i).getIdentifier()) {
+                    JournalEntry updateEntry = journal.get(i);
+                    System.out.println("Found entry with ID " + id);
+                    updateEntry.setNameOfDish(name);
+                    updateEntry.setRestaurantName(restaurant);
+                    updateEntry.setDescription(description);
+                    updateEntry.setIdentifier(journal.size());
+                    updateEntry.setPhotoPath(imgPath);
+                    updateEntry.setRating(rating);
+                    updateEntry.setTags(tags);
+                }
+            }
+        }
+
+        //Detect if an entry needs to be deleted
         boolean toDelete = prefs.getBoolean("toDelete", false); //no id: default value
         if (toDelete) {
             System.out.println("Deleting entry");
-            int id = prefs.getInt("id", -1);
             //Delete entry
             for (int i = 0; i < journal.size(); i++) {
                 if (journal.get(i).getIdentifier() == id) {
                     journal.remove(i);
-                    reloadList(journal);
                 }
             }
         }
-        prefs.edit().remove("toDelete").commit();
-        prefs.edit().remove("id").commit();
+
+        //Remove command to delete entry
+        editor.remove("toDelete");
+        editor.remove("id");
+
+        //Remove all entry information (this prevents entries from being created every time MainActivity resumes)
+        editor.remove("name");
+        editor.remove("restaurant");
+        editor.remove("description");
+        editor.remove("imgPath");
+        editor.remove("rating");
+        editor.remove("id");
+        editor.remove("tags");
+        editor.remove("addOrEdit");
+        editor.putBoolean("addOrEdit", false);
+        editor.commit();
+
+        reloadList(journal);
     }
 
     public static void filter(String text) {
@@ -252,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
     public void createEntryButton(View view) {
         view.setEnabled(false);
         /* Prompt the user for a picture */
-        finish();
+//        finish();
         Intent takePictureIntent = new Intent(MainActivity.this, MunchCam.class);
         startActivity(takePictureIntent);
     }
