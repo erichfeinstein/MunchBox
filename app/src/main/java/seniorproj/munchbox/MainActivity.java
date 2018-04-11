@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+
         //Else check if new entry is being made or entry is being updated
         else {
             //Detect if new entry needs to be created
@@ -205,6 +206,23 @@ public class MainActivity extends AppCompatActivity {
         //Resume the search
         super.onResume();
         searchView.setQuery(searchView.getQuery().toString(), true);
+
+        //Detect if an entry needs to be deleted
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean toDelete = prefs.getBoolean("toDelete", false); //no id: default value
+        if (toDelete) {
+            System.out.println("Deleting entry");
+            int id = prefs.getInt("id", -1);
+            //Delete entry
+            for (int i = 0; i < journal.size(); i++) {
+                if (journal.get(i).getIdentifier() == id) {
+                    journal.remove(i);
+                    reloadList(journal);
+                }
+            }
+        }
+        prefs.edit().remove("toDelete").commit();
+        prefs.edit().remove("id").commit();
     }
 
     public static void filter(String text) {

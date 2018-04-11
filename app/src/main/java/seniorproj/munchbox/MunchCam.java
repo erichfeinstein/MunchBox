@@ -96,6 +96,7 @@ public class MunchCam extends Activity {
                     @Override
                     public void onClick(View v) {
                         confirmButton.setEnabled(false);
+                        confirmButton.getBackground().setAlpha(LOADING_ALPHA_VALUE);
                         loading.setVisibility(View.VISIBLE);
                         loading.setBackgroundColor(Color.parseColor("#66000000"));
                         // save image and send to new activity

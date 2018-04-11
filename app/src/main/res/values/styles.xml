@@ -29,4 +29,11 @@
         <item name="android:windowAnimationStyle">@android:style/Animation</item>
     </style>
 
+    <!-- Local copy of android:Theme.Holo.Dialog.Alert -->
+    <style name="EntryDeleteDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+    </style>
+
 </resources>

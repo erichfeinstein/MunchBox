@@ -5,12 +5,15 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -152,20 +155,25 @@ public class EditEntry extends Activity {
         intent.putExtra("rating", ratingAsInt);
         intent.putExtra("tags", tags);
         intent.putExtra("id", id); //In MainActivity, check if not -1
+
+        //Prevent deletion
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.edit().remove("toDelete").commit();
+        prefs.edit().remove("id").commit();
+
         finish();
         startActivity(intent);
     }
 
-    //TODO Replace 'Delete' with 'Save' button
-    //Add this code to ViewEntry under a drop down menu for deleting
-    public void deleteEntryButton(View view) {
+    //Moved to ViewEntry
+    /*public void deleteEntryButton(View view) {
         view.setEnabled(false);
         finish();
         Intent backToMain = new Intent(EditEntry.this, MainActivity.class);
         backToMain.putExtra("id", id); //Pass the id of the entry to delete
         backToMain.putExtra("toDelete", true);
         startActivity(backToMain);
-    }
+    }*/
 
     private void loadLocations(ArrayList<String> locationsList) {
         locationsAdapter = new LocationsAdapter(locationsList, this);
@@ -223,30 +231,42 @@ public class EditEntry extends Activity {
     @Override
     public void onBackPressed() {
         //"Discard changes to this entry?"
-        new AlertDialog.Builder(this)
-                .setTitle("Cancel")
-                .setMessage("Discard changes to this entry?")
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        Toast.makeText(EditEntry.this, "Cancelling...", Toast.LENGTH_SHORT).show();
-                        finish();
-                        Intent backToList = new Intent(EditEntry.this, MainActivity.class);
-                        //Delete image for cancelled entry
-                        if (id == -1) {
-                            File toDelete = new File(imgPath);
-                            if (toDelete.exists()) {
-                                if (toDelete.delete()) {
-                                    System.out.println("File deleted");
-                                } else {
-                                    System.out.println("File not deleted");
-                                }
-                            }
-                        }
-                        startActivity(backToList);
+        AlertDialog.Builder alert = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.EntryDeleteDialog));
+        if (id == -1) {
+            alert.setTitle("Delete?");
+            alert.setMessage("Cancel creating this entry?");
+        }
+        else {
+            alert.setTitle("Cancel Edit?");
+            alert.setMessage("Discard changes to this entry?");
+        }
+        alert.setCancelable(true);
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Toast.makeText(EditEntry.this, "Cancelling...", Toast.LENGTH_SHORT).show();
+                finish();
+                Intent backToList = new Intent(EditEntry.this, MainActivity.class);
+                //Delete image for cancelled entry
+                if (id == -1) {
+                File toDelete = new File(imgPath);
+                if (toDelete.exists()) {
+                    if (toDelete.delete()) {
+                        System.out.println("File deleted");
+                    } else {
+                        System.out.println("File not deleted");
                     }
-                })
-                .setNegativeButton(android.R.string.no, null).show();
+                }
+            }
+            startActivity(backToList);
+            }
+        });
+        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.dismiss();
+            }
+        });
+        final AlertDialog dialog = alert.create();
+        dialog.show();
     }
 
 

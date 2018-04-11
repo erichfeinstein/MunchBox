@@ -1,16 +1,24 @@
 package seniorproj.munchbox;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class ViewEntry extends Activity {
@@ -77,5 +85,35 @@ public class ViewEntry extends Activity {
         //For determining if Edit Entry has received an existing entry or is building a new one
         toEdit.putExtra("id", id);
         startActivity(toEdit);
+    }
+
+    public void deleteEntryButton(View view) {
+        final Context context = this;
+        AlertDialog.Builder alert = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.EntryDeleteDialog));
+        alert.setTitle("Delete?");
+        alert.setMessage("Are you sure you want to delete this entry?");
+        alert.setCancelable(true);
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Toast.makeText(ViewEntry.this, "Deleting...", Toast.LENGTH_SHORT).show();
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("id", id);
+                editor.putBoolean("toDelete", true);
+                editor.commit();
+
+                finish();
+
+                //Delete image for cancelled entry?
+            }
+        });
+        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.dismiss();
+            }
+        });
+        final AlertDialog dialog = alert.create();
+        dialog.show();
     }
 }
