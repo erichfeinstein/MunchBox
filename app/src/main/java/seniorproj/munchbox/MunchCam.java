@@ -95,6 +95,7 @@ public class MunchCam extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        confirmButton.setEnabled(false);
                         loading.setVisibility(View.VISIBLE);
                         loading.setBackgroundColor(Color.parseColor("#66000000"));
                         // save image and send to new activity
@@ -109,13 +110,13 @@ public class MunchCam extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cam.startPreview();
+                        cancelButton.setEnabled(false);
+                        cancelButton.setVisibility(View.INVISIBLE);
                         captureButton.setEnabled(true);
                         captureButton.setVisibility(View.VISIBLE);
                         confirmButton.setVisibility(View.INVISIBLE);
                         confirmButton.setEnabled(false);
-                        cancelButton.setVisibility(View.INVISIBLE);
-                        cancelButton.setEnabled(false);
+                        cam.startPreview();
                     }
                 }
         );

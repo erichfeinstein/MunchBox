@@ -232,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void createEntryButton(View view) {
+        view.setEnabled(false);
         /* Prompt the user for a picture */
         finish();
         Intent takePictureIntent = new Intent(MainActivity.this, MunchCam.class);

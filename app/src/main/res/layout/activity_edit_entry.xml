@@ -25,16 +25,16 @@
                     android:textSize="20dp"/>
 
                 <Button
-                    android:onClick="deleteEntryButton"
+                    android:onClick="saveEntryButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
                     android:layout_alignParentRight="true"
                     android:textSize="20dp"
                     android:background="@drawable/seemless_border"
-                    android:textColor="@drawable/delete_button"
+                    android:textColor="@drawable/save_button"
                     android:gravity="center"
-                    android:text="Delete"/>
+                    android:text="Save"/>
         </RelativeLayout>
 
         <ScrollView
@@ -182,19 +182,4 @@
                             android:numStars="5" />
                 </RelativeLayout>
         </ScrollView>
-        <Button
-            android:id="@+id/save"
-            android:background="@color/colorPrimaryDark"
-            android:onClick="saveEntryButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:elevation="8dp"
-            android:text="Save"
-            android:padding="5dp"
-            android:textSize="20dp"
-            android:textColor="@android:color/white"
-            android:visibility="visible" />
-
 </RelativeLayout>

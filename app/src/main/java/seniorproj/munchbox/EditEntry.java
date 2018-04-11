@@ -67,8 +67,6 @@ public class EditEntry extends Activity {
         description = (EditText) findViewById(R.id.description);
         rating = (RatingBar) findViewById(R.id.rating);
 
-        button = (Button) findViewById(R.id.save);
-
         //Get image and display it
         imgPath = getIntent().getStringExtra("imageAddr");
         BitmapFactory.Options opts = new BitmapFactory.Options();
@@ -108,7 +106,6 @@ public class EditEntry extends Activity {
                         for (int i = 0; i < restaurants.size(); i++) {
                             locations.add(restaurants.get(i).getProvider());
                         }
-                        restaurant.setText(locations.get(0)); //Set location text to best guess
                     }
                 } catch (Exception e) {
                     System.out.println(e.toString());
@@ -144,6 +141,7 @@ public class EditEntry extends Activity {
 
     //Saves either new entry or updates info of existing entry
     public void saveEntryButton(View view) {
+        view.setEnabled(false);
         finish();
         int ratingAsInt = (int) (rating.getRating() * 2.0); //Multiply by 2 because ratings are stored on a 1-10 scale using ints
         Intent intent = new Intent(EditEntry.this, MainActivity.class);
@@ -161,6 +159,7 @@ public class EditEntry extends Activity {
     //TODO Replace 'Delete' with 'Save' button
     //Add this code to ViewEntry under a drop down menu for deleting
     public void deleteEntryButton(View view) {
+        view.setEnabled(false);
         finish();
         Intent backToMain = new Intent(EditEntry.this, MainActivity.class);
         backToMain.putExtra("id", id); //Pass the id of the entry to delete

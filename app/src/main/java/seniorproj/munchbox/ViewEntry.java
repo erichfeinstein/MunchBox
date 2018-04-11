@@ -64,7 +64,9 @@ public class ViewEntry extends Activity {
         rating.setText(ratingText);
     }
 
-    public void editEntryButton(View v) {
+    public void editEntryButton(View view) {
+        view.setEnabled(false);
+        finish();
         Intent toEdit = new Intent(ViewEntry.this, EditEntry.class);
         toEdit.putExtra("dish", dish);
         toEdit.putExtra("restaurant", restaurant);
