@@ -1,10 +1,14 @@
 Eric Feinstein
-Week of 3/26
+Week of 4/8
 
-3/26: Edit Entry screen touchup. Collecting info from fields to make new Entry
+4/9: Bug fixes involving location data. Sort by distance UI
 
-3/27: Edit Entry UI work
+4/11: New Save button in EditEntry to redesign UI (Back button now in charge of deleting entry)
 
-3/28: Searching on entries list screen live-updates the list of entries that match search. Menu next to search bar opens sorting options which will organize the list of entries by rating or date (ditance to come)
+4/11: Disabled autofill of Location in EditEntry because it slowed the app down/was inconsistent
 
-3/29: Some work on tags on Edit Entry screen, users can tap the "x" on a tag to remove from the list of tags. On the end of the list is an "add-tag" button
+4/11: Disabled all buttons immediately after pressing to prevent double-press bugs
+
+4/11: Using SharedPrefs to pass data around Activities. Now transitions between Activities are more sensible and work more smoothly/quickly
+
+4/12: Share button UI
