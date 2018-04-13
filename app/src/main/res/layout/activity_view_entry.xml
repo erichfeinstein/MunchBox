@@ -29,8 +29,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/imageView"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -83,7 +84,7 @@
             android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lines="3"
+            android:maxLines="3"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="5dp"
@@ -98,6 +99,7 @@
             android:singleLine="true"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
+            android:paddingTop="5dp"
             android:text="List of tags"
             android:textColor="#cecece"
             android:textSize="18dp" />
@@ -125,4 +127,17 @@
             android:textColor="@android:color/white"
             android:visibility="visible" />
     </LinearLayout>
+
+    <Button
+        android:onClick="shareEntryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/seemless_border"
+        android:textColor="@drawable/save_button"
+        android:text="Share"
+        android:textSize="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="18dp"
+        android:layout_marginBottom="18dp"/>
 </RelativeLayout>
