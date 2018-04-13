@@ -9,11 +9,11 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.ContextThemeWrapper;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -118,10 +118,13 @@ public class ViewEntry extends Activity {
     }
 
     public void shareEntryButton(View view) {
+        Uri imageURI = Uri.fromFile(new File(imgPath));
         Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject test");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, descriptionText);
+        shareIntent.setType("*/*");
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "A MunchBox journal entry!");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, dish + " @" + restaurant + " :\n" + descriptionText);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, imageURI);
         startActivity(Intent.createChooser(shareIntent, "Share via"));
     }
 }

@@ -2,6 +2,8 @@ Danny Miles
 
 Week of 4/8
 
+4/13: Sharing now includes both string representation (description, title, and restaurant) and photo of journal entry. Works correctly for Twitter. Facebook and Instagram testing to follow.
+
 4/12: Performed testing on overall app function. Experienced and cataloged bug occurring on multiple entries being edited in one session, but so far is unreproduceable on team members'
 devices. Implemented skeleton of share funcationality; performed code cleanup. 
 
