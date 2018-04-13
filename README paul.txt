@@ -31,3 +31,7 @@ Week 6:
 Finished sortByDistance, allowing users to find the entries that are nearest to them. Not fully implemented, since Google Maps must be integrated for it to work as intended
 JournalEntries now have random coordinates for testing purposes.
 JournalEntries now have TravelTime for testing purposes.
+
+Week 7:
+Created sortByFrequency, which shows users what dishes they've had the most often.
+Added a "favorite" identifier to JournalEntry, with the appropriate methods.

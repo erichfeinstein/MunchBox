@@ -371,6 +371,32 @@ public class MainActivity extends AppCompatActivity {
         reloadList(journal);
     }
 
+    public void sortByFrequency(View view)
+    {
+        journalCopy = new ArrayList(journal);
+        journal.clear();
+        int highestFrequency = 0;
+
+        for(JournalEntry f: journalCopy)
+        {
+            if(f.getFrequency() > highestFrequency)
+            {
+                highestFrequency = f.getFrequency();
+            }
+        }
+        while(highestFrequency > 0)
+        {
+            for (JournalEntry j : journalCopy)
+            {
+                if (j.getFrequency() == highestFrequency)
+                {
+                    journal.add(j);
+                }
+            }
+        }
+        reloadList(journal);
+    }
+
     public JournalEntry findEntryByName(String name, ArrayList<JournalEntry> journal)
     {
         for(JournalEntry j: journal)

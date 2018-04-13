@@ -35,6 +35,7 @@ public class JournalEntry implements Comparable<JournalEntry>
     private double distanceLastChecked;
     private double xLocation = 0;
     private double yLocation = 0;
+    private boolean favorite;
     Random r = new Random();
     private TravelTime toGetThere;
 
@@ -43,6 +44,7 @@ public class JournalEntry implements Comparable<JournalEntry>
         rating = 0;
         nameOfDish = "";
         restaurantName = "";
+        favorite = false;
         //restaurantName = GoogleFindRestaurantName();
         //Generate tags
    //     PhotoAnalyzer labelGen = new PhotoAnalyzer(path);
@@ -58,6 +60,7 @@ public class JournalEntry implements Comparable<JournalEntry>
 
     public JournalEntry() {
         rating = 0;
+        favorite = false;
         nameOfDish = "";
         restaurantName = "";
         //restaurantName = GoogleFindRestaurantName();
@@ -271,5 +274,17 @@ public class JournalEntry implements Comparable<JournalEntry>
     {
         TravelTime travel = new TravelTime("" + distanceLastChecked, (int)distanceLastChecked);
         return travel;
+    }
+
+    public void swapFavoriteStatus()
+    {
+        if(favorite == true)
+        {
+            favorite = false;
+        }
+        else
+        {
+            favorite = true;
+        }
     }
 }
