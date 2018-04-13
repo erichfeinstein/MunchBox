@@ -2,20 +2,16 @@ package seniorproj.munchbox;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +19,6 @@ import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.PopupWindow;
@@ -37,8 +32,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,9 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private static ArrayList<JournalEntry> journal;
     private static ArrayList<JournalEntry> journalCopy;
 
-    private String recentImagePath;
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int THUMBSIZE = 200;
     static final int PERMISSION_ALL = 1;
     String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION};
     //File internalStorageDir = getFilesDir();
@@ -403,7 +394,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createEntry(Bitmap newEntryPhoto, String imagePath) {
-        journal.add(new JournalEntry(newEntryPhoto, recentImagePath));
+        journal.add(new JournalEntry(newEntryPhoto, imagePath));
     }
 
     public List<JournalEntry> getJournal() {

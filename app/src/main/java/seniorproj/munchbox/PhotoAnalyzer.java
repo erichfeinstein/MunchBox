@@ -99,10 +99,8 @@ public class PhotoAnalyzer {
         }
 
         protected void onPostExecute(ArrayList<EntityAnnotation> result) {
-            Activity activity = mainWeakReference.get();
             labels = result;
             editEntryActivity.onBackgroundTaskComplete(getLabels());
-            //This bit is where the sample code sets the labels to the image. I don't think we do it here - Danny
         }
     }
 
@@ -114,24 +112,6 @@ public class PhotoAnalyzer {
         catch (IOException e) {
             Log.d(TAG, "failed to make API request because of IOExecption " + e.getMessage());
         }
-    }
-
-    private static String convertResponseToString(BatchAnnotateImagesResponse response) {
-        StringBuilder message = new StringBuilder("I found these things:\n\n");
-
-        List<EntityAnnotation> labels = response.getResponses().get(0).getLabelAnnotations();
-        if (labels != null) {
-
-            for (EntityAnnotation label : labels) {
-                message.append(String.format(Locale.US, "%.3f: %s", label.getScore(), label.getDescription()));
-                message.append("\n");
-            }
-        }
-        else {
-            message.append("nothing");
-        }
-        System.out.println(message.toString());
-        return message.toString();
     }
 
     private Vision.Images.Annotate prepareAnnotationRequest(Bitmap bitmap) throws IOException {

@@ -116,4 +116,12 @@ public class ViewEntry extends Activity {
         final AlertDialog dialog = alert.create();
         dialog.show();
     }
+
+    public void shareEntryButton(View view) {
+        Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject test");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, descriptionText);
+        startActivity(Intent.createChooser(shareIntent, "Share via"));
+    }
 }

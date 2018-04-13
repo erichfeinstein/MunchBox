@@ -1,6 +1,10 @@
 Danny Miles
 
 Week of 4/8
+
+4/12: Performed testing on overall app function. Experienced and cataloged bug occurring on multiple entries being edited in one session, but so far is unreproduceable on team members'
+devices. Implemented skeleton of share funcationality; performed code cleanup. 
+
 4/10: Implemented cancel functionality on the EditEntry screen.
 
 Week of 4/1
