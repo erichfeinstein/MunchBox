@@ -125,7 +125,7 @@ public class ViewEntry extends Activity {
         shareIntent.setType("*/*");
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, "A MunchBox journal entry!");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, dish + " @" + restaurant + " :\n" + descriptionText);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, dish + " @ " + restaurant + ". " + descriptionText + "... via MunchBox");
         shareIntent.putExtra(Intent.EXTRA_STREAM, imageURI);
         startActivity(Intent.createChooser(shareIntent, "Share via"));
     }
