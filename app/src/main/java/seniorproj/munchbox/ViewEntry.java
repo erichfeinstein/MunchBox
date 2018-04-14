@@ -12,6 +12,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.FileProvider;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.ImageView;
@@ -118,7 +119,8 @@ public class ViewEntry extends Activity {
     }
 
     public void shareEntryButton(View view) {
-        Uri imageURI = Uri.fromFile(new File(imgPath));
+        String provider = ViewEntry.this.getApplicationContext().getPackageName();
+        Uri imageURI = FileProvider.getUriForFile(ViewEntry.this, provider + ".fileprovider",new File(imgPath));
         Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
         shareIntent.setType("*/*");
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -126,5 +128,9 @@ public class ViewEntry extends Activity {
         shareIntent.putExtra(Intent.EXTRA_TEXT, dish + " @" + restaurant + " :\n" + descriptionText);
         shareIntent.putExtra(Intent.EXTRA_STREAM, imageURI);
         startActivity(Intent.createChooser(shareIntent, "Share via"));
+    }
+    /*Can't utilize URIs in Intents in SDK >= 24, so this solution is necessary. */
+    private class MunchFileProvider extends FileProvider {
+
     }
 }
