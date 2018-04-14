@@ -90,7 +90,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                     intent.putExtra("dishName", selectedEntry.getNameOfDish());
                     intent.putExtra("restaurantName", selectedEntry.getRestaurantName());
                     intent.putExtra("description", selectedEntry.getDescription());
-                    intent.putExtra("tags", selectedEntry.getTags());
                     intent.putExtra("rating", selectedEntry.getRatingAsStars());
                     intent.putExtra("ratingNum", selectedEntry.getRating());
                     intent.putExtra("imgPath", selectedEntry.getPhotoPath());

@@ -44,7 +44,7 @@ public class MunchCam extends Activity {
     private SquareImageView picture_frame;
 
     public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int LOADING_ALPHA_VALUE = 128;
+    public static final int LOADING_ALPHA_VALUE = 175;
     public static final int FULL_ALPHA_VALUE = 255;
     public static final int QUALITY = 100;
 
@@ -95,12 +95,12 @@ public class MunchCam extends Activity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        confirmButton.setEnabled(false);
-                        confirmButton.getBackground().setAlpha(LOADING_ALPHA_VALUE);
-                        loading.setVisibility(View.VISIBLE);
-                        loading.setBackgroundColor(Color.parseColor("#66000000"));
-                        // save image and send to new activity
                         confirmHelper();
+                        confirmButton.setEnabled(false);
+                        confirmButton.setVisibility(View.GONE);
+                        loading.setVisibility(View.VISIBLE);
+                        loading.setBackgroundColor(Color.parseColor("#60000000"));
+                        // save image and send to new activity
                         Intent intent = new Intent(MunchCam.this, EditEntry.class);
                         intent.putExtra("imageAddr", recentImagePath);
                         finish();//Should not back to this

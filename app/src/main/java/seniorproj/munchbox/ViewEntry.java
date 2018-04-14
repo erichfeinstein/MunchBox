@@ -41,7 +41,6 @@ public class ViewEntry extends Activity {
         dish = getIntent().getStringExtra("dishName");
         restaurant = getIntent().getStringExtra("restaurantName");
         descriptionText = getIntent().getStringExtra("description");
-        tagsList = getIntent().getStringArrayListExtra("tags");
         String ratingText = getIntent().getStringExtra("rating");
         rating = getIntent().getIntExtra("ratingNum", 0);
         imgPath = getIntent().getStringExtra("imgPath");
@@ -56,19 +55,6 @@ public class ViewEntry extends Activity {
         Bitmap image = BitmapFactory.decodeFile(imgPath);
         ImageView myImage = (ImageView) findViewById(R.id.imageView);
         myImage.setImageBitmap(image);
-
-        StringBuilder tagsText = new StringBuilder();
-        for (int i = 0; i < tagsList.size(); i++) {
-            if (i != tagsList.size()-1) {
-                tagsText.append(tagsList.get(i) + ", ");
-            }
-            else {
-                tagsText.append(tagsList.get(i));
-            }
-        }
-        String tagsString = tagsText.toString();
-        TextView tags = (TextView)findViewById(R.id.tags);
-        tags.setText(tagsString);
         TextView rating = (TextView)findViewById(R.id.rating);
         rating.setText(ratingText);
     }
