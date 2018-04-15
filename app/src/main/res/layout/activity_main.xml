@@ -14,8 +14,10 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:font="@font/timeburnernormal"
+        android:fontFamily="@font/timeburnerbold"
         android:text="MunchBox"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.ActionBar.Title"
         android:textColor="@android:color/white"
@@ -89,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true">
-        <Button
+        <ImageButton
             android:id="@+id/createNewEntry"
             style="@style/Widget.AppCompat.Button.Colored"
             android:onClick="createEntryButton"
@@ -99,9 +101,7 @@
             android:layout_marginBottom="25dp"
             android:background="@drawable/button"
             android:elevation="8dp"
-            android:text="New\nEntry"
-            android:textSize="15dp"
-            android:textColor="@android:color/white"
+            android:src="@drawable/add_entry"
             android:visibility="visible" />
 
         </LinearLayout>
