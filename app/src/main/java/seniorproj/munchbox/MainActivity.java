@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -35,6 +36,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private PopupWindow popup;
     private SearchView searchView;
     private static RecyclerView recyclerView;
     private static MyAdapter adapter;
@@ -144,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
         searchView.setQuery(searchView.getQuery().toString(), true);
 
         //Read the journal from SharedPrefs
+
         SharedPreferences prefsJournal = getPreferences(MODE_PRIVATE);
         Gson gsonJournalRead = new Gson();
         String jsonJournal = prefsJournal.getString("Journal", "");
@@ -277,17 +280,22 @@ public class MainActivity extends AppCompatActivity {
     @SuppressWarnings("ResourceType")
     public void sortByButton(View view) {
         LayoutInflater inflater = getLayoutInflater();
-        PopupWindow popup = new PopupWindow(inflater.inflate(R.layout.activity_sort_by_pop,(ViewGroup)findViewById(R.layout.activity_main)));
+        popup = new PopupWindow(inflater.inflate(R.layout.activity_sort_by_pop,(ViewGroup)findViewById(R.layout.activity_main)));
         popup.setFocusable(true);
         popup.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
         popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
         popup.showAsDropDown(view);
+        popup.setOutsideTouchable(true);
+        popup.setFocusable(true);
+    }
+
+    public void closePopup(){
+        popup.dismiss();
     }
 
     public void createEntryButton(View view) {
         view.setEnabled(false);
         /* Prompt the user for a picture */
-//        finish();
         Intent takePictureIntent = new Intent(MainActivity.this, MunchCam.class);
         startActivity(takePictureIntent);
     }
@@ -301,12 +309,14 @@ public class MainActivity extends AppCompatActivity {
     public void sortByDate(View view) {
         Collections.sort(journal, Comparators.getDateComparator());
         reloadList(journal);
+        closePopup();
     }
 
     public void sortByReview(View view)
     {
         Collections.sort(journal,Comparators.getRateComparator());
         reloadList(journal);
+        closePopup();
         /*
         journalCopy = new ArrayList(journal);
         journal.clear();
@@ -344,6 +354,7 @@ public class MainActivity extends AppCompatActivity {
         */
         Collections.sort(journal, Comparators.getDishNameComparator());
         reloadList(journal);
+        closePopup();
     }
 
     public void sortByDistance(View view)
@@ -372,6 +383,7 @@ public class MainActivity extends AppCompatActivity {
         }
         */
         reloadList(journal);
+        closePopup();
     }
 
     public void sortByFrequency(View view)
@@ -398,6 +410,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         reloadList(journal);
+        closePopup();
     }
 
     public JournalEntry findEntryByName(String name, ArrayList<JournalEntry> journal)

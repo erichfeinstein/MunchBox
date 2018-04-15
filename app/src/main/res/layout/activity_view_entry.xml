@@ -34,7 +34,7 @@
         android:layout_marginRight="10dp"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -45,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="1"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:singleLine="true"
@@ -62,11 +63,11 @@
                 android:layout_gravity="center_vertical"
                 android:paddingRight="8dp"
                 android:singleLine="true"
-                android:text="★★★★★"
+                android:text="Rating"
                 android:textColor="@android:color/black"
                 android:textSize="25dp" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/restaurant"

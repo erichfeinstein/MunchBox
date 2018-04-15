@@ -120,7 +120,6 @@ public class EditEntry extends Activity {
             String restaurantText = getIntent().getStringExtra("restaurant");
             String descriptionText = getIntent().getStringExtra("description");
             tags = getIntent().getStringArrayListExtra("tagsList");
-            if (tags == null) tags = new ArrayList<String>();
             int ratingValue = getIntent().getIntExtra("rating", 0);
 
             name.setText(nameText);
@@ -132,6 +131,7 @@ public class EditEntry extends Activity {
         }
         loadLocations(locations);
 
+        if (tags == null) tags = new ArrayList<String>();
         //Run image analysis
         if (tags.size() == 0) {
             PhotoAnalyzer labelGen = new PhotoAnalyzer(image, this, this);
