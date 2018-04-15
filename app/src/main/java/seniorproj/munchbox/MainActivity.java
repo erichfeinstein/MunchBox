@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private static ArrayList<JournalEntry> journalCopy;
 
     private int lastSortType = 0; //0 is date, 1 is review, 2 is alphabetical, 3 is distance...
+    private int newID = 0;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PERMISSION_ALL = 1;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Read the journal
         if (journal == null) {
             SharedPreferences prefs = getPreferences(MODE_PRIVATE);
             Gson gson = new Gson();
@@ -63,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
             journal = gson.fromJson(json, new TypeToken<List<JournalEntry>>(){}.getType());
             if (journal == null) journal = new ArrayList<JournalEntry>();
         }
+        //Re-assign ID values
+        int i = 0;
+        while (i < journal.size()) {
+            journal.get(i).setIdentifier(i);
+            i++;
+        }
+        newID = i; //Save the new ID value
 
         adapter = new MyAdapter(journal, this);
         recyclerView = (RecyclerView) findViewById(R.id.entriesView);
@@ -155,12 +164,6 @@ public class MainActivity extends AppCompatActivity {
         journal = gsonJournalRead.fromJson(jsonJournal, new TypeToken<List<JournalEntry>>(){}.getType());
         if (journal == null) journal = new ArrayList<JournalEntry>();
 
-        if (lastSortType == 0) Collections.sort(journal, Comparators.getDateComparator());
-        if (lastSortType == 1) Collections.sort(journal, Comparators.getRateComparator());
-        if (lastSortType == 2) Collections.sort(journal, Comparators.getDishNameComparator());
-        //TODO connected to Distance Comparator
-        //if (lastSortType == 3) Collections.sort(journal, Comparators.getDistanceComparator());
-
         journalCopy = new ArrayList<>(journal);
 
         //Re-enable create button after it was disabled to prevent double clicking
@@ -194,7 +197,8 @@ public class MainActivity extends AppCompatActivity {
             newEntry.setNameOfDish(name);
             newEntry.setRestaurantName(restaurant);
             newEntry.setDescription(description);
-            newEntry.setIdentifier(journalCopy.size());
+            newEntry.setIdentifier(newID);
+            newID++; //set ID to next ID available an increment available ID
             newEntry.setPhotoPath(imgPath);
             newEntry.setRating(rating);
             newEntry.setTags(tags);
@@ -216,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
                     updateEntry.setPhotoPath(imgPath);
                     updateEntry.setRating(rating);
                     updateEntry.setTags(tags);
+                    break;
                 }
             }
         }
@@ -268,6 +273,12 @@ public class MainActivity extends AppCompatActivity {
         String write = gsonJournal.toJson(journal);
         writerEditor.putString("Journal", write);
         writerEditor.commit();
+
+        if (lastSortType == 0) Collections.sort(journal, Comparators.getDateComparator());
+        if (lastSortType == 1) Collections.sort(journal, Comparators.getRateComparator());
+        if (lastSortType == 2) Collections.sort(journal, Comparators.getDishNameComparator());
+        //TODO connected to Distance Comparator
+        //if (lastSortType == 3) Collections.sort(journal, Comparators.getDistanceComparator());
 
         reloadList(journal);
     }
