@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.PopupWindow;
 
 import com.google.gson.Gson;
@@ -167,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         journalCopy = new ArrayList<>(journal);
 
         //Re-enable create button after it was disabled to prevent double clicking
-        Button createEntryButton = (Button) findViewById(R.id.createNewEntry);
+        ImageButton createEntryButton = (ImageButton) findViewById(R.id.createNewEntry);
         createEntryButton.setEnabled(true);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
