@@ -27,7 +27,7 @@ public class ViewEntry extends Activity {
     private String dish;
     private String restaurant;
     private String descriptionText;
-    private ArrayList<String> tagsList;
+    private ArrayList<String> tagsList; //Not displayed, but passed to EditEntry
     private int rating;
     private String imgPath;
     private int id;
@@ -45,6 +45,7 @@ public class ViewEntry extends Activity {
         rating = getIntent().getIntExtra("ratingNum", 0);
         imgPath = getIntent().getStringExtra("imgPath");
         id = getIntent().getIntExtra("id", -1);
+        tagsList = getIntent().getStringArrayListExtra("tagsList");
 
         TextView dishName = (TextView)findViewById(R.id.name);
         dishName.setText(dish);
@@ -61,7 +62,6 @@ public class ViewEntry extends Activity {
 
     public void editEntryButton(View view) {
         view.setEnabled(false);
-        finish();
         Intent toEdit = new Intent(ViewEntry.this, EditEntry.class);
         toEdit.putExtra("dish", dish);
         toEdit.putExtra("restaurant", restaurant);
@@ -71,6 +71,7 @@ public class ViewEntry extends Activity {
         toEdit.putExtra("imageAddr", imgPath);
         //For determining if Edit Entry has received an existing entry or is building a new one
         toEdit.putExtra("id", id);
+        finish();
         startActivity(toEdit);
     }
 

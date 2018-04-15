@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         String jsonJournal = prefsJournal.getString("Journal", "");
         journal = gsonJournalRead.fromJson(jsonJournal, new TypeToken<List<JournalEntry>>(){}.getType());
         if (journal == null) journal = new ArrayList<JournalEntry>();
+        journalCopy = new ArrayList<>(journal);
 
         //Re-enable create button after it was disabled to prevent double clicking
         Button createEntryButton = (Button) findViewById(R.id.createNewEntry);
@@ -170,8 +171,8 @@ public class MainActivity extends AppCompatActivity {
         ArrayList tags = gson.fromJson(json, new TypeToken<List<String>>(){}.getType());
 
         //Determine if we are creating a new entry, editing an entry, or deleting an entry (or none)
-        boolean toAdd = prefs.getBoolean("add", false);
-        boolean toEdit = prefs.getBoolean("edit", false);
+        boolean toAdd = prefs.getBoolean("toAdd", false);
+        boolean toEdit = prefs.getBoolean("toEdit", false);
         boolean toDelete = prefs.getBoolean("toDelete", false); //no id: default value
 
         //Make new entry
@@ -181,12 +182,13 @@ public class MainActivity extends AppCompatActivity {
             newEntry.setNameOfDish(name);
             newEntry.setRestaurantName(restaurant);
             newEntry.setDescription(description);
-            newEntry.setIdentifier(journal.size());
+            newEntry.setIdentifier(journalCopy.size());
             newEntry.setPhotoPath(imgPath);
             newEntry.setRating(rating);
             newEntry.setTags(tags);
             journal.add(newEntry);
         }
+
         //Update existing  entry
         if (toEdit && imgPath != null) {
             System.out.println("Editing entry");
@@ -199,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
                     updateEntry.setNameOfDish(name);
                     updateEntry.setRestaurantName(restaurant);
                     updateEntry.setDescription(description);
-                    updateEntry.setIdentifier(journal.size());
                     updateEntry.setPhotoPath(imgPath);
                     updateEntry.setRating(rating);
                     updateEntry.setTags(tags);
@@ -219,6 +220,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //Remove command to delete entry
+        editor.remove("toAdd");
+        editor.remove("toEdit");
         editor.remove("toDelete");
         editor.remove("id");
 

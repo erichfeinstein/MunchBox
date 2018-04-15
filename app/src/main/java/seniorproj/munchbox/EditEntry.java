@@ -40,7 +40,6 @@ public class EditEntry extends Activity {
     private Context context;
 
     private RecyclerView tagsRecyclerView;
-    private ArrayList<EntityAnnotation> labels;
     private TagsAdapter tagsAdapter;
     private ArrayList<String> tags;
     private RecyclerView locationsRecyclerView;
@@ -51,8 +50,6 @@ public class EditEntry extends Activity {
     private EditText restaurant;
     private EditText description;
     private RatingBar rating;
-
-    private Button button;
 
     private String imgPath;
 
@@ -81,8 +78,6 @@ public class EditEntry extends Activity {
         tagsRecyclerView = (RecyclerView) findViewById(R.id.tagsView);
         tagsRecyclerView.setHasFixedSize(true);
         tagsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-        labels = new ArrayList<>();
 
         locationsRecyclerView = (RecyclerView) findViewById(R.id.locationsView);
         locationsRecyclerView.setHasFixedSize(true);
@@ -119,13 +114,14 @@ public class EditEntry extends Activity {
         }
 
         id = getIntent().getIntExtra("id", -1);
+        //If editing an existing entry
         if (id != -1) {
             String nameText = getIntent().getStringExtra("dish");
             String restaurantText = getIntent().getStringExtra("restaurant");
             String descriptionText = getIntent().getStringExtra("description");
             tags = getIntent().getStringArrayListExtra("tagsList");
+            if (tags == null) tags = new ArrayList<String>();
             int ratingValue = getIntent().getIntExtra("rating", 0);
-            String imgPath = getIntent().getStringExtra("imgPath");
 
             name.setText(nameText);
             restaurant.setText(restaurantText);
@@ -134,12 +130,13 @@ public class EditEntry extends Activity {
             rating.setRating(((float)ratingValue)/2);
             //Image already taken care of above
         }
-
         loadLocations(locations);
 
         //Run image analysis
-        PhotoAnalyzer labelGen = new PhotoAnalyzer(image, this, this);
-        tags = labelGen.getLabels();
+        if (tags.size() == 0) {
+            PhotoAnalyzer labelGen = new PhotoAnalyzer(image, this, this);
+            tags = labelGen.getLabels();
+        }
     }
 
     //Saves either new entry or updates info of existing entry
@@ -164,8 +161,8 @@ public class EditEntry extends Activity {
         String json = gson.toJson(tags);
         editor.putString("tags", json);
 
-        if (id == -1) editor.putBoolean("add", true); //New entry
-        else editor.putBoolean("edit", true); //Existing entry
+        if (id == -1) editor.putBoolean("toAdd", true); //New entry
+        else editor.putBoolean("toEdit", true); //Existing entry
 
         editor.commit();
 

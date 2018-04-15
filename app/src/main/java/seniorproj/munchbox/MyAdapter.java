@@ -69,7 +69,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             textViewRestaurant = (TextView)itemView.findViewById(R.id.restaurant);
             textViewRating = (TextView)itemView.findViewById(R.id.rating);
             thumb = (ImageView) itemView.findViewById(R.id.foodThumbnail);
-            id = itemView.getId();
             itemView.setOnClickListener(this);
         }
 
@@ -90,12 +89,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                     intent.putExtra("dishName", selectedEntry.getNameOfDish());
                     intent.putExtra("restaurantName", selectedEntry.getRestaurantName());
                     intent.putExtra("description", selectedEntry.getDescription());
+                    intent.putExtra("tagsList", selectedEntry.getTags());
                     intent.putExtra("rating", selectedEntry.getRatingAsStars());
                     intent.putExtra("ratingNum", selectedEntry.getRating());
                     intent.putExtra("imgPath", selectedEntry.getPhotoPath());
                     intent.putExtra("id", selectedEntry.getIdentifier());
                     MainActivity.resetJournal(); //Always reset journal before leaving MainActivity
                     context.startActivity(intent);
+                    System.out.println("Opening entry with ID: " + id);
                 }
             }
         }

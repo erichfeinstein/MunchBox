@@ -48,7 +48,6 @@ public class MunchCam extends Activity {
     public static final int FULL_ALPHA_VALUE = 255;
     public static final int QUALITY = 100;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
