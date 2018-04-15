@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private static ArrayList<JournalEntry> journal;
     private static ArrayList<JournalEntry> journalCopy;
 
+    private int lastSortType = 0; //0 is date, 1 is review, 2 is alphabetical, 3 is distance...
+
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PERMISSION_ALL = 1;
     String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION};
@@ -152,6 +154,13 @@ public class MainActivity extends AppCompatActivity {
         String jsonJournal = prefsJournal.getString("Journal", "");
         journal = gsonJournalRead.fromJson(jsonJournal, new TypeToken<List<JournalEntry>>(){}.getType());
         if (journal == null) journal = new ArrayList<JournalEntry>();
+
+        if (lastSortType == 0) Collections.sort(journal, Comparators.getDateComparator());
+        if (lastSortType == 1) Collections.sort(journal, Comparators.getRateComparator());
+        if (lastSortType == 2) Collections.sort(journal, Comparators.getDishNameComparator());
+        //TODO connected to Distance Comparator
+        //if (lastSortType == 3) Collections.sort(journal, Comparators.getDistanceComparator());
+
         journalCopy = new ArrayList<>(journal);
 
         //Re-enable create button after it was disabled to prevent double clicking
@@ -310,6 +319,7 @@ public class MainActivity extends AppCompatActivity {
         Collections.sort(journal, Comparators.getDateComparator());
         reloadList(journal);
         closePopup();
+        lastSortType = 0;
     }
 
     public void sortByReview(View view)
@@ -317,73 +327,23 @@ public class MainActivity extends AppCompatActivity {
         Collections.sort(journal,Comparators.getRateComparator());
         reloadList(journal);
         closePopup();
-        /*
-        journalCopy = new ArrayList(journal);
-        journal.clear();
-        for(int i = 10; i >= 0; i--)
-        {
-            for(JournalEntry found : journalCopy)
-            {
-                if (found.getRating() == i)
-                {
-                    journal.add(found);
-                }
-            }
-        }
-        reloadList(journal);
-        */
+        lastSortType = 1;
     }
 
     public void sortAlphabeticallyByDishName(View view)
     {
-        /*
-        journalCopy = new ArrayList(journal);
-        ArrayList<String> stringList = new ArrayList<String>();
-        for(JournalEntry j: journalCopy)
-        {
-            stringList.add(j.getNameOfDish());
-        }
-        Collections.sort(stringList, String.CASE_INSENSITIVE_ORDER);
-        journal.clear();
-        for(String s: stringList)
-        {
-            journal.add(findEntryByName(s, journalCopy));
-        }
-
-        reloadList(journal);
-        */
         Collections.sort(journal, Comparators.getDishNameComparator());
         reloadList(journal);
         closePopup();
+        lastSortType = 2;
     }
 
     public void sortByDistance(View view)
     {
-        /*
-        double currentX = 40;
-        double currentY = 60;
-        checkDistances(currentX, currentY);
-
-        journalCopy = new ArrayList(journal);
-        journal.clear();
-
-        checkDistances(currentX, currentY);
-
-        for(JournalEntry j: journalCopy)
-        {
-            double dist = j.getDistanceLastChecked();
-            for(int i = 0; i < journal.size(); i++)
-            {
-                if(dist <= journal.get(i).getDistanceLastChecked())
-                {
-                    journal.add(i, j);
-                    i = journal.size();
-                }
-            }
-        }
-        */
+        //TODO
         reloadList(journal);
         closePopup();
+        lastSortType = 3;
     }
 
     public void sortByFrequency(View view)
