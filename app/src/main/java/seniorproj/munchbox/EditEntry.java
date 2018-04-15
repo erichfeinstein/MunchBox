@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -28,7 +27,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.api.services.vision.v1.model.EntityAnnotation;
 import com.google.gson.Gson;
 
 import java.net.URL;
@@ -36,8 +34,6 @@ import java.util.ArrayList;
 import java.io.File;
 
 public class EditEntry extends Activity {
-
-    private Context context;
 
     private RecyclerView tagsRecyclerView;
     private TagsAdapter tagsAdapter;
@@ -60,26 +56,25 @@ public class EditEntry extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_entry);
-        context = this;
 
-        name = (EditText) findViewById(R.id.title);
-        restaurant = (EditText) findViewById(R.id.restaurant);
-        description = (EditText) findViewById(R.id.description);
-        rating = (RatingBar) findViewById(R.id.rating);
+        name =   findViewById(R.id.title);
+        restaurant =  findViewById(R.id.restaurant);
+        description = findViewById(R.id.description);
+        rating = findViewById(R.id.rating);
 
         //Get image and display it
         imgPath = getIntent().getStringExtra("imageAddr");
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inPreferredConfig = Bitmap.Config.ARGB_8888;
         Bitmap image = BitmapFactory.decodeFile(imgPath);
-        ImageView myImage = (ImageView) findViewById(R.id.imageView);
+        ImageView myImage = findViewById(R.id.imageView);
         myImage.setImageBitmap(image);
 
-        tagsRecyclerView = (RecyclerView) findViewById(R.id.tagsView);
+        tagsRecyclerView = findViewById(R.id.tagsView);
         tagsRecyclerView.setHasFixedSize(true);
         tagsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        locationsRecyclerView = (RecyclerView) findViewById(R.id.locationsView);
+        locationsRecyclerView = findViewById(R.id.locationsView);
         locationsRecyclerView.setHasFixedSize(true);
         locationsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
@@ -125,13 +120,13 @@ public class EditEntry extends Activity {
             name.setText(nameText);
             restaurant.setText(restaurantText);
             description.setText(descriptionText);
-            loadTags(tags); //Right now this doesn't work: the tags aren't populated by the time we get here. Need to discuss -Danny
+            loadTags(tags);
             rating.setRating(((float)ratingValue)/2);
             //Image already taken care of above
         }
         loadLocations(locations);
 
-        if (tags == null) tags = new ArrayList<String>();
+        if (tags == null) tags = new ArrayList<>();
         //Run image analysis
         if (tags.size() == 0) {
             PhotoAnalyzer labelGen = new PhotoAnalyzer(image, this, this);
@@ -146,8 +141,8 @@ public class EditEntry extends Activity {
 
         //Prevent deletion
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.edit().remove("toDelete").commit();
-        prefs.edit().remove("id").commit();
+        prefs.edit().remove("toDelete").apply();
+        prefs.edit().remove("id").apply();
         //Add to prefs the details of the entry that is being edited/created
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("id", id);
@@ -164,7 +159,7 @@ public class EditEntry extends Activity {
         if (id == -1) editor.putBoolean("toAdd", true); //New entry
         else editor.putBoolean("toEdit", true); //Existing entry
 
-        editor.commit();
+        editor.apply();
 
         finish();
     }
@@ -189,7 +184,7 @@ public class EditEntry extends Activity {
         popup.setFocusable(true);
         popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        EditText tagEntry = (EditText) layout.findViewById(R.id.tag_enter);
+        EditText tagEntry = layout.findViewById(R.id.tag_enter);
         tagEntry.setOnEditorActionListener(new TagEnterListener());
         popup.showAsDropDown(view, 0, -popup.getHeight());
         showKeyboard(tagEntry);

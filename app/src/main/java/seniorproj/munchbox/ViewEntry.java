@@ -89,7 +89,7 @@ public class ViewEntry extends Activity {
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putInt("id", id);
                 editor.putBoolean("toDelete", true);
-                editor.commit();
+                editor.apply();
 
                 finish();
 

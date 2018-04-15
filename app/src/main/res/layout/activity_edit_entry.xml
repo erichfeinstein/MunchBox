@@ -22,7 +22,7 @@
                     android:text="Edit Entry"
                     android:textColor="@android:color/black"
                     android:textStyle="bold"
-                    android:textSize="20dp"/>
+                    android:textSize="20sp"/>
 
                 <Button
                     android:onClick="saveEntryButton"
@@ -30,7 +30,7 @@
                     android:layout_height="match_parent"
                     android:padding="15dp"
                     android:layout_alignParentRight="true"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:background="@drawable/seemless_border"
                     android:textColor="@drawable/save_button"
                     android:gravity="center"
@@ -66,7 +66,7 @@
 
                                         <EditText
                                             android:id="@+id/title"
-                                            android:layout_width="wrap_content"
+                                            android:layout_width="0dp"
                                             android:layout_height="100dp"
                                             android:layout_marginTop="10dp"
                                             android:layout_marginLeft="10dp"
@@ -75,7 +75,7 @@
                                             android:padding="8dp"
                                             android:inputType="textCapWords|textAutoCorrect|textAutoComplete"
                                             android:singleLine="true"
-                                            android:textSize="25dp"
+                                            android:textSize="25sp"
                                             android:hint="Enter a title..."
                                             android:background="@drawable/seemless_border"
                                             android:layout_weight="1"/>

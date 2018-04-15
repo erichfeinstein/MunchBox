@@ -23,7 +23,6 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_margin="8dp"
-            android:layout_weight="1"
             android:background="@android:drawable/ic_menu_close_clear_cancel" />
 
     </RelativeLayout>

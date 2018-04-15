@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -61,11 +60,11 @@ public class MainActivity extends AppCompatActivity {
             Gson gson = new Gson();
             String json = prefs.getString("Journal", "");
             journal = gson.fromJson(json, new TypeToken<List<JournalEntry>>(){}.getType());
-            if (journal == null) journal = new ArrayList<JournalEntry>();
+            if (journal == null) journal = new ArrayList<>();
         }
 
         adapter = new MyAdapter(journal, this);
-        recyclerView = (RecyclerView) findViewById(R.id.entriesView);
+        recyclerView = findViewById(R.id.entriesView);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         searchView = findViewById(R.id.searchField);
         boolean resetList = getIntent().getBooleanExtra("resetList", false);
         if (resetList) filter("");
-        reloadList(journal);
+        reloadList();
 
         journalCopy = new ArrayList<>(journal);
 
@@ -84,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         Gson gson = new Gson();
         String json = gson.toJson(journal);
         prefsEditor.putString("Journal", json);
-        prefsEditor.commit();
+        prefsEditor.apply();
 
         if (!hasPermissions(this, permissions)) {
             ActivityCompat.requestPermissions(this, permissions, PERMISSION_ALL);
@@ -109,12 +108,12 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 if (query == null) {
                     journal = new ArrayList<>(journalCopy);
-                    reloadList(journal);
+                    reloadList();
                     return true;
                 }
                 else {
                     filter(query);
-                    reloadList(journal);
+                    reloadList();
                     return true;
                 }
             }
@@ -123,12 +122,12 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 if (newText == null) {
                     journal = new ArrayList<>(journalCopy);
-                    reloadList(journal);
+                    reloadList();
                     return true;
                 }
                 else {
                     filter(newText);
-                    reloadList(journal);
+                    reloadList();
                     return true;
                 }
             }
@@ -153,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
         Gson gsonJournalRead = new Gson();
         String jsonJournal = prefsJournal.getString("Journal", "");
         journal = gsonJournalRead.fromJson(jsonJournal, new TypeToken<List<JournalEntry>>(){}.getType());
-        if (journal == null) journal = new ArrayList<JournalEntry>();
+        if (journal == null) journal = new ArrayList<>();
 
         if (lastSortType == 0) Collections.sort(journal, Comparators.getDateComparator());
         if (lastSortType == 1) Collections.sort(journal, Comparators.getRateComparator());
@@ -164,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         journalCopy = new ArrayList<>(journal);
 
         //Re-enable create button after it was disabled to prevent double clicking
-        Button createEntryButton = (Button) findViewById(R.id.createNewEntry);
+        Button createEntryButton = findViewById(R.id.createNewEntry);
         createEntryButton.setEnabled(true);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -188,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
         boolean toDelete = prefs.getBoolean("toDelete", false); //no id: default value
 
         //Make new entry
-        if (toAdd && imgPath != null) {
+        if (toAdd) {
             System.out.println("Making new entry with ID: " + journal.size());
             JournalEntry newEntry = new JournalEntry();
             newEntry.setNameOfDish(name);
@@ -202,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //Update existing  entry
-        if (toEdit && imgPath != null) {
+        if (toEdit) {
             System.out.println("Editing entry");
             //Find entry with id
             for (int i = 0; i < journal.size(); i++) {
@@ -250,11 +249,11 @@ public class MainActivity extends AppCompatActivity {
         editor.remove("add");
         editor.remove("edit");
 
-        editor.commit();
+        editor.apply();
 
         //From onCreate
         adapter = new MyAdapter(journal, this);
-        recyclerView = (RecyclerView) findViewById(R.id.entriesView);
+        recyclerView = findViewById(R.id.entriesView);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -267,9 +266,9 @@ public class MainActivity extends AppCompatActivity {
         Gson gsonJournal = new Gson();
         String write = gsonJournal.toJson(journal);
         writerEditor.putString("Journal", write);
-        writerEditor.commit();
+        writerEditor.apply();
 
-        reloadList(journal);
+        reloadList();
     }
 
     public static void filter(String text) {
@@ -310,14 +309,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Changes what the list UI displays
-    public static void reloadList(ArrayList<JournalEntry> newList)
+    public static void reloadList()
     {
         recyclerView.setAdapter(adapter);
     }
 
     public void sortByDate(View view) {
         Collections.sort(journal, Comparators.getDateComparator());
-        reloadList(journal);
+        reloadList();
         closePopup();
         lastSortType = 0;
     }
@@ -325,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
     public void sortByReview(View view)
     {
         Collections.sort(journal,Comparators.getRateComparator());
-        reloadList(journal);
+        reloadList();
         closePopup();
         lastSortType = 1;
     }
@@ -333,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
     public void sortAlphabeticallyByDishName(View view)
     {
         Collections.sort(journal, Comparators.getDishNameComparator());
-        reloadList(journal);
+        reloadList();
         closePopup();
         lastSortType = 2;
     }
@@ -341,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
     public void sortByDistance(View view)
     {
         //TODO
-        reloadList(journal);
+        reloadList();
         closePopup();
         lastSortType = 3;
     }
@@ -369,7 +368,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-        reloadList(journal);
+        reloadList();
         closePopup();
     }
 
@@ -391,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
         {
             double newX = Math.pow(Math.abs(j.getXLocation() - x), 2);
             double newY = Math.pow(Math.abs(j.getYLocation() - y), 2);
-            j.setDistanceLastChecked((Double)Math.sqrt(newX + newY));
+            j.setDistanceLastChecked(Math.sqrt(newX + newY));
         }
     }
 
@@ -408,7 +407,7 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         for (int i = 0; i < grantResults.length; i++) {
-            if (!(grantResults.length > 0 && grantResults[i] == PackageManager.PERMISSION_GRANTED)) {
+            if (!(grantResults[i] == PackageManager.PERMISSION_GRANTED)) {
                 alertUser();
             }
         }
