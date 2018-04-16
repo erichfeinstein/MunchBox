@@ -36,6 +36,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    //TODO Add info button which tells the user about MunchBox, and offers a link to our privacy policy (MUST DO)
+
     private PopupWindow popup;
     private SearchView searchView;
     private static RecyclerView recyclerView;
