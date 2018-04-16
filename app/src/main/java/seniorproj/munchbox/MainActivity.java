@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         journalCopy = new ArrayList<>(journal);
 
         //Re-enable create button after it was disabled to prevent double clicking
-        Button createEntryButton = findViewById(R.id.createNewEntry);
+        ImageButton createEntryButton = findViewById(R.id.createNewEntry);
         createEntryButton.setEnabled(true);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
