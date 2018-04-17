@@ -33,7 +33,7 @@ public class MunchCam extends Activity {
     private MunchCamPreview munchCamPreview;
     private String recentImagePath;
     private byte[] recentData;
-    private Camera recentCamera;
+    //private Camera recentCamera;
 
     private ImageButton confirmButton;
     private ImageButton captureButton;
@@ -144,7 +144,7 @@ public class MunchCam extends Activity {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
             recentData = data;
-            recentCamera = camera;
+            //recentCamera = camera;
             confirmButton.getBackground().setAlpha(FULL_ALPHA_VALUE);
             confirmButton.setEnabled(true);
         }

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -447,6 +448,12 @@ public class MainActivity extends AppCompatActivity {
         builder.setMessage(R.string.dialog_message).setTitle(R.string.dialog_title);
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    @SuppressWarnings("ResourceType")
+    public void openInfoButton(View view) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sites.google.com/view/munchboxweb/home"));
+        startActivity(browserIntent);
     }
 
     //For checking permissions
