@@ -222,9 +222,6 @@ public class MunchCam extends Activity {
         }
         else {
             finish();
-            Intent backToList = new Intent(MunchCam.this, MainActivity.class);
-            backToList.putExtra("resetList", true);
-            startActivity(backToList);
         }
     }
 }

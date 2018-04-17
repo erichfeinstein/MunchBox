@@ -20,6 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/borders"
+                android:padding="8dp"
                 android:text="Sort by Date"
                 android:textColor="@android:color/black"
                 android:singleLine="true"/>
@@ -28,32 +29,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/borders"
+                android:padding="8dp"
                 android:text="Sort by Rating"
                 android:textColor="@android:color/black"
                 android:singleLine="true"/>
-            <Button
-                android:onClick="sortByDistance"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/borders"
-                android:text="Sort by Distance"
-                android:textColor="@android:color/black"
-                android:singleLine="true"/>
+            <!--<Button-->
+                <!--android:onClick="sortByDistance"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@drawable/borders"-->
+                <!--android:text="Sort by Distance"-->
+                <!--android:textColor="@android:color/black"-->
+                <!--android:singleLine="true"/>-->
             <Button
                 android:onClick="sortAlphabeticallyByDishName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/borders"
+                android:padding="8dp"
                 android:text="Sort by Dish Name"
                 android:textColor="@android:color/black"
                 android:singleLine="true"/>
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/borders"
-                android:text="Map"
-                android:textColor="@android:color/black"
-                android:singleLine="true"/>
+            <!--<Button-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@drawable/borders"-->
+                <!--android:text="Map"-->
+                <!--android:textColor="@android:color/black"-->
+                <!--android:singleLine="true"/>-->
 
         </LinearLayout>
     </RelativeLayout>
