@@ -41,7 +41,7 @@
 
             <TextView
                 android:id="@+id/name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
@@ -62,7 +62,7 @@
                 android:singleLine="true"
                 android:text="Rating"
                 android:textColor="@android:color/black"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
 
         </LinearLayout>
 
@@ -75,7 +75,7 @@
             android:singleLine="true"
             android:text="Restaurant Name"
             android:textColor="@android:color/black"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="italic" />
 
         <TextView
@@ -89,7 +89,7 @@
             android:paddingTop="10dp"
             android:text="Description"
             android:textColor="@android:color/black"
-            android:textSize="15dp" />
+            android:textSize="15sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -109,7 +109,7 @@
             android:background="@drawable/button"
             android:elevation="8dp"
             android:text="Edit"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:textColor="@android:color/white"
             android:visibility="visible" />
     </LinearLayout>
@@ -121,7 +121,7 @@
         android:background="@drawable/seemless_border"
         android:textColor="@drawable/save_button"
         android:text="Share"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:paddingTop="10dp"
