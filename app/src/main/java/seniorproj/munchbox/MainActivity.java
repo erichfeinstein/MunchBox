@@ -26,10 +26,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -41,8 +37,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
-    private InterstitialAd mInterstitialAd;
 
     private PopupWindow popup;
     private SearchView searchView;
@@ -156,20 +150,6 @@ public class MainActivity extends AppCompatActivity {
                 searchView.setIconified(false);
             }
         });
-
-        //AdMob ID
-        MobileAds.initialize(this, "ca-app-pub-5796470214889798~4117996882");
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-5796470214889798/1616080338");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                // Load the next interstitial.
-                mInterstitialAd.loadAd(new AdRequest.Builder().build());
-            }
-
-        });
     }
 
     @Override
@@ -211,15 +191,6 @@ public class MainActivity extends AppCompatActivity {
         boolean toAdd = prefs.getBoolean("toAdd", false);
         boolean toEdit = prefs.getBoolean("toEdit", false);
         boolean toDelete = prefs.getBoolean("toDelete", false); //no id: default value
-
-        //If user just created or edited an entry, display an Ad if it is available
-        if (toAdd || toEdit) {
-            if (mInterstitialAd.isLoaded()) {
-                mInterstitialAd.show();
-            } else {
-                Log.d("TAG", "The interstitial wasn't loaded yet.");
-            }
-        }
 
         //Make new entry
         if (toAdd) {

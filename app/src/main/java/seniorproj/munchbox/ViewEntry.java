@@ -26,6 +26,7 @@ public class ViewEntry extends Activity {
 
     private String dish;
     private String restaurant;
+    private String dateText;
     private String descriptionText;
     private ArrayList<String> tagsList; //Not displayed, but passed to EditEntry
     private int rating;
@@ -40,6 +41,7 @@ public class ViewEntry extends Activity {
 
         dish = getIntent().getStringExtra("dishName");
         restaurant = getIntent().getStringExtra("restaurantName");
+        dateText = getIntent().getStringExtra("date");
         descriptionText = getIntent().getStringExtra("description");
         String ratingText = getIntent().getStringExtra("rating");
         rating = getIntent().getIntExtra("ratingNum", 0);
@@ -51,6 +53,8 @@ public class ViewEntry extends Activity {
         dishName.setText(dish);
         TextView restaurantName = (TextView)findViewById(R.id.restaurant);
         restaurantName.setText(restaurant);
+        TextView date = (TextView)findViewById(R.id.date);
+        date.setText(dateText);
         TextView description = (TextView)findViewById(R.id.description);
         description.setText(descriptionText);
         Bitmap image = BitmapFactory.decodeFile(imgPath);

@@ -13,7 +13,10 @@ import android.widget.Toast;
 import android.content.Intent;
 import android.widget.ImageView;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -88,6 +91,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                     intent.putExtra("id", id);
                     intent.putExtra("dishName", selectedEntry.getNameOfDish());
                     intent.putExtra("restaurantName", selectedEntry.getRestaurantName());
+                    Format formatter = new SimpleDateFormat("MMM dd yyyy");
+                    Date date = selectedEntry.getEntryDate();
+                    String dateString = formatter.format(date);
+                    intent.putExtra("date", dateString);
                     intent.putExtra("description", selectedEntry.getDescription());
                     intent.putExtra("tagsList", selectedEntry.getTags());
                     intent.putExtra("rating", selectedEntry.getRatingAsStars());
