@@ -276,6 +276,11 @@ public class JournalEntry implements Comparable<JournalEntry>
         return travel;
     }
 
+    public boolean getFavorite()
+    {
+        return favorite;
+    }
+
     public void swapFavoriteStatus()
     {
         if(favorite == true)

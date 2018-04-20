@@ -35,3 +35,7 @@ JournalEntries now have TravelTime for testing purposes.
 Week 7:
 Created sortByFrequency, which shows users what dishes they've had the most often.
 Added a "favorite" identifier to JournalEntry, with the appropriate methods.
+
+Week 8:
+Created method to filter out entries that are not favorited
+Testing and administrative work, such as the poster. The project is approaching it's end and we aren't adding many more features

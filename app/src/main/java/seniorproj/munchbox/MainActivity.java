@@ -387,6 +387,21 @@ public class MainActivity extends AppCompatActivity {
         closePopup();
     }
 
+    public List<JournalEntry> removeNonFavorites(View view)
+    {
+        journalCopy = new ArrayList(journal);
+
+        for(JournalEntry j: journalCopy)
+        {
+            if(j.getFavorite() == false)
+            {
+                journalCopy.remove(j);
+            }
+        }
+
+        return journalCopy;
+    }
+
     public JournalEntry findEntryByName(String name, ArrayList<JournalEntry> journal)
     {
         for(JournalEntry j: journal)
