@@ -1,5 +1,12 @@
 Danny Miles
 
+Week of 4/15
+
+4/17: Continued code optimization as per the recommendations of Gradle's lint tool. Some devices are still experiencing lag on certain transitions, so we are trying
+to improve performance.
+
+4/15: Group meeting to discuss current standing and goals over the next few weeks. Spent most of the time refactoring and optimizing code to improve performance.
+
 Week of 4/8
 
 4/13: Sharing now includes both string representation (description, title, and restaurant) and photo of journal entry. Works correctly for Twitter. Facebook and Instagram testing to follow.
