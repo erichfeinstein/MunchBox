@@ -115,13 +115,13 @@ public class EditEntry extends Activity {
             String restaurantText = getIntent().getStringExtra("restaurant");
             String descriptionText = getIntent().getStringExtra("description");
             tags = getIntent().getStringArrayListExtra("tagsList");
-            int ratingValue = getIntent().getIntExtra("rating", 0);
+            float ratingVal = getIntent().getFloatExtra("rating", 0);
 
             name.setText(nameText);
             restaurant.setText(restaurantText);
             description.setText(descriptionText);
             loadTags(tags);
-            rating.setRating(((float)ratingValue)/2);
+            rating.setRating(ratingVal);
             //Image already taken care of above
         }
         loadLocations(locations);

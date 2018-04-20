@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.media.Rating;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -16,6 +17,7 @@ import android.support.v4.content.FileProvider;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +31,7 @@ public class ViewEntry extends Activity {
     private String dateText;
     private String descriptionText;
     private ArrayList<String> tagsList; //Not displayed, but passed to EditEntry
-    private int rating;
+    private float ratingVal;
     private String imgPath;
     private int id;
 
@@ -43,8 +45,7 @@ public class ViewEntry extends Activity {
         restaurant = getIntent().getStringExtra("restaurantName");
         dateText = getIntent().getStringExtra("date");
         descriptionText = getIntent().getStringExtra("description");
-        String ratingText = getIntent().getStringExtra("rating");
-        rating = getIntent().getIntExtra("ratingNum", 0);
+        ratingVal = getIntent().getIntExtra("rating", 0);
         imgPath = getIntent().getStringExtra("imgPath");
         id = getIntent().getIntExtra("id", -1);
         tagsList = getIntent().getStringArrayListExtra("tagsList");
@@ -60,8 +61,9 @@ public class ViewEntry extends Activity {
         Bitmap image = BitmapFactory.decodeFile(imgPath);
         ImageView myImage = (ImageView) findViewById(R.id.imageView);
         myImage.setImageBitmap(image);
-        TextView rating = (TextView)findViewById(R.id.rating);
-        rating.setText(ratingText);
+        RatingBar rating = (RatingBar)findViewById(R.id.rating);
+        ratingVal = ratingVal/2f;
+        rating.setRating(ratingVal);
     }
 
     public void editEntryButton(View view) {
@@ -71,7 +73,7 @@ public class ViewEntry extends Activity {
         toEdit.putExtra("restaurant", restaurant);
         toEdit.putExtra("description", descriptionText);
         toEdit.putExtra("tagsList", tagsList);
-        toEdit.putExtra("rating", rating);
+        toEdit.putExtra("rating", ratingVal);
         toEdit.putExtra("imageAddr", imgPath);
         //For determining if Edit Entry has received an existing entry or is building a new one
         toEdit.putExtra("id", id);

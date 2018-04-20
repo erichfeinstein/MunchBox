@@ -97,8 +97,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                     intent.putExtra("date", dateString);
                     intent.putExtra("description", selectedEntry.getDescription());
                     intent.putExtra("tagsList", selectedEntry.getTags());
-                    intent.putExtra("rating", selectedEntry.getRatingAsStars());
-                    intent.putExtra("ratingNum", selectedEntry.getRating());
+                    intent.putExtra("rating", selectedEntry.getRating());
                     intent.putExtra("imgPath", selectedEntry.getPhotoPath());
                     intent.putExtra("id", selectedEntry.getIdentifier());
                     MainActivity.resetJournal(); //Always reset journal before leaving MainActivity
