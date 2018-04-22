@@ -19,14 +19,6 @@ public class Comparators {
         };
     }
 
-    static Comparator<JournalEntry> getFrequencyComparator(){ //Highest to lowest
-        return new Comparator<JournalEntry>(){
-            public int compare(JournalEntry j1, JournalEntry j2){
-                return j2.getFrequency() - j1.getFrequency();
-            }
-        };
-    }
-
     static Comparator<JournalEntry> getDateComparator(){ //Most recent first
         return new Comparator<JournalEntry>(){
             public int compare(JournalEntry j1, JournalEntry j2){

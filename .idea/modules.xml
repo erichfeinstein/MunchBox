@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/2018_spring_395_munchbox.iml" filepath="$PROJECT_DIR$/2018_spring_395_munchbox.iml" />
       <module fileurl="file://C:\Users\Paul\StudioProjects\MunchBox\2018_spring_395_munchbox.iml" filepath="C:\Users\Paul\StudioProjects\MunchBox\2018_spring_395_munchbox.iml" />
+      <module fileurl="file://$PROJECT_DIR$/2018_spring_395_munchbox.iml" filepath="$PROJECT_DIR$/2018_spring_395_munchbox.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MunchBox.iml" filepath="$PROJECT_DIR$/MunchBox.iml" />
       <module fileurl="file://C:\Users\Eric.DESKTOP-783BPSR\Desktop\MunchGit\2018_spring_395_munchbox\MunchBox.iml" filepath="C:\Users\Eric.DESKTOP-783BPSR\Desktop\MunchGit\2018_spring_395_munchbox\MunchBox.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

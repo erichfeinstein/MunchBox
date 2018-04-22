@@ -11,8 +11,7 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:cardBackgroundColor="@color/cardview_light_background">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,8 +22,7 @@
             <seniorproj.munchbox.SquareImageView
                 android:id="@+id/foodThumbnail"
                 android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@android:drawable/btn_star_big_on" />
+                android:layout_height="100dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
