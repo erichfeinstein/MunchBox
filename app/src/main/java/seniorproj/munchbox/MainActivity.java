@@ -274,6 +274,8 @@ public class MainActivity extends AppCompatActivity {
             newEntry.setTags(tags);
             newEntry.setLongitude(longitude);
             newEntry.setLatitude(latitude);
+            newEntry.setDistance("0 mi");
+            newEntry.setDistanceMeters(0);
             journal.add(newEntry);
         }
 
@@ -351,7 +353,6 @@ public class MainActivity extends AppCompatActivity {
         if (lastSortType == 0) Collections.sort(journal, Comparators.getDateComparator());
         if (lastSortType == 1) Collections.sort(journal, Comparators.getRateComparator());
         if (lastSortType == 2) Collections.sort(journal, Comparators.getDishNameComparator());
-        //TODO connected to Distance Comparator
         if (lastSortType == 3) Collections.sort(journal, Comparators.getDistanceComparator());
 
         reloadList();
