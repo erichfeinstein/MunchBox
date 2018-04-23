@@ -27,7 +27,6 @@ public class JournalEntry implements Comparable<JournalEntry>
     private String restaurantName;
     private int rating;
     public File photo = null;
-    private int frequency;
     private String description;
     private ArrayList<String> tags = new ArrayList<String>();
     private Date entryDate = null;
@@ -57,7 +56,6 @@ public class JournalEntry implements Comparable<JournalEntry>
         thumbnail = thumb;
         photoPath = path;
         //this.photoID = R.drawable.sample_image;
-        frequency = 1;
         entryDate = Calendar.getInstance().getTime();  //generate date on entry creation
     }
 
@@ -70,7 +68,6 @@ public class JournalEntry implements Comparable<JournalEntry>
 //        PhotoAnalyzer labelGen = new PhotoAnalyzer(photoPath);
 //        tags = (ArrayList)labelGen.getLabels();
         description = "";
-        frequency = 1;
         entryDate = Calendar.getInstance().getTime();  //generate date on entry creation
         if (tags != null && tags.size() > 0) {
             nameOfDish = tags.get(0);
@@ -99,15 +96,6 @@ public class JournalEntry implements Comparable<JournalEntry>
 
     //These methods will used to change the information in each datapoint.
     //They will be used both for the first time entering and for editing existing datapoints.
-    public void incrementFrequency()
-    {
-        frequency += 1;
-    }
-
-    public int getFrequency()
-    {
-        return frequency;
-    }
 
     public void setRating(int rating)
     {
@@ -186,31 +174,6 @@ public class JournalEntry implements Comparable<JournalEntry>
 
     public ArrayList<String> getTags() { return tags; }
 
-    public void newTag(String newTag)
-    {
-        tags.add(newTag);
-    }
-
-    public void removeTag(int tagToDrop)
-    {
-        if(tagToDrop >= 0 && tagToDrop < tags.size())
-        {
-            tags.remove(tagToDrop);
-        }
-    }
-
-    public String GoogleFindRestaurantName()
-    {
-        //Whatever API magic needs to happen in here
-        return null;
-    }
-
-    public ArrayList<String> GoogleFindTags()
-    {
-        //Whatever API magic needs to happen in here
-        return null;
-    }
-
     public int getIdentifier()
     {
         return identifier;
@@ -249,7 +212,7 @@ public class JournalEntry implements Comparable<JournalEntry>
 
     public String getDistance(){return distance;}
 
-    public boolean getFavorite()
+    public boolean isFavorite()
     {
         return favorite;
     }

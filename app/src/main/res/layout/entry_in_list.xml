@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="64dp"
+    android:layout_height="100dp"
     android:layout_marginBottom="2dp"
     android:layout_marginTop="2dp"
     android:layout_marginLeft="4dp"
@@ -11,8 +11,7 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/cardview_light_background">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,9 +21,8 @@
 
             <seniorproj.munchbox.SquareImageView
                 android:id="@+id/foodThumbnail"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:src="@android:drawable/btn_star_big_on" />
+                android:layout_width="100dp"
+                android:layout_height="100dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -34,18 +32,20 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="32dp"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/dish"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:paddingTop="5sp"
                         android:layout_weight="1"
                         android:text="Dish name"
+                        android:textColor="@android:color/black"
                         android:singleLine="true"
                         android:layout_gravity="center"
-                        android:textSize="20sp" />
+                        android:textSize="25sp" />
 
                     <TextView
                         android:id="@+id/rating"
@@ -53,6 +53,7 @@
                         android:layout_height="wrap_content"
                         android:paddingRight="10dp"
                         android:layout_gravity="center"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="15sp"
                         android:singleLine="true"
                         android:text="Rating"/>
@@ -61,14 +62,36 @@
                 <TextView
                     android:id="@+id/restaurant"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:layout_gravity="center"
+                    android:textColor="@android:color/black"
                     android:text="Restaurant"
-                    android:textStyle="italic"
                     android:singleLine="true"
-                    android:textSize="18sp">
-
+                    android:textSize="20sp">
                 </TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="35sp"
+                        android:paddingBottom="5sp"
+                        android:gravity="bottom"
+                        android:layout_weight="1"
+                        android:textColor="@android:color/darker_gray"
+                        android:textStyle="italic"
+                        android:textSize="15sp"
+                        android:text="X.x miles away"/>
+                    <seniorproj.munchbox.SquareImageView
+                        android:id="@+id/favorite"
+                        android:src="@drawable/heart"
+                        android:layout_width="35sp"
+                        android:layout_height="35sp"
+                        android:layout_marginRight="10sp"
+                        android:paddingBottom="10sp"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 

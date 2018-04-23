@@ -25,6 +25,19 @@
         android:background="@drawable/trash_can"
         android:backgroundTint="@android:color/white"/>
 
+    <ImageButton
+        android:onClick="shareEntryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/imageView"
+        android:background="@drawable/seemless_border"
+        android:src="@drawable/share_button"
+        android:layout_alignParentRight="true"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="18dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,17 +72,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:progressDrawable="@drawable/rating_bar_mb" />
-
-            <!--<TextView-->
-                <!--android:id="@+id/rating"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center_vertical"-->
-                <!--android:paddingRight="8dp"-->
-                <!--android:singleLine="true"-->
-                <!--android:text="Rating"-->
-                <!--android:textColor="@android:color/black"-->
-                <!--android:textSize="25dp" />-->
 
         </LinearLayout>
 
@@ -122,7 +124,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true">
         <Button
-            android:id="@+id/createNewEntry"
             style="@style/Widget.AppCompat.Button.Colored"
             android:onClick="editEntryButton"
             android:layout_width="75dp"
@@ -136,19 +137,4 @@
             android:textColor="@android:color/white"
             android:visibility="visible" />
     </LinearLayout>
-
-    <Button
-        android:onClick="shareEntryButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/seemless_border"
-        android:textColor="@drawable/save_button"
-        android:text="Share"
-        android:textSize="20dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingRight="10dp"
-        android:paddingLeft="18dp"/>
 </RelativeLayout>

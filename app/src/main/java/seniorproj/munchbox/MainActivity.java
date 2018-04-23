@@ -392,40 +392,13 @@ public class MainActivity extends AppCompatActivity {
         lastSortType = 3;
     }
 
-    public void sortByFrequency(View view)
-    {
-        journalCopy = new ArrayList(journal);
-        journal.clear();
-        int highestFrequency = 0;
-
-        for(JournalEntry f: journalCopy)
-        {
-            if(f.getFrequency() > highestFrequency)
-            {
-                highestFrequency = f.getFrequency();
-            }
-        }
-        while(highestFrequency > 0)
-        {
-            for (JournalEntry j : journalCopy)
-            {
-                if (j.getFrequency() == highestFrequency)
-                {
-                    journal.add(j);
-                }
-            }
-        }
-        reloadList();
-        closePopup();
-    }
-
     public List<JournalEntry> removeNonFavorites(View view)
     {
         journalCopy = new ArrayList(journal);
 
         for(JournalEntry j: journalCopy)
         {
-            if(j.getFavorite() == false)
+            if(j.isFavorite() == false)
             {
                 journalCopy.remove(j);
             }
