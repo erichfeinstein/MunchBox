@@ -1,5 +1,9 @@
 Danny Miles
 
+Week of 4/22
+
+4/23: Implemented offline functionality. App no longer crashes when it fails to receive responses from Google's services. (Though it's much less useful in these cases.)
+
 Week of 4/15
 
 4/17: Continued code optimization as per the recommendations of Gradle's lint tool. Some devices are still experiencing lag on certain transitions, so we are trying

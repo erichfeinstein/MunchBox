@@ -169,17 +169,19 @@ public class PhotoAnalyzer {
 
     public ArrayList<String> getLabels() {
         ArrayList<String> returnLabels = new ArrayList<String>();
-        for (int i = 0; i < labels.size(); i++) {
-            String curLabel = labels.get(i).getDescription();
-            if (curLabel.equals("food")
-                    || curLabel.equals("cuisine")
-                    || curLabel.equals("dish")
-                    || curLabel.equals("meal")
-                    || curLabel.equals("lunch")
-                    || curLabel.equals("dinner")
-                    || curLabel.equals("recipe")
-                    || curLabel.contains("vegetarian")) continue;
-            else returnLabels.add(curLabel);
+        if (labels != null) {
+            for (int i = 0; i < labels.size(); i++) {
+                String curLabel = labels.get(i).getDescription();
+                if (curLabel.equals("food")
+                        || curLabel.equals("cuisine")
+                        || curLabel.equals("dish")
+                        || curLabel.equals("meal")
+                        || curLabel.equals("lunch")
+                        || curLabel.equals("dinner")
+                        || curLabel.equals("recipe")
+                        || curLabel.contains("vegetarian")) continue;
+                else returnLabels.add(curLabel);
+            }
         }
         return returnLabels;
     }

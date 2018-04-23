@@ -88,6 +88,8 @@ public class EditEntry extends Activity {
         locationsRecyclerView.setHasFixedSize(true);
         locationsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
+        if (tags == null) tags = new ArrayList<>();
+
         //Run GPS location analysis. If null... ?
         // LOCATION PROVIDER IS NAME OF RESTAURANT
         if (locations == null) {
@@ -142,7 +144,7 @@ public class EditEntry extends Activity {
         }
         loadLocations(locations);
 
-        if (tags == null) tags = new ArrayList<>();
+
         //Run image analysis
         if (tags.size() == 0) {
             PhotoAnalyzer labelGen = new PhotoAnalyzer(image, this, this);
