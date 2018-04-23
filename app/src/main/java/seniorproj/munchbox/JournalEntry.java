@@ -28,19 +28,15 @@ public class JournalEntry implements Comparable<JournalEntry>
     private int rating;
     public File photo = null;
     private String description;
-    private ArrayList<String> tags = new ArrayList<String>();
+    private ArrayList<String> tags = new ArrayList<>();
     private Date entryDate = null;
     private Bitmap thumbnail = null;
     private String photoPath;
     private int distanceMeters;
     private String distance;
-    private double xLocation = 0;
-    private double yLocation = 0;
     private double latitude = 0;
     private double longitude = 0;
     private boolean favorite;
-    Random r = new Random();
-    private TravelTime toGetThere;
 
     public JournalEntry(Bitmap thumb, String path)
     {
@@ -84,7 +80,7 @@ public class JournalEntry implements Comparable<JournalEntry>
     /*Returns all information in the order of: name, restaurant, tags */
     public ArrayList<String> getKeywords()
     {
-        ArrayList<String> returnList = new ArrayList<String>();
+        ArrayList<String> returnList = new ArrayList<>();
         returnList.add(nameOfDish);
         returnList.add(restaurantName);
         for (String tag: tags)
@@ -113,7 +109,7 @@ public class JournalEntry implements Comparable<JournalEntry>
         }
     }
 
-    public Bitmap getThumbnail() { return thumbnail; };
+    public Bitmap getThumbnail() { return thumbnail; }
 
     public int getRating()
     {

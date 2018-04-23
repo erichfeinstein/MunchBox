@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -51,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
     private LocationListener locationListener;
     private static LocationManager locationManager;
+    private float accuracy;
+    private Location currentLocation;
+    private String lastNetwork;
 
     private int lastSortType = 0; //0 is date, 1 is review, 2 is alphabetical, 3 is distance...
     private int newID = 0;
@@ -70,7 +74,37 @@ public class MainActivity extends AppCompatActivity {
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
+                if(currentLocation == null) {
+                    currentLocation = new Location(LocationManager.NETWORK_PROVIDER);
+                    currentLocation.setLatitude(0.0);
+                    currentLocation.setLongitude(0.0);
+                }
+                else if(location.distanceTo(currentLocation) > 100){
 
+                    currentLocation = location;
+                    updateDistances();
+                    lastNetwork = location.getProvider();
+                    /*
+                    System.out.println(location.getProvider());
+                    System.out.println("Updated due to distance change");
+                    System.out.println(currentLocation.getLatitude() + ", " + currentLocation.getLongitude() + ": " + currentLocation.getAccuracy());
+                    */
+                }
+                else if(location.getAccuracy() < accuracy){
+                    accuracy = location.getAccuracy();
+                    updateDistances();
+                    lastNetwork = location.getProvider();
+                    /*
+                    System.out.println(location.getProvider());
+                    System.out.println("Updated due to accuracy change");
+                    System.out.println(currentLocation.getLatitude() + ", " + currentLocation.getLongitude() + ": " + currentLocation.getAccuracy());
+                    */
+                }
+                else{
+                    //System.out.println(location.getProvider() + ": ");
+                    //System.out.println("Distance to current best guess: " + location.distanceTo(currentLocation));
+                    //System.out.println("Radial Accuracy: " + location.getAccuracy());
+                }
             }
             public void onStatusChanged(String provider, int status, Bundle extras) {}
 
@@ -85,7 +119,8 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("No Fine Location Permission");
         }
         else{
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 20*1000, 1000, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         }
 
         //Read the journal
@@ -102,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
             journal.get(i).setIdentifier(i);
             i++;
         }
+        updateDistances();
         newID = i; //Save the new ID value
 
         adapter = new MyAdapter(journal, this);
@@ -310,11 +346,13 @@ public class MainActivity extends AppCompatActivity {
         writerEditor.putString("Journal", write);
         writerEditor.apply();
 
+        updateDistances();
+
         if (lastSortType == 0) Collections.sort(journal, Comparators.getDateComparator());
         if (lastSortType == 1) Collections.sort(journal, Comparators.getRateComparator());
         if (lastSortType == 2) Collections.sort(journal, Comparators.getDishNameComparator());
         //TODO connected to Distance Comparator
-        //if (lastSortType == 3) Collections.sort(journal, Comparators.getDistanceComparator());
+        if (lastSortType == 3) Collections.sort(journal, Comparators.getDistanceComparator());
 
         reloadList();
     }
@@ -387,6 +425,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void sortByDistance(View view)
     {
+        Collections.sort(journal, Comparators.getDistanceComparator());
         reloadList();
         closePopup();
         lastSortType = 3;
@@ -398,7 +437,7 @@ public class MainActivity extends AppCompatActivity {
 
         for(JournalEntry j: journalCopy)
         {
-            if(j.isFavorite() == false)
+            if(!j.isFavorite())
             {
                 journalCopy.remove(j);
             }
@@ -431,8 +470,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        for (int i = 0; i < grantResults.length; i++) {
-            if (!(grantResults[i] == PackageManager.PERMISSION_GRANTED)) {
+        for(int i: grantResults) {
+            if (!(i == PackageManager.PERMISSION_GRANTED)) {
                 alertUser();
             }
         }
@@ -485,24 +524,59 @@ public class MainActivity extends AppCompatActivity {
         return locationManager;
     }
 
-    public void updateDistances(Location location){
-        ArrayList<Location> locations = new ArrayList<>();
-        for(JournalEntry j: journal){
-            locations.add(j.getLocation());
-        }
-        URL url = URLMaker.distanceMatrixURL(this, location, locations);
-        DistanceMatrixRequest dmRequest = new DistanceMatrixRequest();
-        List<Distance> distances = dmRequest.doInBackground(url);
-        for(JournalEntry j: journal){
-            if(!distances.isEmpty()) {
-                Distance distance = distances.remove(0);
-                j.setDistanceMeters(distance.getMeters());
-                j.setDistance(distance.getMiles());
+    public void updateDistances() {
+        //System.out.println("Update Distance Started");
+        Location location;
+        //Start requesting updates
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            if(lastNetwork == null){
+                location = new Location("");
+                location.setLatitude(39.8283);
+                location.setLongitude(-98.5795);
             }
-            else{
-                j.setDistanceMeters(0);
-                j.setDistance("0");
+            else if (lastNetwork.equals(LocationManager.GPS_PROVIDER)) {
+                location = locationManager.getLastKnownLocation(lastNetwork);
+            }
+            else {
+                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            }
+            ArrayList<Location> locations = new ArrayList<>();
+            for (JournalEntry j : journal) {
+                locations.add(j.getLocation());
+            }
+            if(!locations.isEmpty()) {
+                URL url = URLMaker.distanceMatrixURL(this, location, locations);
+                DistanceMatrixRequest dmRequest = new DistanceMatrixRequest();
+                List<Distance> distances = new ArrayList<>();
+                try {
+                    distances = dmRequest.execute(url).get();
+                } catch (Exception e) {
+                    System.out.println("Update Distances Failed: " + e.toString());
+                }
+                for (JournalEntry j : journal) {
+                    if (distances == null) {
+                        System.out.println("dmrequest distances is null");
+                        j.setDistanceMeters(0);
+                        j.setDistance("0");
+                    } else if (!distances.isEmpty()) {
+                        Distance distance = distances.remove(0);
+                        j.setDistanceMeters(distance.getMeters());
+                        j.setDistance(distance.getMiles());
+                        //System.out.println(j.getDistanceMeters());
+                    } else {
+                        //System.out.println("not enough distances");
+                        j.setDistanceMeters(0);
+                        j.setDistance("0");
+                    }
+                    //System.out.println(j.getDistanceMeters());
+                    //System.out.println(j.getDistance());
+                }
             }
         }
+        else {
+            System.out.print("Update Distance: Does Not Have Fine Location Permission");
+        }
+        //System.out.println("Update Distance Finished");
     }
 }
