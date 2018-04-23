@@ -3,6 +3,7 @@ package seniorproj.munchbox;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.media.Image;
 import android.media.ThumbnailUtils;
 import android.os.Environment;
@@ -32,9 +33,12 @@ public class JournalEntry implements Comparable<JournalEntry>
     private Date entryDate = null;
     private Bitmap thumbnail = null;
     private String photoPath;
-    private double distanceLastChecked;
+    private int distanceMeters;
+    private String distance;
     private double xLocation = 0;
     private double yLocation = 0;
+    private double latitude = 0;
+    private double longitude = 0;
     private boolean favorite;
     Random r = new Random();
     private TravelTime toGetThere;
@@ -53,7 +57,6 @@ public class JournalEntry implements Comparable<JournalEntry>
         thumbnail = thumb;
         photoPath = path;
         //this.photoID = R.drawable.sample_image;
-        createRandomLocation();
         frequency = 1;
         entryDate = Calendar.getInstance().getTime();  //generate date on entry creation
     }
@@ -67,7 +70,6 @@ public class JournalEntry implements Comparable<JournalEntry>
 //        PhotoAnalyzer labelGen = new PhotoAnalyzer(photoPath);
 //        tags = (ArrayList)labelGen.getLabels();
         description = "";
-        createRandomLocation();
         frequency = 1;
         entryDate = Calendar.getInstance().getTime();  //generate date on entry creation
         if (tags != null && tags.size() > 0) {
@@ -233,63 +235,45 @@ public class JournalEntry implements Comparable<JournalEntry>
 
     public void setPhotoPath(String photoPath) { this.photoPath = photoPath; }
 
-    public void setDistanceLastChecked(double newDistance)
+    public void setDistanceMeters(int newDistance)
     {
-        distanceLastChecked = newDistance;
+        distanceMeters = newDistance;
     }
 
-    public double getDistanceLastChecked()
+    public int getDistanceMeters()
     {
-        return distanceLastChecked;
+        return distanceMeters;
     }
 
-    public double getXLocation()
-    {
-        return xLocation;
-    }
+    public void setDistance(String newDistance) {distance = newDistance;}
 
-    public void setXLocation(double newX)
-    {
-        xLocation = newX;
-    }
-
-    public double getYLocation()
-    {
-        return yLocation;
-    }
-
-    public void setYLocation(double newY)
-    {
-        yLocation = newY;
-    }
-
-    //temporary method for testing distance algorithm
-    public void createRandomLocation()
-    {
-        xLocation = r.nextInt(10000 - 0) + 1;
-        yLocation = r.nextInt(10000 - 0) + 1;
-    }
-
-    public TravelTime createTravelTime()
-    {
-        TravelTime travel = new TravelTime("" + distanceLastChecked, (int)distanceLastChecked);
-        return travel;
-    }
+    public String getDistance(){return distance;}
 
     public boolean getFavorite()
     {
         return favorite;
     }
 
-    public void swapFavoriteStatus()
-    {
-        if(favorite == true)
-        {
-            favorite = false;
-        }
-        else
-        {
-            favorite = true;
-        }
+    public double getLatitude(){
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude(){
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Location getLocation(){
+        Location l = new Location(String.valueOf(getIdentifier()));
+        l.setLongitude(longitude);
+        l.setLatitude(latitude);
+        return l;
     }
 }

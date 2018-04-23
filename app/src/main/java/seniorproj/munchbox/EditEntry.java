@@ -1,15 +1,19 @@
 package seniorproj.munchbox;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextThemeWrapper;
@@ -42,12 +46,16 @@ public class EditEntry extends Activity {
     private LocationsAdapter locationsAdapter;
     private ArrayList<String> locations;
 
+    private LocationManager locationManager;
+
     private EditText name;
     private EditText restaurant;
     private EditText description;
     private RatingBar rating;
+    private Location location;
 
     private String imgPath;
+
 
     private int id; //If this is -1, it means this is a new entry... if not, update existing entry
 
@@ -56,6 +64,8 @@ public class EditEntry extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_entry);
+
+        locationManager = MainActivity.getLocationManager();
 
         name =   findViewById(R.id.title);
         restaurant =  findViewById(R.id.restaurant);
@@ -82,14 +92,18 @@ public class EditEntry extends Activity {
         // LOCATION PROVIDER IS NAME OF RESTAURANT
         if (locations == null) {
             locations = new ArrayList<>();
-            //Start LocationGetter. Can call locationGetter.getLocation() to receive Location object.
-            LocationGetter locationGetter = new LocationGetter(this);
-            locationGetter.startListening();
-
             //Get current location and identify closest food place
-            Location currentLocation = locationGetter.getLocation();
-            if (currentLocation != null) {
-                URL u = URLMaker.placesURL(this, currentLocation);
+            if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            }
+            else{
+                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            }
+
+            if (location != null) {
+                URL u = URLMaker.placesURL(this, location);
                 PlacesRequest p = new PlacesRequest();
                 p.execute(u);
                 ArrayList<Location> restaurants;
@@ -100,10 +114,12 @@ public class EditEntry extends Activity {
                             locations.add(restaurants.get(i).getProvider());
                         }
                     }
+
                 } catch (Exception e) {
                     System.out.println(e.toString());
                 }
             }
+
             restaurant.setHint("Enter a location..."); //Here is after attempt to find locations.
             //If the attempt fails and no locations are found, change hint to prompt user to enter their own location
         }
@@ -151,6 +167,9 @@ public class EditEntry extends Activity {
         editor.putString("description", description.getText().toString());
         editor.putString("imgPath", imgPath);
         editor.putInt("rating", ratingAsInt);
+        editor.putLong("latitude", Double.doubleToRawLongBits(location.getLatitude()));
+        editor.putLong("longitude", Double.doubleToRawLongBits(location.getLongitude()));
+
         //Gson tags to String
         Gson gson = new Gson();
         String json = gson.toJson(tags);

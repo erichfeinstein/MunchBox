@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -32,6 +35,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.File;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,10 +44,13 @@ public class MainActivity extends AppCompatActivity {
 
     private PopupWindow popup;
     private SearchView searchView;
-    private static RecyclerView recyclerView;
-    private static MyAdapter adapter;
+    private RecyclerView recyclerView;
+    private MyAdapter adapter;
     private static ArrayList<JournalEntry> journal;
     private static ArrayList<JournalEntry> journalCopy;
+
+    private LocationListener locationListener;
+    private static LocationManager locationManager;
 
     private int lastSortType = 0; //0 is date, 1 is review, 2 is alphabetical, 3 is distance...
     private int newID = 0;
@@ -58,6 +65,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Start LocationManager and LocationListener
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+
+            }
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            public void onProviderEnabled(String provider) {}
+
+            public void onProviderDisabled(String provider) {}
+
+        };
+        //Start requesting updates
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            System.out.println("No Fine Location Permission");
+        }
+        else{
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 20*1000, 1000, locationListener);
+        }
 
         //Read the journal
         if (journal == null) {
@@ -182,6 +211,9 @@ public class MainActivity extends AppCompatActivity {
         String imgPath = prefs.getString("imgPath", "");
         int rating = prefs.getInt("rating", 0);
         int id = prefs.getInt("id", -1);
+        double latitude = Double.longBitsToDouble(prefs.getLong("latitude", 0));
+        double longitude = Double.longBitsToDouble(prefs.getLong("longitude", 0));
+
         //Get tags from Gson
         Gson gson = new Gson();
         String json = prefs.getString("tags", "");
@@ -204,6 +236,8 @@ public class MainActivity extends AppCompatActivity {
             newEntry.setPhotoPath(imgPath);
             newEntry.setRating(rating);
             newEntry.setTags(tags);
+            newEntry.setLongitude(longitude);
+            newEntry.setLatitude(latitude);
             journal.add(newEntry);
         }
 
@@ -276,7 +310,6 @@ public class MainActivity extends AppCompatActivity {
         writerEditor.putString("Journal", write);
         writerEditor.apply();
 
-
         if (lastSortType == 0) Collections.sort(journal, Comparators.getDateComparator());
         if (lastSortType == 1) Collections.sort(journal, Comparators.getRateComparator());
         if (lastSortType == 2) Collections.sort(journal, Comparators.getDishNameComparator());
@@ -324,7 +357,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Changes what the list UI displays
-    public static void reloadList()
+    public void reloadList()
     {
         recyclerView.setAdapter(adapter);
     }
@@ -354,7 +387,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void sortByDistance(View view)
     {
-        //TODO
         reloadList();
         closePopup();
         lastSortType = 3;
@@ -412,16 +444,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return null;
-    }
-
-    public void checkDistances(double x, double y)
-    {
-        for(JournalEntry j: journal)
-        {
-            double newX = Math.pow(Math.abs(j.getXLocation() - x), 2);
-            double newY = Math.pow(Math.abs(j.getYLocation() - y), 2);
-            j.setDistanceLastChecked(Math.sqrt(newX + newY));
-        }
     }
 
     private void createEntry(Bitmap newEntryPhoto, String imagePath) {
@@ -484,5 +506,30 @@ public class MainActivity extends AppCompatActivity {
 
     public static void resetJournal() {
         filter("");
+    }
+
+    public static LocationManager getLocationManager() {
+        return locationManager;
+    }
+
+    public void updateDistances(Location location){
+        ArrayList<Location> locations = new ArrayList<>();
+        for(JournalEntry j: journal){
+            locations.add(j.getLocation());
+        }
+        URL url = URLMaker.distanceMatrixURL(this, location, locations);
+        DistanceMatrixRequest dmRequest = new DistanceMatrixRequest();
+        List<Distance> distances = dmRequest.doInBackground(url);
+        for(JournalEntry j: journal){
+            if(!distances.isEmpty()) {
+                Distance distance = distances.remove(0);
+                j.setDistanceMeters(distance.getMeters());
+                j.setDistance(distance.getMiles());
+            }
+            else{
+                j.setDistanceMeters(0);
+                j.setDistance("0");
+            }
+        }
     }
 }

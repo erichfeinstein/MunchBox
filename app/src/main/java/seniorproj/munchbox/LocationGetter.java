@@ -37,9 +37,8 @@ public class LocationGetter {
     private Location mlocation;
     private PlaceLikelihood likelyPlace;
 
-    public LocationGetter(Context mContext){
-        context = mContext;
-        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+    public LocationGetter(LocationManager l){
+        locationManager = l;
 
         // Define a listener that responds to location updates
         locationListener = new LocationListener() {
@@ -62,7 +61,7 @@ public class LocationGetter {
                 != PackageManager.PERMISSION_GRANTED) {
         }
         else{
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 20*1000, 10, locationListener);
         }
     }
 
@@ -72,11 +71,11 @@ public class LocationGetter {
             /*
             Need to ask for permission and then recall this function.
              */
-            return locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
         }
         else{
-            return locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
     }
 
