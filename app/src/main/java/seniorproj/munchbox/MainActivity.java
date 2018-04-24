@@ -527,14 +527,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateDistances() {
         //System.out.println("Update Distance Started");
-        Location location;
+        Location location = null;
         //Start requesting updates
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             if(lastNetwork == null){
-                location = new Location("");
-                location.setLatitude(39.8283);
-                location.setLongitude(-98.5795);
+                for (JournalEntry j: journal){
+                    j.setDistanceMeters(0);
+                    j.setDistance("0.0 mi");
+                }
             }
             else if (lastNetwork.equals(LocationManager.GPS_PROVIDER)) {
                 location = locationManager.getLastKnownLocation(lastNetwork);
@@ -546,7 +547,7 @@ public class MainActivity extends AppCompatActivity {
             for (JournalEntry j : journal) {
                 locations.add(j.getLocation());
             }
-            if(!locations.isEmpty()) {
+            if(!locations.isEmpty() && location != null) {
                 URL url = URLMaker.distanceMatrixURL(this, location, locations);
                 DistanceMatrixRequest dmRequest = new DistanceMatrixRequest();
                 List<Distance> distances = new ArrayList<>();
