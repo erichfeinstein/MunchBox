@@ -534,7 +534,7 @@ public class MainActivity extends AppCompatActivity {
             if(lastNetwork == null){
                 for (JournalEntry j: journal){
                     j.setDistanceMeters(0);
-                    j.setDistance("0.0 mi");
+                    j.setDistance("");
                 }
             }
             else if (lastNetwork.equals(LocationManager.GPS_PROVIDER)) {
