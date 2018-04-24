@@ -47,6 +47,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.textViewDish.setText(entry.getNameOfDish());
         holder.textViewRestaurant.setText(entry.getRestaurantName());
         holder.textViewRating.setText(entry.getRatingAsStars());
+        holder.textViewDistance.setText(entry.getDistance());
         if (entry.isFavorite()) holder.favoriteImg.setVisibility(View.VISIBLE);
         else holder.favoriteImg.setVisibility(View.INVISIBLE);
         holder.id = entry.getIdentifier();
@@ -64,6 +65,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public TextView textViewDish;
         public TextView textViewRestaurant;
         public TextView textViewRating;
+        public TextView textViewDistance;
         private int id;
         public ImageView thumb;
         public ImageView favoriteImg;
@@ -74,6 +76,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             textViewDish = itemView.findViewById(R.id.dish);
             textViewRestaurant = itemView.findViewById(R.id.restaurant);
             textViewRating = itemView.findViewById(R.id.rating);
+            textViewDistance = itemView.findViewById(R.id.distance);
             thumb = itemView.findViewById(R.id.foodThumbnail);
             favoriteImg = itemView.findViewById(R.id.favorite);
             itemView.setOnClickListener(this);
