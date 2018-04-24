@@ -75,12 +75,11 @@ public class MainActivity extends AppCompatActivity {
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 if(currentLocation == null) {
-                    currentLocation = new Location(LocationManager.NETWORK_PROVIDER);
-                    currentLocation.setLatitude(0.0);
-                    currentLocation.setLongitude(0.0);
+                    currentLocation = location;
+                    lastNetwork = location.getProvider();
+                    updateDistances();
                 }
                 else if(location.distanceTo(currentLocation) > 100){
-
                     currentLocation = location;
                     updateDistances();
                     lastNetwork = location.getProvider();
@@ -91,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                     */
                 }
                 else if(location.getAccuracy() < accuracy){
+                    currentLocation = location;
                     accuracy = location.getAccuracy();
                     updateDistances();
                     lastNetwork = location.getProvider();
