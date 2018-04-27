@@ -2,6 +2,8 @@ Danny Miles
 
 Week of 4/22
 
+4/27: Fixed static memory leaks relating to PhotoAnalyzer's AsyncTask. Some refactoring; also adjusted layout parameters to reduce unnecessary computations.
+
 4/23: Implemented offline functionality. App no longer crashes when it fails to receive responses from Google's services. (Though it's much less useful in these cases.)
 
 Week of 4/15

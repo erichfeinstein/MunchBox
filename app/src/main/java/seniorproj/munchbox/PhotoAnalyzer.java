@@ -35,6 +35,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import com.google.common.io.BaseEncoding;
 
@@ -71,12 +72,12 @@ public class PhotoAnalyzer {
         }
     }
 
-    private class RequestTask extends AsyncTask<Object, Void, ArrayList<EntityAnnotation>> {
+    private static class ImageTask extends AsyncTask<Object, Void, ArrayList<EntityAnnotation>> {
         private final WeakReference<Activity> mainWeakReference;
         private Vision.Images.Annotate request;
         private ArrayList<EntityAnnotation> labelsInput;
 
-        RequestTask(Activity activity, Vision.Images.Annotate annotate, ArrayList<EntityAnnotation> labels) {
+        ImageTask(Activity activity, Vision.Images.Annotate annotate, ArrayList<EntityAnnotation> labels) {
             mainWeakReference = new WeakReference(activity);
             request = annotate;
             labelsInput = labels;
@@ -97,22 +98,23 @@ public class PhotoAnalyzer {
             System.out.println("Vision request failed.");
             return null;
         }
-
-        protected void onPostExecute(ArrayList<EntityAnnotation> result) {
-            labels = result;
-            editEntryActivity.onBackgroundTaskComplete(getLabels());
-        }
     }
 
     private void callCloudVision(final Bitmap bitmap) {
         try {
-            RequestTask labelTask = new RequestTask(editEntryActivity, prepareAnnotationRequest(bitmap), labels);
+            ImageTask labelTask = new ImageTask(editEntryActivity, prepareAnnotationRequest(bitmap), labels) {
+                protected void onPostExecute(ArrayList<EntityAnnotation> list) {
+                    labels = list;
+                    editEntryActivity.onBackgroundTaskComplete(getLabels());
+                }
+            };
             labelTask.execute();
-        }
-        catch (IOException e) {
+
+        } catch (IOException e) {
             Log.d(TAG, "failed to make API request because of IOExecption " + e.getMessage());
         }
     }
+
 
     private Vision.Images.Annotate prepareAnnotationRequest(Bitmap bitmap) throws IOException {
         HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
