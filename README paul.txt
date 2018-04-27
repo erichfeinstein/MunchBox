@@ -39,3 +39,7 @@ Added a "favorite" identifier to JournalEntry, with the appropriate methods.
 Week 8:
 Created method to filter out entries that are not favorited
 Testing and administrative work, such as the poster. The project is approaching it's end and we aren't adding many more features
+
+Week 9:
+Added more exempt tags, to ensure unwanted tags are not found
+More testing, work on presentation

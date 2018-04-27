@@ -179,7 +179,24 @@ public class PhotoAnalyzer {
                         || curLabel.equals("lunch")
                         || curLabel.equals("dinner")
                         || curLabel.equals("recipe")
-                        || curLabel.contains("vegetarian")) continue;
+                        || curLabel.contains("vegetarian")
+                        || curLabel.equals("red")
+                        || curLabel.equals("blue")
+                        || curLabel.equals("yellow")
+                        || curLabel.equals("pink")
+                        || curLabel.equals("gray")
+                        || curLabel.equals("grey")
+                        || curLabel.equals("black")
+                        || curLabel.equals("white")
+                        || curLabel.equals("bag")
+                        || curLabel.equals("plate")
+                        || curLabel.equals("bowl")
+                        || curLabel.equals("spoon")
+                        || curLabel.equals("fork")
+                        || curLabel.equals("knife")
+                        || curLabel.equals("cup")
+                        || curLabel.equals("table")
+                        || curLabel.equals("counter")) continue;
                 else returnLabels.add(curLabel);
             }
         }
