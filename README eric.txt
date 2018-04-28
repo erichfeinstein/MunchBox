@@ -1,12 +1,11 @@
 Eric Feinstein
-Week of 4/15
+Week of 4/22
 
-4/15: Set up and launched MunchBox on Google Play (also MunchBox Web page)
+4/22: framework for favoriting entries, UI elements implemented
 
-4/15: UI adjustments as a result of feedback from friends testing the app
+4/24: display entry distance from current location in entry list of MainActivity, adjustment to when/how new distance is polled
 
-4/16: New stars in UI. App icon inserted
+4/25: Google Play update
 
-4/17: More UI adjustments. Fixed bug with MunchCam creating duplicate instances of MainActivity
-
-4/20: RatingBar on ViewEntry (looks a lot nicer), more UI adjustments
+4/26&27: Feedback from users- placed TODOs of new features that users want added: swipe between entries from within ViewEntry,
+send a notification to the user if a new entry they have created is missing info like name of dish, restaurant, etc.

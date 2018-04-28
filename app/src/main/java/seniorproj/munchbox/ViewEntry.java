@@ -64,6 +64,8 @@ public class ViewEntry extends Activity {
         RatingBar rating = (RatingBar)findViewById(R.id.rating);
         ratingVal = ratingVal/2f;
         rating.setRating(ratingVal);
+
+        //TODO add a swipe listener to swipe between entries from within ViewEntry
     }
 
     public void editEntryButton(View view) {

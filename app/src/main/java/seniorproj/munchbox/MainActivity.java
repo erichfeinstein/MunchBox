@@ -262,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Make new entry
         if (toAdd) {
+            //TODO if any of the intent extras are null or "", send notification to finish entry
             System.out.println("Making new entry with ID: " + journal.size());
             JournalEntry newEntry = new JournalEntry();
             newEntry.setNameOfDish(name);
