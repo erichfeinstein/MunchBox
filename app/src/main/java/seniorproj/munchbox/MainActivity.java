@@ -2,6 +2,9 @@ package seniorproj.munchbox;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,11 +15,14 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -263,6 +269,36 @@ public class MainActivity extends AppCompatActivity {
         //Make new entry
         if (toAdd) {
             //TODO if any of the intent extras are null or "", send notification to finish entry
+            //* * * * * * * * * *
+            
+            Intent intent = new Intent(this, AlertDetails.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, 4)
+                    .setSmallIcon()
+                    .setContentTitle("Notification Test")
+                    .setContentText("Notification Test Content")
+                    .setContentIntent(pendingIntent)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                CharSequence chanName = getString(R.string.channel_name);
+                String chanDescription = getString(R.string.channel_description);
+                int importance = NotificationManagerCompat.IMPORTANCE_DEFAULT NotificationManagerCompat.IMPORTANCE_DEFAULT;
+                NotificationChannel channel = new NotificationChannel(4, name, importance);
+                channel.setDescription(description);
+                // Register the channel with the system
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+                notificationManager.createNotificationChannel(channel);
+            }
+
+            if (/*intent extras are are null, send notification*/) {
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+                notificationManager.notify(notificationId, mBuilder.build());
+            }
+
+            //* * * * * * * * * *
             System.out.println("Making new entry with ID: " + journal.size());
             JournalEntry newEntry = new JournalEntry();
             newEntry.setNameOfDish(name);
