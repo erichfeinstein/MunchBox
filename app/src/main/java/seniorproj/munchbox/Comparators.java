@@ -11,7 +11,11 @@ import java.util.Comparator;
  */
 
 public class Comparators {
-    static Comparator<JournalEntry> getRateComparator(){ //Highest to lowest
+
+    /*Returns comparator based on rating. These are sorted from highest to lowest.
+    @return A comparator that sorts based on rating, highest to lowest
+     */
+    static Comparator<JournalEntry> getRateComparator(){
         return new Comparator<JournalEntry>(){
             public int compare(JournalEntry j1, JournalEntry j2){
                 return j2.getRating() - j1.getRating();
@@ -19,7 +23,10 @@ public class Comparators {
         };
     }
 
-    static Comparator<JournalEntry> getDateComparator(){ //Most recent first
+    /*Comparator based on date.
+    @return A comparator that sorts based on entry date, most recent first
+     */
+    static Comparator<JournalEntry> getDateComparator(){
         return new Comparator<JournalEntry>(){
             public int compare(JournalEntry j1, JournalEntry j2){
                 return j2.getEntryDate().compareTo(j1.getEntryDate());
@@ -27,7 +34,10 @@ public class Comparators {
         };
     }
 
-    static Comparator<JournalEntry> getDistanceComparator(){ //Closest to furthest
+    /* Comparator based on distance.
+    @return A comparator that sorts based on distance from the user. Closest first
+     */
+    static Comparator<JournalEntry> getDistanceComparator(){
         return new Comparator<JournalEntry>(){
             public int compare(JournalEntry j1, JournalEntry j2){
                 return j1.getDistanceMeters() - j2.getDistanceMeters();
@@ -35,7 +45,10 @@ public class Comparators {
         };
     }
 
-    static Comparator<JournalEntry> getDishNameComparator(){ //A to Z
+    /* Comparator based on names of entries.
+    @return A comparator that sorts based on dish name. Ordered from A to Z
+     */
+    static Comparator<JournalEntry> getDishNameComparator(){
         return new Comparator<JournalEntry>(){
             public int compare(JournalEntry j1, JournalEntry j2){
                 return j1.getNameOfDish().compareTo(j2.getNameOfDish());

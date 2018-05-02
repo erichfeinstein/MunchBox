@@ -152,7 +152,7 @@ public class EditEntry extends Activity {
         }
     }
 
-    //Saves either new entry or updates info of existing entry
+    //Either creates a new entry or updates an existing entry. All transactions are saved to memory upon this button press.
     public void saveEntryButton(View view) {
         view.setEnabled(false);
         int ratingAsInt = (int) (rating.getRating() * 2.0); //Multiply by 2 because ratings are stored on a 1-10 scale using ints
@@ -185,17 +185,20 @@ public class EditEntry extends Activity {
         finish();
     }
 
+    /*Handles the loading of location data obtained from the LocationasAdapter. */
     private void loadLocations(ArrayList<String> locationsList) {
         locationsAdapter = new LocationsAdapter(locationsList, this);
         locationsRecyclerView.setAdapter(locationsAdapter);
     }
 
+    /*Handles the loading of the tags obtained from the Google Vision library. */
     private void loadTags(ArrayList<String> tagsList) {
         tagsAdapter = new TagsAdapter(tagsList, this);
         tagsRecyclerView.setAdapter(tagsAdapter);
         tagsAdapter.notifyDataSetChanged();
     }
 
+    /*Opens the menu that allows users to add custom tags, in addition to the auto-generated Vision tags. */
     @SuppressWarnings("ResourceType")
     public void openAddTag(View view) {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);

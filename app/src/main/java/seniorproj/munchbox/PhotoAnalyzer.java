@@ -33,9 +33,6 @@ import java.lang.ref.WeakReference;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 import com.google.common.io.BaseEncoding;
 
@@ -63,7 +60,8 @@ public class PhotoAnalyzer {
         uploadImage(image);
     }
 
-    public void uploadImage(Bitmap image) {
+    /* Entry point of Google Vision logic. Takes the photo of the dish and begins the request process. */
+        public void uploadImage(Bitmap image) {
         if (image != null) {
             callCloudVision(image);
         }
@@ -100,6 +98,7 @@ public class PhotoAnalyzer {
         }
     }
 
+    /*Takes the input image and sends it to the Google Vision cloud system. Handled in background. */
     private void callCloudVision(final Bitmap bitmap) {
         try {
             ImageTask labelTask = new ImageTask(editEntryActivity, prepareAnnotationRequest(bitmap), labels) {
@@ -115,7 +114,7 @@ public class PhotoAnalyzer {
         }
     }
 
-
+    /*Library-required method. Prepares the HTTP request to Google's servers. */
     private Vision.Images.Annotate prepareAnnotationRequest(Bitmap bitmap) throws IOException {
         HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
         JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
@@ -169,6 +168,9 @@ public class PhotoAnalyzer {
         return annotateRequest;
     }
 
+    /*The tags are returned as EntityAnnotations. This method prepares them as a list of strings for use by
+    the rest of the program
+     */
     public ArrayList<String> getLabels() {
         ArrayList<String> returnLabels = new ArrayList<String>();
         if (labels != null) {

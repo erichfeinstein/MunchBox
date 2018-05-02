@@ -126,6 +126,5 @@ public class ViewEntry extends Activity {
     }
     /*Can't utilize URIs in Intents in SDK >= 24, so this solution is necessary. */
     private class MunchFileProvider extends FileProvider {
-
     }
 }

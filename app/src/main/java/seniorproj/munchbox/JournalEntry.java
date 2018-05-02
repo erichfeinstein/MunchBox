@@ -44,14 +44,9 @@ public class JournalEntry implements Comparable<JournalEntry>
         nameOfDish = "";
         restaurantName = "";
         favorite = false;
-        //restaurantName = GoogleFindRestaurantName();
-        //Generate tags
-   //     PhotoAnalyzer labelGen = new PhotoAnalyzer(path);
-   //     tags = (ArrayList)labelGen.getLabels();
         description = "";
         thumbnail = thumb;
         photoPath = path;
-        //this.photoID = R.drawable.sample_image;
         entryDate = Calendar.getInstance().getTime();  //generate date on entry creation
     }
 
@@ -60,9 +55,6 @@ public class JournalEntry implements Comparable<JournalEntry>
         favorite = false;
         nameOfDish = "";
         restaurantName = "";
-        //restaurantName = GoogleFindRestaurantName();
-//        PhotoAnalyzer labelGen = new PhotoAnalyzer(photoPath);
-//        tags = (ArrayList)labelGen.getLabels();
         description = "";
         entryDate = Calendar.getInstance().getTime();  //generate date on entry creation
         if (tags != null && tags.size() > 0) {
@@ -70,8 +62,8 @@ public class JournalEntry implements Comparable<JournalEntry>
         }
     }
 
-    //Used for sorting in MainActivity
-    //Note: Only for comparing date of entry creation. Also the default sort option
+    /*Used for sorting in MainActivity
+      Only for comparing date of entry creation. Also the default sort option */
     @Override
     public int compareTo(JournalEntry otherEntry) {
         return getEntryDate().compareTo(otherEntry.getEntryDate());
