@@ -43,3 +43,7 @@ Testing and administrative work, such as the poster. The project is approaching 
 Week 9:
 Added more exempt tags, to ensure unwanted tags are not found
 More testing, work on presentation
+
+Week 10:
+Testing, work on presentation and final writeup.
+If there was more for me to add I would've but we're basically done.
