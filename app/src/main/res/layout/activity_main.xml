@@ -41,6 +41,15 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:padding="10dp" />
+        <ImageButton
+            android:onClick="createNotification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/info_button"
+            android:background="@drawable/seemless_border"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp" />
 
     </RelativeLayout>
 

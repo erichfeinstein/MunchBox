@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="seniorproj.munchbox">
-    <!--<uses-sdk android:minSdkVersion="16" />-->
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-feature android:name="android.hardware.camera" android:required= "true" />
-    <uses-permission android:name ="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- <uses-sdk android:minSdkVersion="16" /> -->
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-feature android:name="android.hardware.location.network"/>
-    <uses-feature android:name="android.hardware.location.gps"/>
+
+    <uses-feature android:name="android.hardware.location.network" />
+    <uses-feature android:name="android.hardware.location.gps" />
+
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -17,45 +25,38 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.MunchBoxNoBar.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ViewEntry"
-            android:label="@string/title_activity_view_entry">
-        </activity>
-
+            android:label="@string/title_activity_view_entry" />
         <activity
             android:name=".EditEntry"
             android:label="Edit Entry"
-            android:windowSoftInputMode="adjustResize|stateHidden">
-        </activity>
-
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".MunchCam"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait" />
 
         <provider
-            android:name = "android.support.v4.content.FileProvider"
+            android:name="android.support.v4.content.FileProvider"
             android:authorities="seniorproj.munchbox.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"></meta-data>
+                android:resource="@xml/provider_paths" />
         </provider>
 
-
-
+        <activity android:name=".NotificationReceiverActivity"></activity>
     </application>
 
 </manifest>

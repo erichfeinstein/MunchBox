@@ -2,6 +2,7 @@ package seniorproj.munchbox;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -271,32 +272,57 @@ public class MainActivity extends AppCompatActivity {
             //TODO if any of the intent extras are null or "", send notification to finish entry
             //* * * * * * * * * *
             
-            Intent intent = new Intent(this, AlertDetails.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+//            Intent intent = new Intent(this, AlertDetails.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+//
+//            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, 4)
+//                    .setSmallIcon()
+//                    .setContentTitle("Notification Test")
+//                    .setContentText("Notification Test Content")
+//                    .setContentIntent(pendingIntent)
+//                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+//
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                CharSequence chanName = getString(R.string.channel_name);
+//                String chanDescription = getString(R.string.channel_description);
+//                int importance = NotificationManagerCompat.IMPORTANCE_DEFAULT NotificationManagerCompat.IMPORTANCE_DEFAULT;
+//                NotificationChannel channel = new NotificationChannel(4, name, importance);
+//                channel.setDescription(description);
+//                // Register the channel with the system
+//                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+//                notificationManager.createNotificationChannel(channel);
+//            }
+//
+//            if (/*intent extras are are null, send notification*/) {
+//                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+//                notificationManager.notify(notificationId, mBuilder.build());
+//            }
 
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, 4)
-                    .setSmallIcon()
-                    .setContentTitle("Notification Test")
-                    .setContentText("Notification Test Content")
-                    .setContentIntent(pendingIntent)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+            // prepare intent which is triggered if the
+// notification is selected
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                CharSequence chanName = getString(R.string.channel_name);
-                String chanDescription = getString(R.string.channel_description);
-                int importance = NotificationManagerCompat.IMPORTANCE_DEFAULT NotificationManagerCompat.IMPORTANCE_DEFAULT;
-                NotificationChannel channel = new NotificationChannel(4, name, importance);
-                channel.setDescription(description);
-                // Register the channel with the system
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-                notificationManager.createNotificationChannel(channel);
-            }
+            //Intent intent = new Intent(this, NotificationReceiver.class);
+// use System.currentTimeMillis() to have a unique ID for the pending intent
+            //  PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
 
-            if (/*intent extras are are null, send notification*/) {
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-                notificationManager.notify(notificationId, mBuilder.build());
-            }
+// build notification
+// the addAction re-use the same intent to keep the example short
+//            Notification n  = new Notification.Builder(this)
+//                    .setContentTitle("New mail from " + "test@gmail.com")
+//                    .setContentText("Subject")
+//                    .setSmallIcon(R.drawable.icon)
+//                    .setContentIntent(pIntent)
+//                    .setAutoCancel(true)
+//                    .addAction(R.drawable.icon, "Call", pIntent)
+//                    .addAction(R.drawable.icon, "More", pIntent)
+//                    .addAction(R.drawable.icon, "And more", pIntent).build();
+//
+//
+//            NotificationManager notificationManager =
+//                    (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//
+//            notificationManager.notify(0, n);
 
             //* * * * * * * * * *
             System.out.println("Making new entry with ID: " + journal.size());
@@ -541,6 +567,32 @@ public class MainActivity extends AppCompatActivity {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sites.google.com/view/munchboxweb/home"));
         startActivity(browserIntent);
     }
+
+    public void createNotification(View view) {
+        // Prepare intent which is triggered if the
+        // notification is selected
+        Intent intent = new Intent(this, ViewEntry.class);
+        intent.putExtra("id", newID-1);
+        PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
+
+        // Build notification
+        // Actions are just fake
+        Notification noti = new Notification.Builder(this)
+                .setContentTitle("MunchBox")
+                .setContentText("Finish editing your entry!")
+                .setSmallIcon(R.drawable.notif_icon)
+                .setContentIntent(pIntent)
+                //.addAction(R.drawable.icon, "Call", pIntent)
+                //.addAction(R.drawable.icon, "More", pIntent)
+                /*.addAction(R.drawable.icon, "And more", pIntent)*/.build();
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        // hide the notification after its selected
+        noti.flags |= Notification.FLAG_AUTO_CANCEL;
+
+        notificationManager.notify(0, noti);
+
+    }
+
 
     //For checking permissions
     public static boolean hasPermissions(Context context, String... permissions) {
