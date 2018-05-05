@@ -1,7 +1,9 @@
 package seniorproj.munchbox;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -35,6 +37,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -268,37 +271,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Make new entry
         if (toAdd) {
-            //TODO if any of the intent extras are null or "", send notification to finish entry
-            //* * * * * * * * * *
-            
-            Intent intent = new Intent(this, AlertDetails.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, 4)
-                    .setSmallIcon()
-                    .setContentTitle("Notification Test")
-                    .setContentText("Notification Test Content")
-                    .setContentIntent(pendingIntent)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                CharSequence chanName = getString(R.string.channel_name);
-                String chanDescription = getString(R.string.channel_description);
-                int importance = NotificationManagerCompat.IMPORTANCE_DEFAULT NotificationManagerCompat.IMPORTANCE_DEFAULT;
-                NotificationChannel channel = new NotificationChannel(4, name, importance);
-                channel.setDescription(description);
-                // Register the channel with the system
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-                notificationManager.createNotificationChannel(channel);
-            }
-
-            if (/*intent extras are are null, send notification*/) {
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-                notificationManager.notify(notificationId, mBuilder.build());
-            }
-
-            //* * * * * * * * * *
             System.out.println("Making new entry with ID: " + journal.size());
             JournalEntry newEntry = new JournalEntry();
             newEntry.setNameOfDish(name);

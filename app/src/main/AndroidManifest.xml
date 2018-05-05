@@ -54,8 +54,6 @@
                 android:resource="@xml/provider_paths"></meta-data>
         </provider>
 
-
-
     </application>
 
 </manifest>
