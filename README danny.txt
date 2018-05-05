@@ -1,5 +1,11 @@
 Danny Miles
 
+Week of 4/29
+
+5/4: Performed whole-use case testing on app. Shared with friends and family for feedback moving forward.
+
+5/1: Documented the codebase more thoroughly, in a loose Javadoc style. Minor refactoring as well, for some performance increases.
+
 Week of 4/22
 
 4/27: Fixed static memory leaks relating to PhotoAnalyzer's AsyncTask. Some refactoring; also adjusted layout parameters to reduce unnecessary computations.
