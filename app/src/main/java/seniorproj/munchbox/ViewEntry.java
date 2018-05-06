@@ -51,8 +51,10 @@ public class ViewEntry extends Activity {
         tagsList = getIntent().getStringArrayListExtra("tagsList");
 
         TextView dishName = (TextView)findViewById(R.id.name);
+        dishName.setSelected(true);
         dishName.setText(dish);
         TextView restaurantName = (TextView)findViewById(R.id.restaurant);
+        restaurantName.setSelected(true);
         restaurantName.setText(restaurant);
         TextView date = (TextView)findViewById(R.id.date);
         date.setText(dateText);

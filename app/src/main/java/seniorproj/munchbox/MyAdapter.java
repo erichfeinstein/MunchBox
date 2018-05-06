@@ -48,8 +48,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.textViewRestaurant.setText(entry.getRestaurantName());
         holder.textViewRating.setText(entry.getRatingAsStars());
         holder.textViewDistance.setText(entry.getDistance());
-        if (entry.isFavorite()) holder.favoriteImg.setVisibility(View.VISIBLE);
-        else holder.favoriteImg.setVisibility(View.INVISIBLE);
         holder.id = entry.getIdentifier();
         Bitmap img = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(entry.getPhotoPath()), THUMBSIZE, THUMBSIZE);
         holder.thumb.setImageBitmap(img);
@@ -68,17 +66,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public TextView textViewDistance;
         private int id;
         public ImageView thumb;
-        public ImageView favoriteImg;
         public String imgPath;
 
         public ViewHolder(View itemView) {
             super(itemView);
             textViewDish = itemView.findViewById(R.id.dish);
+            textViewDish.setSelected(true);
             textViewRestaurant = itemView.findViewById(R.id.restaurant);
+            textViewRestaurant.setSelected(true);
             textViewRating = itemView.findViewById(R.id.rating);
             textViewDistance = itemView.findViewById(R.id.distance);
             thumb = itemView.findViewById(R.id.foodThumbnail);
-            favoriteImg = itemView.findViewById(R.id.favorite);
             itemView.setOnClickListener(this);
         }
 
