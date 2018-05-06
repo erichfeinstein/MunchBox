@@ -18,6 +18,9 @@ public class Comparators {
     static Comparator<JournalEntry> getRateComparator(){
         return new Comparator<JournalEntry>(){
             public int compare(JournalEntry j1, JournalEntry j2){
+                if(j2.getRating() == j1.getRating()){
+                    return j1.getDistanceMeters() - j2.getDistanceMeters();
+                }
                 return j2.getRating() - j1.getRating();
             }
         };
@@ -51,7 +54,12 @@ public class Comparators {
     static Comparator<JournalEntry> getDishNameComparator(){
         return new Comparator<JournalEntry>(){
             public int compare(JournalEntry j1, JournalEntry j2){
-                return j1.getNameOfDish().compareTo(j2.getNameOfDish());
+                if(j1.getNameOfDish().compareTo(j2.getNameOfDish()) == 0){
+                    return j1.getDistanceMeters() - j2.getDistanceMeters();
+                }
+                else{
+                    return j1.getNameOfDish().compareTo(j2.getNameOfDish());
+                }
             }
         };
     }

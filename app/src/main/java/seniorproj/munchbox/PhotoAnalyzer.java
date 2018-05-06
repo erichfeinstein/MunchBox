@@ -83,6 +83,7 @@ public class PhotoAnalyzer {
 
         @Override
         protected ArrayList<EntityAnnotation> doInBackground(Object... params) {
+            System.out.println("Current thread ID: " + Thread.currentThread().getId());
             try {
                 Log.d(TAG, "created cloud vision request object, sending");
                 BatchAnnotateImagesResponse response = request.execute();

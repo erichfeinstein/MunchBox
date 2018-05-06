@@ -12,6 +12,9 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,6 +39,7 @@ import com.google.gson.Gson;
 import java.net.URL;
 import java.util.ArrayList;
 import java.io.File;
+import java.util.Timer;
 
 public class EditEntry extends Activity {
 
@@ -105,8 +109,22 @@ public class EditEntry extends Activity {
             }
 
             if (location != null) {
+                System.out.println("Current thread ID: " + Thread.currentThread().getId());
                 URL u = URLMaker.placesURL(this, location);
-                PlacesRequest p = new PlacesRequest();
+                Handler mHandler = new Handler(Looper.getMainLooper()){
+                    public void handleMessage(Message msg){
+                        switch(msg.what){
+                            case 1:  // PlacesRunnable
+                                locations = (ArrayList<String>) msg.obj;
+                                loadLocations(locations);
+                                System.out.println(locations);
+                        }
+                    }
+                };
+                PlacesRunnable pr = new PlacesRunnable(u, mHandler);
+                new Thread(pr).start();
+
+/*                PlacesRequest p = new PlacesRequest();
                 p.execute(u);
                 ArrayList<Location> restaurants;
                 try {
@@ -119,7 +137,7 @@ public class EditEntry extends Activity {
 
                 } catch (Exception e) {
                     System.out.println(e.toString());
-                }
+                }*/
             }
 
             restaurant.setHint("Enter a location..."); //Here is after attempt to find locations.
@@ -142,13 +160,14 @@ public class EditEntry extends Activity {
             rating.setRating(ratingVal);
             //Image already taken care of above
         }
-        loadLocations(locations);
+        //System.out.println("Loading locations");
+        //loadLocations(locations);
 
 
         //Run image analysis
         if (tags.size() == 0) {
             PhotoAnalyzer labelGen = new PhotoAnalyzer(image, this, this);
-            tags = labelGen.getLabels();
+            //tags = labelGen.getLabels();
         }
     }
 

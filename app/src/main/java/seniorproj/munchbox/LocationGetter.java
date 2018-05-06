@@ -7,6 +7,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -30,20 +32,35 @@ import com.google.android.gms.tasks.Task;
 /*
 Testing necessary for this one.
  */
-public class LocationGetter {
+public class LocationGetter implements Runnable {
     private Context context;
-    private LocationManager locationManager;
+    private Handler mHandler;
     private LocationListener locationListener;
-    private Location mlocation;
-    private PlaceLikelihood likelyPlace;
+    private static LocationManager locationManager;
+    private float accuracy;
+    private Location currentLocation;
+    private String lastNetwork;
 
-    public LocationGetter(LocationManager l){
+    public LocationGetter(LocationManager l, Context c, Handler mainHandler){
+        mHandler = mainHandler;
         locationManager = l;
-
+        context = c;
+        lastNetwork = null;
         // Define a listener that responds to location updates
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
+                if(currentLocation == null) {
+                    updateLocation(location);
+                }
+                else if(location.distanceTo(currentLocation) > 100){
+                    updateLocation(location);
+                }
+                else if(location.getAccuracy() < accuracy){
+                    updateLocation(location);
+                }
+                else{
 
+                }
             }
             public void onStatusChanged(String provider, int status, Bundle extras) {}
 
@@ -55,65 +72,26 @@ public class LocationGetter {
 
     }
 
-    public void startListening(){
+    private void startListening(){
         // Register the listener with the Location Manager to receive location updates
         if(ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
+            System.out.println("LocationGetter does not have permission");
         }
         else{
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 20*1000, 10, locationListener);
         }
     }
 
-    public Location getLocation(){
-        if(ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            /*
-            Need to ask for permission and then recall this function.
-             */
-            return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-        }
-        else{
-            return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        }
+    private void updateLocation(Location newLocation){
+        mHandler.sendMessage(Message.obtain(mHandler, 2, newLocation));
+        currentLocation = newLocation;
+        accuracy = newLocation.getAccuracy();
+        lastNetwork = newLocation.getProvider();
     }
 
-    /* Currently not working. Finishing HTTP implementation instead*/
-    public PlaceLikelihood googleMapLocation(Location location){
-        PlaceDetectionClient p = Places.getPlaceDetectionClient(context);
-        if(ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            System.out.println("sigh...");
-        }
-        else {
-            //System.out.println("Get Current Place Start");
-            Task<PlaceLikelihoodBufferResponse> placeResult = p.getCurrentPlace(null);
-            //System.out.println("Get Current Place End");
-            placeResult.addOnCompleteListener(new OnCompleteListener<PlaceLikelihoodBufferResponse>() {
-                @Override
-                public void onComplete(@NonNull Task<PlaceLikelihoodBufferResponse> task) {
-                    //System.out.println("Complete");
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        PlaceLikelihoodBufferResponse buffer = task.getResult();
-                        for (PlaceLikelihood placeLikelihood: buffer){
-                            if(likelyPlace != null){
-                                likelyPlace = placeLikelihood;
-                            }
-                        }
-                    }
-
-                    /*
-                    Data storage
-                    Use placeLikelihood.getPlace().otherFunction() for data
-                    Talk to Eric about format.
-                     */
-
-                    //for (PlaceLikelihood placeLikelihood : likelyPlaces) {}
-                    //likelyPlaces.release();
-                }
-            });
-        }
-        return likelyPlace;
+    public void run(){
+        startListening();
     }
+
 }
