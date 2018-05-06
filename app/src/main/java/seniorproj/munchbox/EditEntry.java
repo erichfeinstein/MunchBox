@@ -67,6 +67,16 @@ public class EditEntry extends Activity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Handler mHandler = new Handler(Looper.getMainLooper()){
+            public void handleMessage(Message msg){
+                switch(msg.what){
+                    case 1:  // PlacesRunnable
+                        locations = (ArrayList<String>) msg.obj;
+                        loadLocations(locations);
+                        System.out.println(locations);
+                }
+            }
+        };
         setContentView(R.layout.activity_edit_entry);
 
         locationManager = MainActivity.getLocationManager();
@@ -111,16 +121,6 @@ public class EditEntry extends Activity {
             if (location != null) {
                 System.out.println("Current thread ID: " + Thread.currentThread().getId());
                 URL u = URLMaker.placesURL(this, location);
-                Handler mHandler = new Handler(Looper.getMainLooper()){
-                    public void handleMessage(Message msg){
-                        switch(msg.what){
-                            case 1:  // PlacesRunnable
-                                locations = (ArrayList<String>) msg.obj;
-                                loadLocations(locations);
-                                System.out.println(locations);
-                        }
-                    }
-                };
                 PlacesRunnable pr = new PlacesRunnable(u, mHandler);
                 new Thread(pr).start();
 
