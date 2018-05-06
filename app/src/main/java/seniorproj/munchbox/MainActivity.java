@@ -19,6 +19,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -57,11 +60,8 @@ public class MainActivity extends AppCompatActivity {
     private static ArrayList<JournalEntry> journal;
     private static ArrayList<JournalEntry> journalCopy;
 
-    private LocationListener locationListener;
     private static LocationManager locationManager;
-    private float accuracy;
     private Location currentLocation;
-    private String lastNetwork;
 
     private int lastSortType = 0; //0 is date, 1 is review, 2 is alphabetical, 3 is distance...
     private int newID = 0;
@@ -74,61 +74,26 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Context c = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Handler mHandler = new Handler(Looper.getMainLooper()){
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what){
+                    case 2:
+                        currentLocation = (Location) msg.obj;
+                    case 3:
+                        currentLocation = (Location) msg.obj;
+                        updateDistances();
+                }
+            }
+        };
 
         //Start LocationManager and LocationListener
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                if(currentLocation == null) {
-                    currentLocation = location;
-                    lastNetwork = location.getProvider();
-                    updateDistances();
-                }
-                else if(location.distanceTo(currentLocation) > 100){
-                    currentLocation = location;
-                    updateDistances();
-                    lastNetwork = location.getProvider();
-                    /*
-                    System.out.println(location.getProvider());
-                    System.out.println("Updated due to distance change");
-                    System.out.println(currentLocation.getLatitude() + ", " + currentLocation.getLongitude() + ": " + currentLocation.getAccuracy());
-                    */
-                }
-                else if(location.getAccuracy() < accuracy){
-                    currentLocation = location;
-                    accuracy = location.getAccuracy();
-                    updateDistances();
-                    lastNetwork = location.getProvider();
-                    /*
-                    System.out.println(location.getProvider());
-                    System.out.println("Updated due to accuracy change");
-                    System.out.println(currentLocation.getLatitude() + ", " + currentLocation.getLongitude() + ": " + currentLocation.getAccuracy());
-                    */
-                }
-                else{
-                    //System.out.println(location.getProvider() + ": ");
-                    //System.out.println("Distance to current best guess: " + location.distanceTo(currentLocation));
-                    //System.out.println("Radial Accuracy: " + location.getAccuracy());
-                }
-            }
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-            public void onProviderEnabled(String provider) {}
-
-            public void onProviderDisabled(String provider) {}
-
-        };
-        //Start requesting updates
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            System.out.println("No Fine Location Permission");
-        }
-        else{
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-        }
+        LocationGetter lg = new LocationGetter(locationManager, c, mHandler);
+        new Thread(lg).start();
 
         //Read the journal
         if (journal == null) {
@@ -144,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
             journal.get(i).setIdentifier(i);
             i++;
         }
-        updateDistances();
         newID = i; //Save the new ID value
 
         adapter = new MyAdapter(journal, this);
@@ -615,29 +579,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateDistances() {
-        //System.out.println("Update Distance Started");
-        Location location = null;
-        //Start requesting updates
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            if(lastNetwork == null){
-                for (JournalEntry j: journal){
-                    j.setDistanceMeters(0);
-                    j.setDistance("");
-                }
+        if(currentLocation == null){
+            for (JournalEntry j: journal){
+                j.setDistanceMeters(0);
+                j.setDistance("");
             }
-            else if (lastNetwork.equals(LocationManager.GPS_PROVIDER)) {
-                location = locationManager.getLastKnownLocation(lastNetwork);
-            }
-            else {
-                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            }
+        }
+        else {
             ArrayList<Location> locations = new ArrayList<>();
             for (JournalEntry j : journal) {
                 locations.add(j.getLocation());
             }
-            if(!locations.isEmpty() && location != null) {
-                URL url = URLMaker.distanceMatrixURL(this, location, locations);
+            if (!locations.isEmpty() && currentLocation != null) {
+                URL url = URLMaker.distanceMatrixURL(this, currentLocation, locations);
                 DistanceMatrixRequest dmRequest = new DistanceMatrixRequest();
                 List<Distance> distances = new ArrayList<>();
                 try {
@@ -665,9 +619,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-        else {
-            System.out.print("Update Distance: Does Not Have Fine Location Permission");
-        }
-        //System.out.println("Update Distance Finished");
     }
+
 }

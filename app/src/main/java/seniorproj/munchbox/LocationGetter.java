@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -39,18 +40,18 @@ public class LocationGetter implements Runnable {
     private static LocationManager locationManager;
     private float accuracy;
     private Location currentLocation;
-    private String lastNetwork;
 
     public LocationGetter(LocationManager l, Context c, Handler mainHandler){
+        System.out.println("Making LocationGetter");
         mHandler = mainHandler;
         locationManager = l;
         context = c;
-        lastNetwork = null;
         // Define a listener that responds to location updates
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
+                System.out.println("Location Changed");
                 if(currentLocation == null) {
-                    updateLocation(location);
+                    updateDistances(location);
                 }
                 else if(location.distanceTo(currentLocation) > 100){
                     updateLocation(location);
@@ -87,11 +88,22 @@ public class LocationGetter implements Runnable {
         mHandler.sendMessage(Message.obtain(mHandler, 2, newLocation));
         currentLocation = newLocation;
         accuracy = newLocation.getAccuracy();
-        lastNetwork = newLocation.getProvider();
+    }
+
+    private void updateDistances(Location newLocation){
+        mHandler.sendMessage(Message.obtain(mHandler, 3, newLocation));
+        currentLocation = newLocation;
+        accuracy = newLocation.getAccuracy();
     }
 
     public void run(){
+        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        System.out.println("LG run");
+        Looper.prepare();
+        System.out.println("LG prepared");
         startListening();
+        System.out.println("LG listening");
+        Looper.loop();
     }
 
 }
