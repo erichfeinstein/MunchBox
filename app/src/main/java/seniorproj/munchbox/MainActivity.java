@@ -96,17 +96,18 @@ public class MainActivity extends AppCompatActivity {
         new Thread(lg).start();
 
         //Read the journal
-        if (journal == null) {
-            SharedPreferences prefs = getPreferences(MODE_PRIVATE);
-            Gson gson = new Gson();
-            String json = prefs.getString("Journal", "");
-            journal = gson.fromJson(json, new TypeToken<List<JournalEntry>>(){}.getType());
-            if (journal == null) journal = new ArrayList<>();
-        }
+        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = prefs.getString("Journal", "");
+        journal = gson.fromJson(json, new TypeToken<List<JournalEntry>>(){}.getType());
+        if (journal == null) journal = new ArrayList<>();
+        journalCopy = new ArrayList<>(journal);
+
         //Re-assign ID values
         int i = 0;
         while (i < journal.size()) {
             journal.get(i).setIdentifier(i);
+            journalCopy.get(i).setIdentifier(i);
             i++;
         }
         newID = i; //Save the new ID value
@@ -123,15 +124,7 @@ public class MainActivity extends AppCompatActivity {
         if (resetList) filter("");
         reloadList();
 
-        journalCopy = new ArrayList<>(journal);
 
-        //Save journal to SharedPrefs using Gson
-        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor prefsEditor = prefs.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(journal);
-        prefsEditor.putString("Journal", json);
-        prefsEditor.apply();
 
         if (!hasPermissions(this, permissions)) {
             ActivityCompat.requestPermissions(this, permissions, PERMISSION_ALL);
@@ -186,23 +179,17 @@ public class MainActivity extends AppCompatActivity {
                 searchView.setIconified(false);
             }
         });
+        reloadList();
+        System.out.println("created journal copy size: " + journalCopy.size());
+        System.out.println("created journal size: " + journal.size());
     }
 
     @Override
     public void onResume() {
         //Resume the search
         super.onResume();
-        searchView.setQuery(searchView.getQuery().toString(), true);
 
-        //Read the journal from SharedPrefs
-
-        SharedPreferences prefsJournal = getPreferences(MODE_PRIVATE);
-        Gson gsonJournalRead = new Gson();
-        String jsonJournal = prefsJournal.getString("Journal", "");
-        journal = gsonJournalRead.fromJson(jsonJournal, new TypeToken<List<JournalEntry>>(){}.getType());
         if (journal == null) journal = new ArrayList<>();
-
-        journalCopy = new ArrayList<>(journal);
 
         //Re-enable create button after it was disabled to prevent double clicking
         ImageButton createEntryButton = findViewById(R.id.createNewEntry);
@@ -248,15 +235,17 @@ public class MainActivity extends AppCompatActivity {
             newEntry.setDistance("0 mi");
             newEntry.setDistanceMeters(0);
             journal.add(newEntry);
+            journalCopy.add(newEntry);
         }
 
         //Update existing  entry
         if (toEdit) {
             System.out.println("Editing entry");
             //Find entry with id
+            JournalEntry updateEntry = new JournalEntry();
             for (int i = 0; i < journal.size(); i++) {
                 if (id == journal.get(i).getIdentifier()) {
-                    JournalEntry updateEntry = journal.get(i);
+                    updateEntry = journal.get(i);
                     System.out.println("Found entry with ID " + id);
 
                     updateEntry.setNameOfDish(name);
@@ -265,6 +254,14 @@ public class MainActivity extends AppCompatActivity {
                     updateEntry.setPhotoPath(imgPath);
                     updateEntry.setRating(rating);
                     updateEntry.setTags(tags);
+                    break;
+                }
+            }
+            //Also update the entry in journalCopy
+            for (int j = 0; j < journalCopy.size(); j++) {
+                if (id == journalCopy.get(j).getIdentifier()) {
+                    journalCopy.set(j, updateEntry);
+                    System.out.println("Successfully updated journal copy version of entry");
                     break;
                 }
             }
@@ -277,6 +274,13 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < journal.size(); i++) {
                 if (journal.get(i).getIdentifier() == id) {
                     journal.remove(i);
+                    break;
+                }
+            }
+            for (int j = 0; j < journalCopy.size(); j++) {
+                if (journalCopy.get(j).getIdentifier() == id) {
+                    journalCopy.remove(j);
+                    break;
                 }
             }
         }
@@ -286,6 +290,7 @@ public class MainActivity extends AppCompatActivity {
         editor.remove("toEdit");
         editor.remove("toDelete");
         editor.remove("id");
+        editor.remove("Journal");
 
         //Remove all entry information (this prevents entries from being created every time MainActivity resumes)
         editor.remove("name");
@@ -302,23 +307,6 @@ public class MainActivity extends AppCompatActivity {
 
         editor.apply();
 
-        //From onCreate
-        adapter = new MyAdapter(journal, this);
-        recyclerView = findViewById(R.id.entriesView);
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(layoutManager);
-        System.out.println("Journal size: " + journal.size());
-
-        //Write journal to SharedPrefs
-        //Using same SharedPrefs object as the reader in the beginning of onResume
-        SharedPreferences.Editor writerEditor = prefsJournal.edit();
-        Gson gsonJournal = new Gson();
-        String write = gsonJournal.toJson(journal);
-        writerEditor.putString("Journal", write);
-        writerEditor.apply();
-
         updateDistances();
 
         if (lastSortType == 0) Collections.sort(journal, Comparators.getDateComparator());
@@ -326,8 +314,21 @@ public class MainActivity extends AppCompatActivity {
         if (lastSortType == 2) Collections.sort(journal, Comparators.getDishNameComparator());
         if (lastSortType == 3) Collections.sort(journal, Comparators.getDistanceComparator());
 
-        journalCopy = new ArrayList(journal);
+        //journalCopy = new ArrayList(journal);
         reloadList();
+
+        System.out.println("journal copy size: " + journalCopy.size());
+        System.out.println("journal size: " + journal.size());
+
+        //journal = new ArrayList(journalCopy);
+
+        //Save journal to SharedPrefs using Gson
+        SharedPreferences prefsWrite = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = prefsWrite.edit();
+        Gson gsonWrite = new Gson();
+        String jsonWrite = gsonWrite.toJson(journalCopy);
+        prefsEditor.putString("Journal", jsonWrite);
+        prefsEditor.apply();
     }
 
     public static void filter(String text) {
@@ -565,5 +566,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 }

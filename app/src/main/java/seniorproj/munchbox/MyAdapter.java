@@ -53,7 +53,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.id = entry.getIdentifier();
 //        Bitmap img = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(entry.getPhotoPath()), THUMBSIZE, THUMBSIZE);
 //        holder.thumb.setImageBitmap(img);
-        System.out.println(entry.getPhotoPath());
         Picasso.get().load("file://"+entry.getPhotoPath()).resize(300,300).into(holder.thumb);
     }
 
@@ -109,7 +108,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                     intent.putExtra("rating", selectedEntry.getRating());
                     intent.putExtra("imgPath", selectedEntry.getPhotoPath());
                     intent.putExtra("id", selectedEntry.getIdentifier());
-                    MainActivity.resetJournal(); //Always reset journal before leaving MainActivity
+                    //MainActivity.resetJournal(); //Always reset journal before leaving MainActivity
+
                     context.startActivity(intent);
                     System.out.println("Opening entry with ID: " + id);
                 }

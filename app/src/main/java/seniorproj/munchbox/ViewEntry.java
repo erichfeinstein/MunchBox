@@ -127,7 +127,4 @@ public class ViewEntry extends Activity {
         shareIntent.putExtra(Intent.EXTRA_STREAM, imageURI);
         startActivity(Intent.createChooser(shareIntent, "Share via"));
     }
-    /*Can't utilize URIs in Intents in SDK >= 24, so this solution is necessary. */
-    private class MunchFileProvider extends FileProvider {
-    }
 }
