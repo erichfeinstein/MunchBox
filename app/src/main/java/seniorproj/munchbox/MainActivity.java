@@ -326,6 +326,7 @@ public class MainActivity extends AppCompatActivity {
         if (lastSortType == 2) Collections.sort(journal, Comparators.getDishNameComparator());
         if (lastSortType == 3) Collections.sort(journal, Comparators.getDistanceComparator());
 
+        journalCopy = new ArrayList(journal);
         reloadList();
     }
 

@@ -21,6 +21,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -60,14 +62,13 @@ public class ViewEntry extends Activity {
         date.setText(dateText);
         TextView description = (TextView)findViewById(R.id.description);
         description.setText(descriptionText);
-        Bitmap image = BitmapFactory.decodeFile(imgPath);
+        //Bitmap image = BitmapFactory.decodeFile(imgPath);
         ImageView myImage = (ImageView) findViewById(R.id.imageView);
-        myImage.setImageBitmap(image);
+        //myImage.setImageBitmap(image);
+        Picasso.get().load("file://"+imgPath).resize(850,850).into(myImage);
         RatingBar rating = (RatingBar)findViewById(R.id.rating);
         ratingVal = ratingVal/2f;
         rating.setRating(ratingVal);
-
-        //TODO add a swipe listener to swipe between entries from within ViewEntry
     }
 
     public void editEntryButton(View view) {

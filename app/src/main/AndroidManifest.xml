@@ -29,12 +29,14 @@
 
         <activity
             android:name=".ViewEntry"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_view_entry">
         </activity>
 
         <activity
             android:name=".EditEntry"
             android:label="Edit Entry"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden">
         </activity>
 

@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -90,9 +91,11 @@ public class EditEntry extends Activity {
         imgPath = getIntent().getStringExtra("imageAddr");
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        //Not being set to myImage, but being used to send to image analysis
         Bitmap image = BitmapFactory.decodeFile(imgPath);
         ImageView myImage = findViewById(R.id.imageView);
-        myImage.setImageBitmap(image);
+        Picasso.get().load("file://"+imgPath).resize(300,300).into(myImage);
+        //myImage.setImageBitmap(image);
 
         tagsRecyclerView = findViewById(R.id.tagsView);
         tagsRecyclerView.setHasFixedSize(true);

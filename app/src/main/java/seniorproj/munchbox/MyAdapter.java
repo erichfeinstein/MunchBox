@@ -13,6 +13,8 @@ import android.widget.Toast;
 import android.content.Intent;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,8 +51,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.textViewRating.setText(entry.getRatingAsStars());
         holder.textViewDistance.setText(entry.getDistance());
         holder.id = entry.getIdentifier();
-        Bitmap img = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(entry.getPhotoPath()), THUMBSIZE, THUMBSIZE);
-        holder.thumb.setImageBitmap(img);
+//        Bitmap img = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(entry.getPhotoPath()), THUMBSIZE, THUMBSIZE);
+//        holder.thumb.setImageBitmap(img);
+        System.out.println(entry.getPhotoPath());
+        Picasso.get().load("file://"+entry.getPhotoPath()).resize(300,300).into(holder.thumb);
     }
 
     @Override
