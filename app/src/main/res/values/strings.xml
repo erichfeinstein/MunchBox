@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MunchBox</string>
     <string name="title_activity_view_entry">view_entry</string>
-    <string name="mykey">AIzaSyByRb53RMSFPVw4gkR4GlGvkP6P7VaFicc</string>
+    <string name="mykey">AIzaSyCs92vdXm0Ms65SWRo1CB9ihPR2Z39wMgg</string>
     <string name="dialog_message">MunchBox requires these permissions to run. You will not be able to continue without permissions enabled.</string>
     <string name="dialog_title">Permissions Denied</string>
     <string name="exit">Close app</string>
